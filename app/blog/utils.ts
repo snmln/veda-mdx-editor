@@ -31,22 +31,27 @@ function getMDXFiles(dir) {
   return fs.readdirSync(dir).filter((file) => path.extname(file) === '.mdx')
 }
 
+// function readMDXFile(filePath) {
+//   let rawContent = fs.readFileSync(filePath, 'utf-8')
+//   return parseFrontmatter(rawContent)
+// }
+
 function readMDXFile(filePath) {
   let rawContent = fs.readFileSync(filePath, 'utf-8')
-  console.log('parsed by gray matter')
-  console.log(matter(rawContent))
-  return parseFrontmatter(rawContent)
+  let parsedData = matter(rawContent)
+  return parsedData
 }
 
 function getMDXData(dir) {
   let mdxFiles = getMDXFiles(dir)
   return mdxFiles.map((file) => {
-    let { metadata, content } = readMDXFile(path.join(dir, file))
-    // console.log(matter(metadata))
+    // let metadata = getFrontMatter(path.join(dir, file))
+    let { content, data } = readMDXFile(path.join(dir, file))
+    // console.log(content)
     let slug = path.basename(file, path.extname(file))
 
     return {
-      metadata,
+      metadata: data,
       slug,
       content,
     }
@@ -55,6 +60,7 @@ function getMDXData(dir) {
 
 
 export function getDatasets() {
+  // console.log(getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets')))
   return getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets'))
 }
 
