@@ -53,12 +53,22 @@ function getMDXData(dir) {
   })
 }
 
+
+export function getDatasets() {
+  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets'))
+}
+
+export function getStories() {
+  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'stories'))
+}
+
 export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets'))
 }
 
 export function formatDate(date: string, includeRelative = false) {
   let currentDate = new Date()
+  if (!date) return;
   if (!date.includes('T')) {
     date = `${date}T00:00:00`
   }
