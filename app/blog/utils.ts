@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import matter from 'gray-matter'
 
 type Metadata = {
   title: string
@@ -32,6 +33,8 @@ function getMDXFiles(dir) {
 
 function readMDXFile(filePath) {
   let rawContent = fs.readFileSync(filePath, 'utf-8')
+  console.log('parsed by gray matter')
+  console.log(matter(rawContent))
   return parseFrontmatter(rawContent)
 }
 
@@ -39,6 +42,7 @@ function getMDXData(dir) {
   let mdxFiles = getMDXFiles(dir)
   return mdxFiles.map((file) => {
     let { metadata, content } = readMDXFile(path.join(dir, file))
+    // console.log(matter(metadata))
     let slug = path.basename(file, path.extname(file))
 
     return {
@@ -50,7 +54,7 @@ function getMDXData(dir) {
 }
 
 export function getBlogPosts() {
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'))
+  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets'))
 }
 
 export function formatDate(date: string, includeRelative = false) {

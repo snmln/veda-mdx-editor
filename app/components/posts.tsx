@@ -3,7 +3,7 @@ import { formatDate, getBlogPosts } from 'app/blog/utils'
 
 export function BlogPosts() {
   let allBlogs = getBlogPosts()
-
+  console.log('wahaha')
   return (
     <div>
       {allBlogs
