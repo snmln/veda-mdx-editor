@@ -1,10 +1,8 @@
-"use client"
 import { BlogPosts } from 'app/components/posts'
-import { DataCatalog } from 'veda-ui'
-import {
-  DevseedUiThemeProvider,
-  createUITheme,
-} from "@devseed-ui/theme-provider";
+// import {
+//   DevseedUiThemeProvider,
+//   createUITheme,
+// } from "@devseed-ui/theme-provider";
 
 export const VEDA_OVERRIDE_THEME = {
   zIndices: {
@@ -58,7 +56,6 @@ export const VEDA_OVERRIDE_THEME = {
   },
 };
 
-console.log(DataCatalog)
 // export const metadata = {
 //   title: 'Blog',
 //   description: 'Read my blog.',
@@ -66,12 +63,13 @@ console.log(DataCatalog)
 
 export default function Page() {
   return (
-    // <section>
-    //   <h1 className="font-semibold text-2xl mb-8 tracking-tighter">My Blog</h1>
-    //   <BlogPosts />
-    // </section>
-    <DevseedUiThemeProvider theme={createUITheme(VEDA_OVERRIDE_THEME)}>
-    <DataCatalog datasets={[]} />
-    </DevseedUiThemeProvider>
+    <section>
+      <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Datasets</h1>
+      <BlogPosts type="dataset" />
+    </section>
+    // // <DevseedUiThemeProvider theme={createUITheme(VEDA_OVERRIDE_THEME)}>
+    //   {/* <DataCatalog datasets={[]} /> */}
+    //     // <BlogPosts />
+    // // </DevseedUiThemeProvider>
   )
 }
