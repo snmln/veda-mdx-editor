@@ -1,12 +1,31 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
+import markdownit from 'markdown-it';
+const md = markdownit();
 
 type Metadata = {
   title: string
   publishedAt: string
   summary: string
   image?: string
+}
+
+function stringifyYmlWithFns(data) {
+
+  const markdownProcessed = Object.keys(data).reduce((acc, key) => {
+    if (typeof data[key] === 'string' && data[key].startsWith('::markdown')) {
+      const v = data[key]
+      const p = v.replace(/^::markdown ?/, '');
+      // Conver the string to HTML
+      const parsedVal = md.render(p);
+      acc[key] = parsedVal.replace(/(\r\n|\n|\r)/gm, '');
+      return acc
+    }
+    acc[key] = data[key]
+    return acc
+  },{})
+  return markdownProcessed;
 }
 
 function parseFrontmatter(fileContent: string) {
@@ -38,7 +57,11 @@ function getMDXFiles(dir) {
 
 function readMDXFile(filePath) {
   let rawContent = fs.readFileSync(filePath, 'utf-8')
-  let parsedData = matter(rawContent)
+  let parsedData = matter(rawContent);
+  let str = stringifyYmlWithFns(parsedData.data);
+  console.log(str)
+  // let json = JSON.parse(str);
+  // console.log(json)
   return parsedData
 }
 
