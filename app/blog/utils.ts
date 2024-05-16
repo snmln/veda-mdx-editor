@@ -11,21 +11,86 @@ type Metadata = {
   image?: string
 }
 
-function stringifyYmlWithFns(data) {
+export function resolveConfigFunctions<T>(
+  datum,
+  bag
+);
+export function resolveConfigFunctions<T extends any[]>(
+  datum,
+  bag
+);
+export function resolveConfigFunctions(
+  datum,
+  bag
+): any {
+  if (Array.isArray(datum)) {
+    return datum.map((v) => resolveConfigFunctions(v, bag));
+  }
 
-  const markdownProcessed = Object.keys(data).reduce((acc, key) => {
-    if (typeof data[key] === 'string' && data[key].startsWith('::markdown')) {
-      const v = data[key]
-      const p = v.replace(/^::markdown ?/, '');
-      // Conver the string to HTML
-      const parsedVal = md.render(p);
-      acc[key] = parsedVal.replace(/(\r\n|\n|\r)/gm, '');
-      return acc
+  if (datum != null && typeof datum === 'object') {
+    // Use for loop instead of reduce as it faster.
+    const ready = {};
+    for (const [k, v] of Object.entries(datum as object)) {
+      ready[k] = resolveConfigFunctions(v, bag);
     }
-    acc[key] = data[key]
-    return acc
-  },{})
-  return markdownProcessed;
+    return ready;
+  }
+
+  if (typeof datum === 'function') {
+    try {
+      return datum(bag);
+    } catch (error) {
+      /* eslint-disable-next-line no-console */
+      // console.error(
+      //   'Failed to resolve function %s(%o) with error %s',
+      //   datum.name,
+      //   bag,
+      //   error.message
+      // );
+      return null;
+    }
+  }
+
+  return datum;
+}
+
+
+
+function parseAttributes(obj) {
+  const convert = (obj) => {
+    return Object.keys(obj).reduce((acc, key) => {
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        acc[key] = Array.isArray(obj[key]) ? obj[key].map(convert) : convert(obj[key]);
+      } else if (typeof obj[key] === 'string') {
+
+        if (obj[key].includes('::markdown')) {
+          const v = obj[key]
+          const p = v.replace(/^::markdown ?/, '');
+          // Conver the string to HTML
+          const parsedVal = md.render(p);
+          acc[key] = parsedVal.replaceAll(/(\r\n|\n|\r)/gm, '');
+          return acc
+        }
+        
+        if (obj[key].includes('::js')) {
+          console.log('yay you are function')
+          console.log(key)
+          const v = obj[key]
+          const p = v.replace(/^::js ?/, '')
+          .replaceAll('\\n', '\n');
+          acc[key] = p
+          return acc
+        } else {
+          acc[key] = obj[key];
+        }
+      } else {
+        acc[key] = obj[key];
+      }
+      return acc;
+    }, Array.isArray(obj) ? [] : {});
+  };
+
+  return convert(obj);
 }
 
 function parseFrontmatter(fileContent: string) {
@@ -58,25 +123,20 @@ function getMDXFiles(dir) {
 function readMDXFile(filePath) {
   let rawContent = fs.readFileSync(filePath, 'utf-8')
   let parsedData = matter(rawContent);
-  let str = stringifyYmlWithFns(parsedData.data);
-  console.log(str)
-  // let json = JSON.parse(str);
-  // console.log(json)
   return parsedData
 }
 
 function getMDXData(dir) {
   let mdxFiles = getMDXFiles(dir)
   return mdxFiles.map((file) => {
-    // let metadata = getFrontMatter(path.join(dir, file))
     let { content, data } = readMDXFile(path.join(dir, file))
-    // console.log(content)
+    const parsedData = parseAttributes(data)
     let slug = path.basename(file, path.extname(file))
 
     return {
-      metadata: data,
+      metadata: parsedData,
       slug,
-      content,
+      content
     }
   })
 }
