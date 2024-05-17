@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import markdownit from 'markdown-it';
+import { DatasetLayer, StoryData } from 'app/types/veda'
 const md = markdownit();
 
 type Metadata = {
@@ -73,8 +74,6 @@ function parseAttributes(obj) {
         }
         
         if (obj[key].includes('::js')) {
-          console.log('yay you are function')
-          console.log(key)
           const v = obj[key]
           const p = v.replace(/^::js ?/, '')
           .replaceAll('\\n', '\n');
@@ -134,7 +133,7 @@ function getMDXData(dir) {
     let slug = path.basename(file, path.extname(file))
 
     return {
-      metadata: parsedData,
+      metadata: parsedData as (DatasetLayer | StoryData),
       slug,
       content
     }
@@ -157,7 +156,7 @@ export function getBlogPosts() {
 
 export function formatDate(date: string, includeRelative = false) {
   let currentDate = new Date()
-  if (!date) return;
+  if (!date || typeof date !== 'string') return;
   if (!date.includes('T')) {
     date = `${date}T00:00:00`
   }
