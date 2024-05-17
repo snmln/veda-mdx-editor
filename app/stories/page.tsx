@@ -4,7 +4,7 @@ import { BlogPosts } from 'app/components/posts'
 //   createUITheme,
 // } from "@devseed-ui/theme-provider";
 
-export const VEDA_OVERRIDE_THEME = {
+const VEDA_OVERRIDE_THEME = {
   zIndices: {
     hide: -1,
     docked: 10,
@@ -65,7 +65,7 @@ export default function Page() {
   return (
     <section>
       <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Stories</h1>
-      <BlogPosts type="story" />
+      <BlogPosts postType="story" />
     </section>
     // // <DevseedUiThemeProvider theme={createUITheme(VEDA_OVERRIDE_THEME)}>
     //   {/* <DataCatalog datasets={[]} /> */}
