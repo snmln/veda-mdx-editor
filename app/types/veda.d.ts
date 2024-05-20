@@ -157,21 +157,25 @@ export interface DatasetUsage {
   label: string;
   title: string;
 }
+
+export interface ContentCommonData {
+  featured?: boolean;
+  id: string;
+  name: string;
+  description: string;
+  media?: Media;
+  related?: RelatedContentData[];
+  taxonomy: Taxonomy[];
+}
+
 /**
  * Data structure for the Datasets frontmatter.
  */
-export interface DatasetData {
-  featured?: boolean;
+export interface DatasetData extends ContentCommonData {
   sourceExclusive?: string;
-  id: string;
-  name: string;
   infoDescription?: string;
-  taxonomy: Taxonomy[];
-  description: string;
   usage?: DatasetUsage[];
-  media?: Media;
   layers: DatasetLayer[];
-  related?: RelatedContentData[];
   disableExplore?: boolean;
 }
 
@@ -182,15 +186,8 @@ export interface DatasetData {
 /**
  * Data structure for the Stories frontmatter.
  */
-export interface StoryData {
-  featured?: boolean;
-  id: string;
-  name: string;
-  description: string;
+export interface StoryData extends ContentCommonData {
   pubDate: string;
-  media?: Media;
-  taxonomy: Taxonomy[];
-  related?: RelatedContentData[];
   asLink?: LinkContentData;
 }
 
@@ -207,3 +204,4 @@ export interface Media {
     url: string;
   };
 }
+
