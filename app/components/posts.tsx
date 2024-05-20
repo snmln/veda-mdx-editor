@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Image from 'next/image'
+
 import { formatDate, getDatasets, getStories } from 'app/blog/utils'
 import { StoryData } from 'app/types/veda'
 
@@ -34,6 +36,15 @@ export function BlogPosts({ postType}) {
               <p>
                 {post.metadata.description}
               </p>
+              <div>
+                {post.metadata.media && 
+                <Image 
+                  src={post.metadata.media.src} 
+                  alt={post.metadata.media.alt} 
+                  width={300} 
+                  height={300} 
+                /> }
+              </div>
           </Link>
         ))}
     </div>
