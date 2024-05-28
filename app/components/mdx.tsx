@@ -1,8 +1,9 @@
-import Link from 'next/link'
-import Image from 'next/image'
+
+import React from 'react'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { highlight } from 'sugar-high'
-import React from 'react'
+
+import { EnhancedBlock, Prose, EnhancedCaption, EnhancedFigure} from './mdx-components/block'
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (
@@ -26,27 +27,8 @@ function Table({ data }) {
   )
 }
 
-function CustomLink(props) {
-  let href = props.href
 
-  if (href.startsWith('/')) {
-    return (
-      <Link href={href} {...props}>
-        {props.children}
-      </Link>
-    )
-  }
 
-  if (href.startsWith('#')) {
-    return <a {...props} />
-  }
-
-  return <a target="_blank" rel="noopener noreferrer" {...props} />
-}
-
-function RoundedImage(props) {
-  return <Image alt={props.alt} className="rounded-lg" {...props} />
-}
 
 function Code({ children, ...props }) {
   let codeHTML = highlight(children)
@@ -93,10 +75,12 @@ let components = {
   h4: createHeading(4),
   h5: createHeading(5),
   h6: createHeading(6),
-  Image: RoundedImage,
-  a: CustomLink,
   code: Code,
   Table,
+  Block: EnhancedBlock,
+  Prose: Prose,
+  Caption: EnhancedCaption,
+  Figure: EnhancedFigure
 }
 
 export function CustomMDX(props) {
