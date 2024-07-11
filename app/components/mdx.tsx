@@ -2,8 +2,16 @@
 import React from 'react'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { highlight } from 'sugar-high'
-
-import { EnhancedBlock, Prose, EnhancedCaption, EnhancedFigure} from './mdx-components/block'
+import { 
+  EnhancedBlock,
+  Prose,
+  // EnhancedCaption,
+  // EnhancedFigure,
+  Caption,
+  Figure,
+  Image,
+  EnhancedMapBlock,
+} from './mdx-components/block'
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (
@@ -79,8 +87,13 @@ let components = {
   Table,
   Block: EnhancedBlock,
   Prose: Prose,
-  Caption: EnhancedCaption,
-  Figure: EnhancedFigure
+  // Prose: EnhancedProse,
+  // Caption: EnhancedCaption,
+  // Figure: EnhancedFigure,
+  Caption: Caption,
+  Figure: Figure,
+  Image: Image,
+  Map: EnhancedMapBlock
 }
 
 export function CustomMDX(props) {

@@ -1,13 +1,14 @@
 'use client'
 
-import VEDA from "@developmentseed/veda-ui";
-// import { Block } from "@developmentseed/veda-ui"; // This returns undefined
+// import VEDA from "@developmentseed/veda-ui";
+import { Block, Prose, Figure, Caption, Image, MapBlockWithProvider } from "@developmentseed/veda-ui"; // This returns undefined
 // console.log(VEDA)
-// console.log(VEDA.Block)
+// console.log(Block)
 import {
   DevseedUiThemeProvider,
   createUITheme,
 } from "@devseed-ui/theme-provider";
+import { useDataStore } from "app/store/provider";
 import React, { Children } from 'react'
 
 export const VEDA_OVERRIDE_THEME = {
@@ -86,49 +87,30 @@ function EnhancedBlock(props) {
   
   return (
     <DevseedUiThemeProvider theme={createUITheme(VEDA_OVERRIDE_THEME)}>
-      <VEDA.Block {...props} />
+      <Block {...props} />
     </DevseedUiThemeProvider>
   );
 }
 
+function EnhancedMapBlock(props) {
+  const { datasets } = useDataStore();
 
-// function EnhancedProse(props) {
-//   const Prose = VEDA.Prose
-//   return (
-    
-//       <VEDA.Prose {...props} />
-    
-//   );
-// }
+  const transformed = datasets?.map((dataset) => ({
+    content: dataset.content,
+    slug: dataset.slug,
+    data: dataset.metadata,
+  }));
 
-// EnhancedProse.displayName= 'Prose'
-
-
-function EnhancedCaption(props) {
   return (
-    
-      <VEDA.Caption {...props} />
-    
+    <MapBlockWithProvider {...props} datasets={transformed}/>
   );
 }
-
-EnhancedCaption.displayName='Caption'
-
-function EnhancedFigure(props) {
-  return (
-    
-      <VEDA.Figure {...props} />
-    
-  );
-}
-
-const Prose = VEDA.Prose
-console.log(Prose)
-EnhancedFigure.displayName = 'Figure'
 
 export {
   EnhancedBlock,
   Prose,
-  EnhancedCaption,
-  EnhancedFigure
+  Image,
+  EnhancedMapBlock,
+  Caption,
+  Figure,
 }
