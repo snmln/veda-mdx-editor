@@ -143,8 +143,7 @@ function getMDXData(dir) {
 
 
 export function getDatasets() {
-  // console.log(getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets')))
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets'))
+  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets'));
 }
 
 export function getStories() {
