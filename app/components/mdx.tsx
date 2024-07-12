@@ -5,12 +5,11 @@ import { highlight } from 'sugar-high'
 import { 
   EnhancedBlock,
   Prose,
-  // EnhancedCaption,
-  // EnhancedFigure,
   Caption,
   Figure,
   Image,
   EnhancedMapBlock,
+  CompareImage,
 } from './mdx-components/block'
 
 function Table({ data }) {
@@ -87,13 +86,11 @@ let components = {
   Table,
   Block: EnhancedBlock,
   Prose: Prose,
-  // Prose: EnhancedProse,
-  // Caption: EnhancedCaption,
-  // Figure: EnhancedFigure,
   Caption: Caption,
   Figure: Figure,
   Image: Image,
-  Map: EnhancedMapBlock
+  Map: EnhancedMapBlock,
+  CompareImage: CompareImage,
 }
 
 export function CustomMDX(props) {
