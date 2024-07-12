@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { ReactQueryProvider } from "@developmentseed/veda-ui";
 
 interface DataStore {
   datasets?: any[];
@@ -13,7 +14,7 @@ export function useDataStore() {
   return useContext<DataStore>(DataContext);
 }
 
-export function DataProvider({ initialDatasets = undefined, children }: {children: JSX.Element | ReactNode, initialDatasets: any[] | undefined}) {
+function DataProvider({ initialDatasets = undefined, children }: {children: JSX.Element | ReactNode, initialDatasets: any[] | undefined}) {
   const [datasets, setDatasets] = useState<any[] | undefined>(initialDatasets);
   const value = {
     datasets, 
@@ -22,7 +23,11 @@ export function DataProvider({ initialDatasets = undefined, children }: {childre
 
   return (
     <DataContext.Provider value={value}>
-      {children}
+      <ReactQueryProvider>
+        {children}
+      </ReactQueryProvider>
     </DataContext.Provider>
   );
 }
+
+export default DataProvider;
