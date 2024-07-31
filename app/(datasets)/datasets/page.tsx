@@ -1,8 +1,5 @@
-import { BlogPosts } from 'app/components/posts'
-import { getDatasets } from 'app/blog/utils/mdx'
-
-import Layout from 'app/layout'
-import NestedLayout from 'app/components/nested-layout'
+import { BlogPosts } from 'app/components/posts';
+import { getDatasets } from 'app/blog/utils/mdx';
 
 export default function Page() {
   const posts = getDatasets();
