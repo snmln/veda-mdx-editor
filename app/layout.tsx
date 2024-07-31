@@ -4,7 +4,8 @@ import { Navbar } from './components/nav';
 import Footer from './components/footer';
 import { baseUrl } from './sitemap';
 import dynamic from 'next/dynamic';
-const CoreVedaProvidersWrapper = dynamic(() => import('app/store/providers'), {ssr: false})
+
+const DevSeedUIThemeProvider = dynamic(() => import('app/store/providers/theme'), {ssr: false})
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -34,8 +35,6 @@ export const metadata: Metadata = {
   },
 }
 
-const cx = (...classes) => classes.filter(Boolean).join(' ')
-
 export default function RootLayout({
   children,
 }: {
@@ -47,11 +46,11 @@ export default function RootLayout({
     >
       <body>
         <main>
-          <CoreVedaProvidersWrapper>
+          <DevSeedUIThemeProvider>
             <Navbar />
               {children}
             <Footer />
-          </CoreVedaProvidersWrapper>
+          </DevSeedUIThemeProvider>
         </main>
       </body>
     </html>

@@ -14,8 +14,6 @@ export function useDataStore() {
   return useContext<DataStore>(DataContext);
 }
 
-
-
 function DataProvider({ initialDatasets = undefined, children }: {children: JSX.Element | ReactNode, initialDatasets: any[] | undefined}) {
   const [datasets, setDatasets] = useState<any[] | undefined>(initialDatasets);
   const value = {

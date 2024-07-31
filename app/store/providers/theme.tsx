@@ -1,6 +1,5 @@
 'use client';
-import React, {ReactNode} from 'react';
-
+import React, { ReactNode } from 'react';
 import {
   createUITheme,
 } from "@devseed-ui/theme-provider";
