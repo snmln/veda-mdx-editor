@@ -22,6 +22,7 @@ const VEDA_OVERRIDE_THEME = {
   color: {
     base: "#2c3e50",
     primary: "#2276ac",
+    link: '#FF0000', // To check if the theme is working
     danger: "#FC3D21",
     infographicA: "#fcab10",
     infographicB: "#f4442e",
