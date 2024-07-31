@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { Navbar } from './components/nav';
 import Footer from './components/footer';
 import { baseUrl } from './sitemap';
+import dynamic from 'next/dynamic';
+const CoreVedaProvidersWrapper = dynamic(() => import('app/store/providers'), {ssr: false})
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -45,9 +47,11 @@ export default function RootLayout({
     >
       <body>
         <main>
-          <Navbar />
-            {children}
-          <Footer />
+          <CoreVedaProvidersWrapper>
+            <Navbar />
+              {children}
+            <Footer />
+          </CoreVedaProvidersWrapper>
         </main>
       </body>
     </html>
