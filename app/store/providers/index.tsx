@@ -8,12 +8,9 @@ export default function CoreVedaProvidersWrapper({
 }: {
   children: JSX.Element | ReactNode
 }) {
-  const datasets = getDatasetsMetadata();
   return (
-    <DataProvider initialDatasets={datasets}>
       <DevseedUIThemeProvider>
         {children}
       </DevseedUIThemeProvider>
-    </DataProvider>
   )
 }

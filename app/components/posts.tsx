@@ -1,9 +1,11 @@
 'use client';
+import { useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useDataStore } from 'app/store/providers/data';
 
 export function BlogPosts({ postType, posts=[]}: {postType: string, posts?: any[]}) {
-  
+
   const prefix = (postType === 'dataset')? 'datasets': 'stories'
   return (
     <div>
