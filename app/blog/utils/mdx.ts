@@ -61,8 +61,8 @@ export function resolveConfigFunctions(
 function parseAttributes(obj) {
   const convert = (obj) => {
     return Object.keys(obj).reduce((acc, key) => {
-      if (typeof obj[key] === 'object' && obj[key] !== null) {
-        acc[key] = Array.isArray(obj[key]) ? obj[key].map(convert) : convert(obj[key]);
+      if (typeof obj[key] === 'object' && obj[key] !== null) {     
+        acc[key] = convert(obj[key]);
       } else if (typeof obj[key] === 'string') {
 
         if (obj[key].includes('::markdown')) {
@@ -141,10 +141,27 @@ function getMDXData(dir) {
   })
 }
 
+function getMDXMetaData(dir) {
+  let mdxFiles = getMDXFiles(dir)
+  return mdxFiles.map((file) => {
+    let { data } = readMDXFile(path.join(dir, file))
+    const parsedData = parseAttributes(data)
+    let slug = path.basename(file, path.extname(file))
+
+    return {
+      metadata: parsedData as (DatasetLayer | StoryData),
+      slug
+    }
+  })
+}
+
+
+export function getDatasetsMetadata() {
+  return getMDXMetaData(path.join(process.cwd(), 'app', 'blog', 'datasets'));
+}
 
 export function getDatasets() {
-  // console.log(getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets')))
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets'))
+  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets'));
 }
 
 export function getStories() {
@@ -153,41 +170,4 @@ export function getStories() {
 
 export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets'))
-}
-
-export function formatDate(date: string, includeRelative = false) {
-  let currentDate = new Date()
-  if (!date || typeof date !== 'string') return;
-  if (!date.includes('T')) {
-    date = `${date}T00:00:00`
-  }
-  let targetDate = new Date(date)
-
-  let yearsAgo = currentDate.getFullYear() - targetDate.getFullYear()
-  let monthsAgo = currentDate.getMonth() - targetDate.getMonth()
-  let daysAgo = currentDate.getDate() - targetDate.getDate()
-
-  let formattedDate = ''
-
-  if (yearsAgo > 0) {
-    formattedDate = `${yearsAgo}y ago`
-  } else if (monthsAgo > 0) {
-    formattedDate = `${monthsAgo}mo ago`
-  } else if (daysAgo > 0) {
-    formattedDate = `${daysAgo}d ago`
-  } else {
-    formattedDate = 'Today'
-  }
-
-  let fullDate = targetDate.toLocaleString('en-us', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  })
-
-  if (!includeRelative) {
-    return fullDate
-  }
-
-  return `${fullDate} (${formattedDate})`
 }

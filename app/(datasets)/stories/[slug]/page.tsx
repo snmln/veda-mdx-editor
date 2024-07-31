@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { CustomMDX } from 'app/components/mdx'
-import { formatDate, getBlogPosts, getStories } from 'app/blog/utils'
+import { formatDate } from 'app/blog/utils/date';
+import { getStories } from 'app/blog/utils/mdx';
 import { baseUrl } from 'app/sitemap'
 
 async function generateStaticParams() {
@@ -88,7 +89,6 @@ export default function Blog({ params }) {
           {formatDate(post.metadata.publishedAt)}
         </p>
       </div>
-      <h3> hihi</h3>
       <article className="prose">
         <CustomMDX source={post.content} />
       </article>

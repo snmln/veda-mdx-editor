@@ -1,8 +1,9 @@
-import { BlogPosts } from 'app/components/posts'
-// import {
-//   DevseedUiThemeProvider,
-//   createUITheme,
-// } from "@devseed-ui/theme-provider";
+'use client';
+import React, { ReactNode } from 'react';
+import {
+  createUITheme,
+} from "@devseed-ui/theme-provider";
+import { DevseedUiThemeProvider, PageMainContent } from "@developmentseed/veda-ui";
 
 const VEDA_OVERRIDE_THEME = {
   zIndices: {
@@ -20,6 +21,7 @@ const VEDA_OVERRIDE_THEME = {
   color: {
     base: "#2c3e50",
     primary: "#2276ac",
+    link: '#FF0000', // To check if the theme is working
     danger: "#FC3D21",
     infographicA: "#fcab10",
     infographicB: "#f4442e",
@@ -56,20 +58,14 @@ const VEDA_OVERRIDE_THEME = {
   },
 };
 
-// export const metadata = {
-//   title: 'Blog',
-//   description: 'Read my blog.',
-// }
-
-export default function Page() {
+function DevseedUIThemeProvider({children}: {children: JSX.Element | ReactNode}) {
   return (
-    <section>
-      <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Stories</h1>
-      <BlogPosts postType="story" />
-    </section>
-    // // <DevseedUiThemeProvider theme={createUITheme(VEDA_OVERRIDE_THEME)}>
-    //   {/* <DataCatalog datasets={[]} /> */}
-    //     // <BlogPosts />
-    // // </DevseedUiThemeProvider>
-  )
+    <DevseedUiThemeProvider theme={createUITheme(VEDA_OVERRIDE_THEME)}>
+      <PageMainContent>
+        {children}
+      </PageMainContent>
+    </DevseedUiThemeProvider>
+  );
 }
+
+export default DevseedUIThemeProvider;
