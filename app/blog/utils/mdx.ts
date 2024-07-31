@@ -141,6 +141,24 @@ function getMDXData(dir) {
   })
 }
 
+function getMDXMetaData(dir) {
+  let mdxFiles = getMDXFiles(dir)
+  return mdxFiles.map((file) => {
+    let { data } = readMDXFile(path.join(dir, file))
+    const parsedData = parseAttributes(data)
+    let slug = path.basename(file, path.extname(file))
+
+    return {
+      metadata: parsedData as (DatasetLayer | StoryData),
+      slug
+    }
+  })
+}
+
+
+export function getDatasetsMetadata() {
+  return getMDXMetaData(path.join(process.cwd(), 'app', 'blog', 'datasets'));
+}
 
 export function getDatasets() {
   return getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets'));

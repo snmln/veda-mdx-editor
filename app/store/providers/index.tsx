@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react'
 import DataProvider from './data';
-import { getDatasets } from '../../blog/utils/mdx';
+import { getDatasetsMetadata } from '../../blog/utils/mdx';
 import DevseedUIThemeProvider from './theme';
 
 export default function CoreVedaProvidersWrapper({
@@ -8,8 +8,9 @@ export default function CoreVedaProvidersWrapper({
 }: {
   children: JSX.Element | ReactNode
 }) {
+  const datasets = getDatasetsMetadata();
   return (
-    <DataProvider initialDatasets={getDatasets()}>
+    <DataProvider initialDatasets={datasets}>
       <DevseedUIThemeProvider>
         {children}
       </DevseedUIThemeProvider>
