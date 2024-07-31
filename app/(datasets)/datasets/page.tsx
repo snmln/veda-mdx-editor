@@ -1,6 +1,9 @@
 import { BlogPosts } from 'app/components/posts'
 import { getDatasets } from 'app/blog/utils/mdx'
 
+import Layout from 'app/layout'
+import NestedLayout from 'app/components/nested-layout'
+
 export default function Page() {
   const posts = getDatasets();
   return (
@@ -10,3 +13,4 @@ export default function Page() {
     </section>
   )
 }
+
