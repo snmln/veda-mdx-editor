@@ -1,11 +1,9 @@
-'use client';
-import { useDataStore } from "app/store/providers/data";
-import { CatalogView, useFiltersWithQS } from '../../lib';
-import { useRouter } from "next/navigation";
-import { usePathname } from 'next/navigation'
+import { getDatasets } from 'app/blog/utils/mdx';
+import { Suspense } from "react";
+import Catalog from './catalog'
 
 export default function Page() {
-  const { datasets: posts } = useDataStore();
+  const posts: any[] = getDatasets();
 
   const transformData = () => {
     const data = posts?.map((post) => ({
@@ -30,14 +28,12 @@ export default function Page() {
 
   const transformed = transformData();
 
-  const router = useRouter();
-  const pathName = usePathname();
-  const controlVars = useFiltersWithQS({navigate: router, push: true});
-
   return (
     <section>
       <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Datasets</h1>
-      <CatalogView datasets={transformed} onFilterChanges={() => controlVars} location={pathName}/>
+      <Suspense fallback={<>Loading...</>}>
+        <Catalog datasets={transformed} />
+      </Suspense>
     </section>
   )
 }
