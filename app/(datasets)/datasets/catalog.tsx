@@ -17,7 +17,6 @@ export default function Catalog({
     <CatalogView
       datasets={datasets}
       onFilterChanges={() => controlVars}
-      rootPath={pathName}
       location={pathName}
       linkProperties={{
         LinkElement: Link,
