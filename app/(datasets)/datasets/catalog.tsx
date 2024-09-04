@@ -2,8 +2,7 @@
 import { CatalogView, useFiltersWithQS } from '../../lib';
 import { useRouter } from "next/navigation";
 import { usePathname } from 'next/navigation';
-import Link from 'next/link'
-import styled from 'styled-components';
+import Link from 'next/link';
 
 export default function Catalog({
   datasets
@@ -18,8 +17,12 @@ export default function Catalog({
     <CatalogView
       datasets={datasets}
       onFilterChanges={() => controlVars}
+      rootPath={pathName}
       location={pathName}
-      OverrideLinkElement={Link}
+      linkProperties={{
+        LinkElement: Link,
+        pathAttributeKeyName: 'href'
+      }}
     />
   );
 }
