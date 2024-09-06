@@ -1,6 +1,8 @@
 'use client';
-import { PageHero } from '@developmentseed/veda-ui';
+import { CatalogView, PageHero, useFiltersWithQS } from '@developmentseed/veda-ui';
 
 export {
-  PageHero
+  CatalogView,
+  PageHero,
+  useFiltersWithQS
 }
