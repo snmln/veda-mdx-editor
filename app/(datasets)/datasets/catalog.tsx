@@ -10,14 +10,14 @@ export default function Catalog({
   datasets: any;
 }) {
   const router = useRouter();
-  const pathName = usePathname();
+  const pathname = usePathname();
   const controlVars = useFiltersWithQS({navigate: router, push: true});
 
   return (
     <CatalogView
       datasets={datasets}
       onFilterChanges={() => controlVars}
-      location={pathName}
+      pathname={pathname}
       linkProperties={{
         LinkElement: Link,
         pathAttributeKeyName: 'href'
