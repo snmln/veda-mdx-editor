@@ -18,6 +18,8 @@ import {
   NavItem,
   InternalNavLink,
   NavItemType,
+  ExplorationAndAnalysis,
+  timelineDatasetsAtom
 } from '@developmentseed/veda-ui';
 
 /**
@@ -37,6 +39,7 @@ export {
   PageMainContent,
   PageHeader,
   LogoContainer,
+  ExplorationAndAnalysis,
 
   // MDX Components
   Block,
@@ -50,6 +53,9 @@ export {
 
   // Hooks
   useFiltersWithQS,
+
+  // State
+  timelineDatasetsAtom
 };
 
 export type { NavItem, InternalNavLink };
