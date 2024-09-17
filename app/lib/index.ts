@@ -19,6 +19,7 @@ import {
   InternalNavLink,
   NavItemType,
   ExplorationAndAnalysis,
+  DatasetSelectorModal,
   timelineDatasetsAtom
 } from '@developmentseed/veda-ui';
 
@@ -40,6 +41,7 @@ export {
   PageHeader,
   LogoContainer,
   ExplorationAndAnalysis,
+  DatasetSelectorModal,
 
   // MDX Components
   Block,
