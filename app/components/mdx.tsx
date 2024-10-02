@@ -1,15 +1,16 @@
 import React from 'react'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { highlight } from 'sugar-high'
+
 import { 
   Block,
   Prose,
   Caption,
   Figure,
   Image,
-  EnhancedMapBlock,
   CompareImage,
-} from './mdx-components/block'
+} from '../lib';
+import EnhancedMapBlock from './mdx-components/block';
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (

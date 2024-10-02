@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 import {
   createUITheme,
 } from "@devseed-ui/theme-provider";
-import { DevseedUiThemeProvider, PageMainContent } from "@developmentseed/veda-ui";
+import { DevseedUiThemeProvider, PageMainContent } from "../../lib";
 
 const VEDA_OVERRIDE_THEME = {
   zIndices: {
