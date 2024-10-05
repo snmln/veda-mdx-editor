@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useDataStore } from "app/store/providers/data";
+import { useDataStore } from 'app/store/providers/data';
 import { MapBlock } from '../../lib';
 import React from 'react';
 
@@ -13,7 +13,5 @@ export default function EnhancedMapBlock(props) {
     data: dataset.metadata,
   }));
 
-  return (
-    <MapBlock {...props} datasets={transformed}/>
-  );
+  return <MapBlock {...props} datasets={transformed} />;
 }

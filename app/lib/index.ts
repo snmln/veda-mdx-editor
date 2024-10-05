@@ -1,5 +1,5 @@
 'use client';
-import { 
+import {
   CatalogView,
   PageHero,
   useFiltersWithQS,
@@ -39,7 +39,7 @@ export {
   Image,
   MapBlock,
   CompareImage,
-  
+
   // Hooks
   useFiltersWithQS,
-}
+};
