@@ -1,31 +1,29 @@
-import { notFound } from 'next/navigation'
-import { CustomMDX } from 'app/components/mdx'
+import React from 'react';
+import { notFound } from 'next/navigation';
+import { CustomMDX } from 'app/components/mdx';
 import { getDatasets } from 'app/blog/utils/mdx';
-import { baseUrl } from 'app/sitemap'
-import {PageHero} from 'app/lib'
+import { baseUrl } from 'app/sitemap';
+import { PageHero } from 'app/lib';
 
 function generateStaticParams() {
-  let posts = getDatasets()
+  const posts = getDatasets();
 
   return posts.map((post) => ({
     slug: post.slug,
-  }))
+  }));
 }
 
-export function generateMetadata({ params }) {
-  let post = getDatasets().find((post) => post.slug === params.slug)
-  
+export function generateMetadata({ params }: { params: any }) {
+  const post = getDatasets().find((post) => post.slug === params.slug);
+
   if (!post) {
-    return
+    return;
   }
 
-  let {
-    name,
-    pubDate: publishedTime,
-    description,
-    image,
-  } = post.metadata
-  let ogImage = image ? image : `${baseUrl}/og?title=${encodeURIComponent(name)}`
+  const { name, pubDate: publishedTime, description, image } = post.metadata;
+  const ogImage = image
+    ? image
+    : `${baseUrl}/og?title=${encodeURIComponent(name)}`;
 
   return {
     name,
@@ -48,27 +46,27 @@ export function generateMetadata({ params }) {
       description,
       images: [ogImage],
     },
-  }
+  };
 }
 
-export default function Blog({ params }) {
-  let post = getDatasets().find((post) => post.slug === params.slug)
+export default function Blog({ params }: { params: any }) {
+  const post = getDatasets().find((post) => post.slug === params.slug);
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
   return (
     <section>
-      <article className="prose">
-      <PageHero
-        title={post.metadata.name}
-        description={post.metadata.description}
-        coverSrc={post.metadata.media?.src} 
-        coverAlt={post.metadata.media?.alt}
-      />
+      <article className='prose'>
+        <PageHero
+          title={post.metadata.name}
+          description={post.metadata.description}
+          coverSrc={post.metadata.media?.src}
+          coverAlt={post.metadata.media?.alt}
+        />
         <CustomMDX source={post.content} />
       </article>
     </section>
-  )
+  );
 }

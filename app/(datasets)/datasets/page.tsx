@@ -1,13 +1,14 @@
+import React from 'react';
 import { getDatasets } from 'app/blog/utils/mdx';
-import { Suspense } from "react";
-import Catalog from './catalog'
+import { Suspense } from 'react';
+import Catalog from './catalog';
 
 export default function Page() {
   const posts: any[] = getDatasets();
 
   const transformData = () => {
     const data = posts?.map((post) => ({
-      ...post.metadata
+      ...post.metadata,
     }));
 
     const result = data?.map((d) => {
@@ -15,26 +16,25 @@ export default function Page() {
         const updatedVals = t.values.map((v) => {
           return {
             id: v.replace(/ /g, '_').toLowerCase(),
-            name: v
-          }
-        })
-        return {...t, values: updatedVals}
-      })
-      return {...d, taxonomy: updatedTax}
-    })
+            name: v,
+          };
+        });
+        return { ...t, values: updatedVals };
+      });
+      return { ...d, taxonomy: updatedTax };
+    });
 
-    return result
+    return result;
   };
 
   const transformed = transformData();
 
   return (
     <section>
-      <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Datasets</h1>
+      <h1 className='font-semibold text-2xl mb-8 tracking-tighter'>Datasets</h1>
       <Suspense fallback={<>Loading...</>}>
         <Catalog datasets={transformed} />
       </Suspense>
     </section>
-  )
+  );
 }
-

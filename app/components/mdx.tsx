@@ -1,28 +1,21 @@
-import React from 'react'
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { highlight } from 'sugar-high'
+import React from 'react';
+import { MDXRemote } from 'next-mdx-remote/rsc';
+import { highlight } from 'sugar-high';
 
-import { 
-  Block,
-  Prose,
-  Caption,
-  Figure,
-  Image,
-  CompareImage,
-} from '../lib';
+import { Block, Prose, Caption, Figure, Image, CompareImage } from '../lib';
 import EnhancedMapBlock from './mdx-components/block';
 
-function Table({ data }) {
-  let headers = data.headers.map((header, index) => (
+function Table({ data }: { data: any }) {
+  const headers = data.headers.map((header, index) => (
     <th key={index}>{header}</th>
-  ))
-  let rows = data.rows.map((row, index) => (
+  ));
+  const rows = data.rows.map((row, index) => (
     <tr key={index}>
       {row.map((cell, cellIndex) => (
         <td key={cellIndex}>{cell}</td>
       ))}
     </tr>
-  ))
+  ));
 
   return (
     <table>
@@ -31,15 +24,12 @@ function Table({ data }) {
       </thead>
       <tbody>{rows}</tbody>
     </table>
-  )
+  );
 }
 
-
-
-
-function Code({ children, ...props }) {
-  let codeHTML = highlight(children)
-  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />
+function Code({ children, ...props }: { children: any }) {
+  const codeHTML = highlight(children);
+  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
 }
 
 function slugify(str) {
@@ -50,12 +40,12 @@ function slugify(str) {
     .replace(/\s+/g, '-') // Replace spaces with -
     .replace(/&/g, '-and-') // Replace & with 'and'
     .replace(/[^\w\-]+/g, '') // Remove all non-word characters except for -
-    .replace(/\-\-+/g, '-') // Replace multiple - with single -
+    .replace(/\-\-+/g, '-'); // Replace multiple - with single -
 }
 
 function createHeading(level) {
-  const Heading = ({ children }) => {
-    let slug = slugify(children)
+  const Heading = ({ children }: { children: JSX.Element }) => {
+    const slug = slugify(children);
     return React.createElement(
       `h${level}`,
       { id: slug },
@@ -66,16 +56,16 @@ function createHeading(level) {
           className: 'anchor',
         }),
       ],
-      children
-    )
-  }
+      children,
+    );
+  };
 
-  Heading.displayName = `Heading${level}`
+  Heading.displayName = `Heading${level}`;
 
-  return Heading
+  return Heading;
 }
 
-let components = {
+const components = {
   h1: createHeading(1),
   h2: createHeading(2),
   h3: createHeading(3),
@@ -90,18 +80,16 @@ let components = {
   Figure: Figure,
   Image: Image,
   Map: EnhancedMapBlock,
-  CompareImage: CompareImage
-}
+  CompareImage: CompareImage,
+};
 
-export function CustomMDX(props) {
+export function CustomMDX(props: any) {
   return (
-    
-      <MDXRemote
-        {...props}
-        components={{ ...components, ...(props.components || {}) }}
-      >
-        {props.children}
-      </MDXRemote>
-    
-  )
+    <MDXRemote
+      {...props}
+      components={{ ...components, ...(props.components || {}) }}
+    >
+      {props.children}
+    </MDXRemote>
+  );
 }
