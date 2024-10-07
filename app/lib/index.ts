@@ -13,6 +13,8 @@ import {
   Image,
   MapBlock,
   CompareImage,
+  PageHeader,
+  LogoContainer
 } from '@developmentseed/veda-ui';
 
 /**
@@ -30,6 +32,8 @@ export {
   CatalogView,
   PageHero,
   PageMainContent,
+  PageHeader,
+  LogoContainer,
 
   // MDX Components
   Block,
