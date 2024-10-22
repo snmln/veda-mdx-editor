@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { ReactQueryProvider } from '../../lib';
+import { ReactQueryProvider } from '@lib';
 
 interface DataStore {
   datasets?: any[];
