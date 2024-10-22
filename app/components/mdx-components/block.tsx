@@ -1,7 +1,7 @@
 'use client';
 
 import { useDataStore } from 'app/store/providers/data';
-import { MapBlock } from '../../lib';
+import { MapBlock } from '@lib';
 import React from 'react';
 
 export default function EnhancedMapBlock(props) {

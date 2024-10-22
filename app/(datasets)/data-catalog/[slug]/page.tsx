@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { CustomMDX } from 'app/components/mdx';
 import { getDatasets } from 'app/blog/utils/mdx';
 import { baseUrl } from 'app/sitemap';
-import { PageHero } from 'app/lib';
+import { PageHero } from '@lib';
 
 function generateStaticParams() {
   const posts = getDatasets();

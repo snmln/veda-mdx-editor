@@ -2,7 +2,7 @@ import React from 'react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { highlight } from 'sugar-high';
 
-import { Block, Prose, Caption, Figure, Image, CompareImage } from '../lib';
+import { Block, Prose, Caption, Figure, Image, CompareImage } from '@lib';
 import EnhancedMapBlock from './mdx-components/block';
 
 function Table({ data }: { data: any }) {
