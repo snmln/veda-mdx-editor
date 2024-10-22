@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageResponse } from 'next/og';
+import { ImageResponse } from 'next/og'; // @TODO: Look into generating dynamic OG images and whether they are still leveragable with statically building as much as possible
 
 export function GET(request: Request) {
   const url = new URL(request.url);
