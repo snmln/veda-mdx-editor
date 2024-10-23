@@ -5,8 +5,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "eslint . --fix",
-    "prettier:write": "prettier . --write"
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@developmentseed/veda-ui": "v5.7.0-alpha.1",
