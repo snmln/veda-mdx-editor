@@ -14,7 +14,7 @@ import {
   MapBlock,
   CompareImage,
   PageHeader,
-  LogoContainer
+  LogoContainer,
 } from '@developmentseed/veda-ui';
 
 /**
