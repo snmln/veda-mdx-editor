@@ -20,7 +20,8 @@ import {
   NavItemType,
   ExplorationAndAnalysis,
   DatasetSelectorModal,
-  timelineDatasetsAtom
+  timelineDatasetsAtom,
+  useTimelineDatasetAtom
 } from '@developmentseed/veda-ui';
 
 /**
@@ -57,7 +58,8 @@ export {
   useFiltersWithQS,
 
   // State
-  timelineDatasetsAtom
+  timelineDatasetsAtom,
+  useTimelineDatasetAtom
 };
 
 export type { NavItem, InternalNavLink };
