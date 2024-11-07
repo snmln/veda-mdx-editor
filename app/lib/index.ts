@@ -52,7 +52,4 @@ export {
   useFiltersWithQS,
 };
 
-export type {
-  NavItem,
-  InternalNavLink
-}
+export type { NavItem, InternalNavLink };
