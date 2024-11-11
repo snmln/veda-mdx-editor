@@ -26,11 +26,19 @@ module.exports = {
       // unexpected behavior due to multiple instances of Jotai's default store.
       // For more details, refer to the GitHub discussion:
       // https://github.com/pmndrs/jotai/discussions/2044
-      'jotai': path.resolve(__dirname, 'node_modules', 'jotai'),
-      'jotai-devtools': path.resolve(__dirname, 'node_modules', 'jotai-devtools'),
-      'jotai-location': path.resolve(__dirname, 'node_modules', 'jotai-location'),
+      jotai: path.resolve(__dirname, 'node_modules', 'jotai'),
+      'jotai-devtools': path.resolve(
+        __dirname,
+        'node_modules',
+        'jotai-devtools',
+      ),
+      'jotai-location': path.resolve(
+        __dirname,
+        'node_modules',
+        'jotai-location',
+      ),
       'jotai-optics': path.resolve(__dirname, 'node_modules', 'jotai-optics'),
     };
     return config;
   },
-}
+};

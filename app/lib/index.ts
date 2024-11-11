@@ -22,7 +22,7 @@ import {
   ExplorationAndAnalysis,
   DatasetSelectorModal,
   timelineDatasetsAtom,
-  useTimelineDatasetAtom
+  useTimelineDatasetAtom,
 } from '@developmentseed/veda-ui';
 
 /**
@@ -60,7 +60,7 @@ export {
 
   // State
   timelineDatasetsAtom,
-  useTimelineDatasetAtom
+  useTimelineDatasetAtom,
 };
 
 export type { NavItem, InternalNavLink };
