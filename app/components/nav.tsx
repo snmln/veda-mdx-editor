@@ -2,21 +2,22 @@ import React from 'react';
 import Link from 'next/link';
 import { PageHeader, LogoContainer } from '@lib';
 import NasaLogo from '../../public/images/nasa-logo';
+import { NavItem } from '@lib';
 
-const navItems = [
+const navItems: NavItem[] = [
   // @TODO: This should use the NavLinkType from veda-ui...
   {
-    title: 'home',
+    title: 'Home',
     to: '/',
     type: 'internalLink',
   },
   {
-    title: 'datasets',
-    to: '/datasets',
+    title: 'Data Catalog',
+    to: '/data-catalog',
     type: 'internalLink',
   },
   {
-    title: 'stories',
+    title: 'Stories',
     to: '/stories',
     type: 'internalLink',
   },

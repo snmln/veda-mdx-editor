@@ -15,6 +15,9 @@ import {
   CompareImage,
   PageHeader,
   LogoContainer,
+  NavItem,
+  InternalNavLink,
+  NavItemType,
 } from '@developmentseed/veda-ui';
 
 /**
@@ -43,7 +46,10 @@ export {
   Image,
   MapBlock,
   CompareImage,
+  NavItemType,
 
   // Hooks
   useFiltersWithQS,
 };
+
+export type { NavItem, InternalNavLink };
