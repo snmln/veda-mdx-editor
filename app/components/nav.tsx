@@ -17,6 +17,11 @@ const navItems: NavItem[] = [
     type: 'internalLink',
   },
   {
+    title: 'Exploration',
+    to: '/exploration',
+    type: 'internalLink',
+  },
+  {
     title: 'Stories',
     to: '/stories',
     type: 'internalLink',
