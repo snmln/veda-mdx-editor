@@ -1,8 +1,7 @@
-import React from 'react';
 import { notFound } from 'next/navigation';
 import { CustomMDX } from 'app/components/mdx';
-import { formatDate } from 'app/blog/utils/date';
-import { getStories } from 'app/blog/utils/mdx';
+import { formatDate } from 'app/content/utils/date';
+import { getStories } from 'app/content/utils/mdx';
 import { baseUrl } from 'app/sitemap';
 
 async function generateStaticParams() {
@@ -37,7 +36,7 @@ function generateMetadata({ params }: { params: any }) {
       description,
       type: 'article',
       publishedTime,
-      url: `${baseUrl}/blog/${post.slug}`,
+      url: `${baseUrl}/content/${post.slug}`,
       images: [
         {
           url: ogImage,
@@ -76,7 +75,7 @@ export default function Blog({ params }: { params: any }) {
             image: post.metadata.image
               ? `${baseUrl}${post.metadata.image}`
               : `/og?title=${encodeURIComponent(post.metadata.title)}`,
-            url: `${baseUrl}/blog/${post.slug}`,
+            url: `${baseUrl}/content/${post.slug}`,
             author: {
               '@type': 'Person',
               name: 'My Portfolio',

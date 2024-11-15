@@ -45,7 +45,7 @@ export function Navbar() {
   );
 
   return (
-    <aside className='-ml-[8px] mb-16 tracking-tight'>
+    <aside className='-ml-[8px] tracking-tight'>
       <div className='lg:sticky lg:top-20'>
         <nav id='nav'>
           <div className='flex flex-row space-x-0 hug-reset-container'>

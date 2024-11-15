@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import DataProvider from 'app/store/providers/data';
-import { getDatasetsMetadata } from 'app/blog/utils/mdx';
+import { getDatasetsMetadata } from 'app/content/utils/mdx';
 
 export default function DatasetLayout({
   children,
