@@ -1,7 +1,6 @@
-import React from 'react';
 import { notFound } from 'next/navigation';
 import { CustomMDX } from 'app/components/mdx';
-import { getDatasets } from 'app/blog/utils/mdx';
+import { getDatasets } from 'app/content/utils/mdx';
 import { baseUrl } from 'app/sitemap';
 import { PageHero } from '@lib';
 
@@ -33,7 +32,7 @@ export function generateMetadata({ params }) {
       description,
       type: 'article',
       publishedTime,
-      url: `${baseUrl}/blog/${post.slug}`,
+      url: `${baseUrl}/content/${post.slug}`,
       images: [
         {
           url: ogImage,

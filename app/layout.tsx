@@ -14,15 +14,15 @@ const DevSeedUIThemeProvider = dynamic(
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Next.js Portfolio Starter',
-    template: '%s | Next.js Portfolio Starter',
+    default: 'Next.js VEDA Template Instance',
+    template: '%s | Next.js VEDA Template Instance',
   },
-  description: 'This is my portfolio.',
+  description: 'Next.js VEDA Template Instance.',
   openGraph: {
-    title: 'My Portfolio',
-    description: 'This is my portfolio.',
+    title: 'Next.js VEDA Template Instance',
+    description: 'Next.js VEDA Template Instance.',
     url: baseUrl,
-    siteName: 'My Portfolio',
+    siteName: 'Next.js VEDA Template Instance',
     locale: 'en_US',
     type: 'website',
   },
