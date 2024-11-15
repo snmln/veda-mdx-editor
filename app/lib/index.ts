@@ -1,4 +1,5 @@
 'use client';
+
 import {
   CatalogView,
   PageHero,
@@ -18,6 +19,10 @@ import {
   NavItem,
   InternalNavLink,
   NavItemType,
+  ExplorationAndAnalysis,
+  DatasetSelectorModal,
+  timelineDatasetsAtom,
+  useTimelineDatasetAtom,
 } from '@developmentseed/veda-ui';
 
 /**
@@ -37,6 +42,8 @@ export {
   PageMainContent,
   PageHeader,
   LogoContainer,
+  ExplorationAndAnalysis,
+  DatasetSelectorModal,
 
   // MDX Components
   Block,
@@ -50,6 +57,10 @@ export {
 
   // Hooks
   useFiltersWithQS,
+
+  // State
+  timelineDatasetsAtom,
+  useTimelineDatasetAtom,
 };
 
 export type { NavItem, InternalNavLink };
