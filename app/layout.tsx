@@ -5,7 +5,7 @@ import { Navbar } from './components/nav';
 import Footer from './components/footer';
 import { baseUrl } from './sitemap';
 import dynamic from 'next/dynamic';
-import { VedauiConfigProvider } from '@lib';
+import { EnvConfigProvider } from '@lib';
 
 const DevSeedUIThemeProvider = dynamic(
   () => import('app/store/providers/theme'),
@@ -50,9 +50,9 @@ export default function RootLayout({
       <body>
         <main>
           <DevSeedUIThemeProvider>
-            <VedauiConfigProvider
+            <EnvConfigProvider
               config={{
-                mapboxToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? '',
+                envMapboxToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? '',
                 envApiStacEndpoint:
                   process.env.NEXT_PUBLIC_API_STAC_ENDPOINT ?? '',
                 envApiRasterEndpoint:
@@ -62,7 +62,7 @@ export default function RootLayout({
               <Navbar />
               {children}
               <Footer />
-            </VedauiConfigProvider>
+            </EnvConfigProvider>
           </DevSeedUIThemeProvider>
         </main>
       </body>
