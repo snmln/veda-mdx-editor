@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import DataProvider from 'app/store/providers/data';
 import { getDatasetsMetadata } from 'app/content/utils/mdx';
 
