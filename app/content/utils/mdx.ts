@@ -116,17 +116,17 @@ function getMDXMetaData(dir) {
 }
 
 export function getDatasetsMetadata() {
-  return getMDXMetaData(path.join(process.cwd(), 'app', 'blog', 'datasets'));
+  return getMDXMetaData(path.join(process.cwd(), 'app', 'content', 'datasets'));
 }
 
 export function getDatasets() {
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets'));
+  return getMDXData(path.join(process.cwd(), 'app', 'content', 'datasets'));
 }
 
 export function getStories() {
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'stories'));
+  return getMDXData(path.join(process.cwd(), 'app', 'content', 'stories'));
 }
 
 export function getBlogPosts() {
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'datasets'));
+  return getMDXData(path.join(process.cwd(), 'app', 'content', 'datasets'));
 }
