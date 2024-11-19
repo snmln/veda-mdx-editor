@@ -6,6 +6,7 @@ import {
   useFiltersWithQS,
   ReactQueryProvider,
   DevseedUiThemeProvider,
+  EnvConfigProvider,
   PageMainContent,
   Block,
   Prose,
@@ -35,6 +36,7 @@ export {
   // Providers
   DevseedUiThemeProvider,
   ReactQueryProvider,
+  EnvConfigProvider,
 
   // Components
   CatalogView,
