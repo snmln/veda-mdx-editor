@@ -115,6 +115,10 @@ function getMDXMetaData(dir) {
   });
 }
 
+export function getStoriesMetadata() {
+  return getMDXMetaData(path.join(process.cwd(), 'app', 'content', 'stories'));
+}
+
 export function getDatasetsMetadata() {
   return getMDXMetaData(path.join(process.cwd(), 'app', 'content', 'datasets'));
 }

@@ -23,6 +23,7 @@ import {
   DatasetSelectorModal,
   timelineDatasetsAtom,
   useTimelineDatasetAtom,
+  StoriesHubContent,
 } from '@developmentseed/veda-ui';
 
 /**
@@ -44,6 +45,7 @@ export {
   LogoContainer,
   ExplorationAndAnalysis,
   DatasetSelectorModal,
+  StoriesHubContent,
 
   // MDX Components
   Block,
