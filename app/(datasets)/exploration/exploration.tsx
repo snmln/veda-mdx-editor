@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import {
   ExplorationAndAnalysis,
@@ -35,13 +35,7 @@ export default function ExplorationAnalysis({ datasets }: { datasets: any }) {
 
   const setExternalDatasets = useSetAtom(externalDatasetsAtom);
 
-  console.log('datasets', datasets, 'transformed', transformed);
-
   setExternalDatasets(transformed);
-
-  useEffect(() => {
-    setExternalDatasets(transformed);
-  }, [datasets]);
 
   const openModal = () => {
     setDatasetModalRevealed(true);
@@ -51,8 +45,6 @@ export default function ExplorationAnalysis({ datasets }: { datasets: any }) {
   };
 
   const [timelineDatasets, setTimelineDatasets] = useTimelineDatasetAtom();
-
-  console.log('timelineDatasets', timelineDatasets);
   const [datasetModalRevealed, setDatasetModalRevealed] = useState(
     !timelineDatasets.length,
   );
