@@ -16,7 +16,6 @@ import {
   MapBlock,
   CompareImage,
   PageHeader,
-  LogoContainer,
   NavItem,
   InternalNavLink,
   NavItemType,
@@ -43,7 +42,6 @@ export {
   PageHero,
   PageMainContent,
   PageHeader,
-  LogoContainer,
   ExplorationAndAnalysis,
   DatasetSelectorModal,
 
