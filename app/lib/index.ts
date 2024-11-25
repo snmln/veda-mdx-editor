@@ -24,6 +24,7 @@ import {
   DatasetSelectorModal,
   timelineDatasetsAtom,
   useTimelineDatasetAtom,
+  externalDatasetsAtom
 } from '@developmentseed/veda-ui';
 
 /**
@@ -63,6 +64,7 @@ export {
   // State
   timelineDatasetsAtom,
   useTimelineDatasetAtom,
+  externalDatasetsAtom
 };
 
 export type { NavItem, InternalNavLink };
