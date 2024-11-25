@@ -5,20 +5,11 @@ import {
   ExplorationAndAnalysis,
   DatasetSelectorModal,
   useTimelineDatasetAtom,
+  externalDatasetsAtom,
 } from 'app/lib';
+import { useSetAtom } from 'jotai';
 
 export default function ExplorationAnalysis({ datasets }: { datasets: any }) {
-  const [timelineDatasets, setTimelineDatasets] = useTimelineDatasetAtom();
-  const [datasetModalRevealed, setDatasetModalRevealed] = useState(
-    !timelineDatasets.length,
-  );
-
-  const openModal = () => {
-    setDatasetModalRevealed(true);
-  };
-  const closeModal = () => {
-    setDatasetModalRevealed(false);
-  };
   const transformData = () => {
     const data = datasets?.map((post) => ({
       ...post.metadata,
@@ -41,6 +32,22 @@ export default function ExplorationAnalysis({ datasets }: { datasets: any }) {
   };
 
   const transformed = transformData();
+
+  const setExternalDatasets = useSetAtom(externalDatasetsAtom);
+
+  setExternalDatasets(transformed);
+
+  const openModal = () => {
+    setDatasetModalRevealed(true);
+  };
+  const closeModal = () => {
+    setDatasetModalRevealed(false);
+  };
+
+  const [timelineDatasets, setTimelineDatasets] = useTimelineDatasetAtom();
+  const [datasetModalRevealed, setDatasetModalRevealed] = useState(
+    !timelineDatasets.length,
+  );
 
   return (
     <>
