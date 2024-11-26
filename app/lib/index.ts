@@ -19,7 +19,6 @@ import {
   LogoContainer,
   NavItem,
   InternalNavLink,
-  NavItemType,
   ExplorationAndAnalysis,
   DatasetSelectorModal,
   timelineDatasetsAtom,
@@ -58,7 +57,6 @@ export {
   Image,
   MapBlock,
   CompareImage,
-  NavItemType,
 
   // Hooks
   useFiltersWithQS,
