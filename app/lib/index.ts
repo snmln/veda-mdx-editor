@@ -6,6 +6,7 @@ import {
   useFiltersWithQS,
   ReactQueryProvider,
   DevseedUiThemeProvider,
+  EnvConfigProvider,
   PageMainContent,
   Block,
   Prose,
@@ -24,6 +25,7 @@ import {
   timelineDatasetsAtom,
   useTimelineDatasetAtom,
   StoriesHubContent,
+  externalDatasetsAtom
 } from '@developmentseed/veda-ui';
 
 /**
@@ -36,6 +38,7 @@ export {
   // Providers
   DevseedUiThemeProvider,
   ReactQueryProvider,
+  EnvConfigProvider,
 
   // Components
   CatalogView,
@@ -63,6 +66,7 @@ export {
   // State
   timelineDatasetsAtom,
   useTimelineDatasetAtom,
+  externalDatasetsAtom
 };
 
 export type { NavItem, InternalNavLink };
