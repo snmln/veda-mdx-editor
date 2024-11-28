@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import { StoriesHubContent, useFiltersWithQS } from '@lib';
-import { useRouter } from "next/navigation";
 import Link from 'next/link';
 
 
@@ -10,12 +9,11 @@ export default function Hub({
 }: {
   stories: any;
 }) {
-  const router = useRouter();
-  const controlVars = useFiltersWithQS({navigate: ({ search }) => router.replace(`?${search}`)});
+  const controlVars = useFiltersWithQS();
 
   return (
-    <StoriesHubContent 
-      allStories={allStories} 
+    <StoriesHubContent
+      allStories={allStories}
       onFilterchanges={() => controlVars}
       storiesString= {{
         one: 'story',
