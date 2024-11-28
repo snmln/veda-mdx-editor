@@ -19,11 +19,11 @@ import {
   LogoContainer,
   NavItem,
   InternalNavLink,
-  NavItemType,
   ExplorationAndAnalysis,
   DatasetSelectorModal,
   timelineDatasetsAtom,
   useTimelineDatasetAtom,
+  StoriesHubContent,
   externalDatasetsAtom
 } from '@developmentseed/veda-ui';
 
@@ -47,6 +47,7 @@ export {
   LogoContainer,
   ExplorationAndAnalysis,
   DatasetSelectorModal,
+  StoriesHubContent,
 
   // MDX Components
   Block,
@@ -56,7 +57,6 @@ export {
   Image,
   MapBlock,
   CompareImage,
-  NavItemType,
 
   // Hooks
   useFiltersWithQS,
