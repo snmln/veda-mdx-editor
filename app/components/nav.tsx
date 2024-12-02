@@ -1,4 +1,3 @@
-import React from 'react';
 import Link from 'next/link';
 import { PageHeader } from '@lib';
 import NasaLogo from '../../public/images/nasa-logo';
@@ -7,29 +6,49 @@ import { NavItem } from '@lib';
 const navItems: NavItem[] = [
   // @TODO: This should use the NavLinkType from veda-ui...
   {
-    id: 'home',
-    title: 'Home',
-    to: '/',
-    type: 'internalLink',
+    id: 'test',
+    title: 'Test',
+    type: 'dropdown',
+    children: [
+      {
+        id: 'dropdown-menu-item-1',
+        title: 'dropdown menu item 1',
+        to: '/stories',
+        type: 'internalLink'
+      }
+    ]
+  },
+  {
+    id: 'another-test',
+    title: 'Another Test',
+    type: 'dropdown',
+    children: [
+      {
+        id: 'dropdown-menu-item-2',
+        title: 'dropdown menu item 2',
+        to: '/stories',
+        type: 'internalLink'
+      }
+    ]
   },
   {
     id: 'data-catalog',
     title: 'Data Catalog',
     to: '/data-catalog',
-    type: 'internalLink',
+    type: 'internalLink'
   },
   {
     id: 'exploration',
     title: 'Exploration',
     to: '/exploration',
-    type: 'internalLink',
+    type: 'internalLink'
   },
   {
     id: 'stories',
     title: 'Stories',
     to: '/stories',
-    type: 'internalLink',
-  },
+    type: 'internalLink'
+  }
 ];
 
 export function Navbar() {
