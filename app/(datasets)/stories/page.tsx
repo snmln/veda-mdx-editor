@@ -1,14 +1,14 @@
 import React from 'react';
-import { BlogPosts } from 'app/components/posts';
-import { getStories } from 'app/content/utils/mdx';
+import { getStoriesMetadata } from 'app/content/utils/mdx';
+import Hub from './hub';
 
 export default function Page() {
-  const posts = getStories();
+  const stories = getStoriesMetadata().map(d => ({...d.metadata, path: `stories/${d.slug}`}));
 
   return (
     <section>
       <h1 className='font-semibold text-2xl mb-8 tracking-tighter'>Stories</h1>
-      <BlogPosts postType='story' posts={posts} />
+      <Hub stories={stories} />
     </section>
   );
 }
