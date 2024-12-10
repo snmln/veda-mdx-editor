@@ -18,11 +18,12 @@ import {
   PageHeader,
   NavItem,
   InternalNavLink,
-  NavItemType,
   ExplorationAndAnalysis,
   DatasetSelectorModal,
   timelineDatasetsAtom,
   useTimelineDatasetAtom,
+  StoriesHubContent,
+  externalDatasetsAtom
 } from '@developmentseed/veda-ui';
 
 /**
@@ -44,6 +45,7 @@ export {
   PageHeader,
   ExplorationAndAnalysis,
   DatasetSelectorModal,
+  StoriesHubContent,
 
   // MDX Components
   Block,
@@ -53,7 +55,6 @@ export {
   Image,
   MapBlock,
   CompareImage,
-  NavItemType,
 
   // Hooks
   useFiltersWithQS,
@@ -61,6 +62,7 @@ export {
   // State
   timelineDatasetsAtom,
   useTimelineDatasetAtom,
+  externalDatasetsAtom
 };
 
 export type { NavItem, InternalNavLink };
