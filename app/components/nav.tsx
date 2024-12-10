@@ -48,26 +48,22 @@ export function Navbar() {
   };
 
   return (
-    <aside className='-ml-[8px] tracking-tight'>
-      <nav id='nav'>
-        <PageHeader
-          mainNavItems={navItems}
-          subNavItems={subNavItems}
-          logoSvg={
-            <div id='logo-container-link'>
-              {/*
-                USWDS targets only <a> tags for styling links. However when the text is a <span>
-                instead of a link, it does not inherit the color styling (it ends up being white).
-                To fix this, we must add the color inline like this.
-                TODO: Ideally we can address this on the veda-ui side so that the color applies to all elements within the logo.
-              */}
-              <NasaLogoColor />
-              <span style={{ color: '#1b1b1b' }}>Earthdata VEDA Dashboard</span>
-            </div>
-          }
-          linkProperties={linkProps}
-        />
-      </nav>
-    </aside>
+    <PageHeader
+      mainNavItems={navItems}
+      subNavItems={subNavItems}
+      logoSvg={
+        <div id='logo-container-link'>
+          {/*
+            USWDS targets only <a> tags for styling links. However when the text is a <span>
+            instead of a link, it does not inherit the color styling (it ends up being white).
+            To fix this, we must add the color inline like this.
+            TODO: Ideally we can address this on the veda-ui side so that the color applies to all elements within the logo.
+          */}
+          <NasaLogoColor />
+          <span style={{ color: '#1b1b1b' }}>Earthdata VEDA Dashboard</span>
+        </div>
+      }
+      linkProperties={linkProps}
+    />
   );
 }
