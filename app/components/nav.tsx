@@ -1,37 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { PageHeader } from '@lib';
-import NasaLogo from '../../public/images/nasa-logo';
 import { NavItem } from '@lib';
+import NasaLogoColor from 'app/components/nasa-logo-color.js';
+
 
 const navItems: NavItem[] = [
-  // @TODO: This should use the NavLinkType from veda-ui...
-  {
-    id: 'test',
-    title: 'Test',
-    type: 'dropdown',
-    children: [
-      {
-        id: 'dropdown-menu-item-1',
-        title: 'dropdown menu item 1',
-        to: '/stories',
-        type: 'internalLink'
-      }
-    ]
-  },
-  {
-    id: 'another-test',
-    title: 'Another Test',
-    type: 'dropdown',
-    children: [
-      {
-        id: 'dropdown-menu-item-2',
-        title: 'dropdown menu item 2',
-        to: '/stories',
-        type: 'internalLink'
-      }
-    ]
-  },
   {
     id: 'data-catalog',
     title: 'Data Catalog',
@@ -52,6 +26,21 @@ const navItems: NavItem[] = [
   }
 ];
 
+const subNavItems: NavItem[] = [
+  {
+    id: 'about',
+    title: 'About',
+    to: '/about',
+    type: 'internalLink'
+  },
+  {
+    id: 'contact-us',
+    title: 'Contact us',
+    actionId: 'open-google-form',
+    type: 'action'
+  }
+]
+
 export function Navbar() {
   const linkProps = {
     LinkElement: Link,
@@ -63,8 +52,9 @@ export function Navbar() {
       <nav id='nav'>
         <PageHeader
           mainNavItems={navItems}
-          subNavItems={[]}
-          logo={<NasaLogo />}
+          subNavItems={subNavItems}
+          logoSvg={<NasaLogoColor />}
+          title={'Earthdata VEDA Dashboard'}
           linkProperties={linkProps}
         />
       </nav>
