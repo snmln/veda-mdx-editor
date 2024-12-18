@@ -6,8 +6,9 @@ import { baseUrl } from './sitemap';
 import dynamic from 'next/dynamic';
 import { EnvConfigProvider } from '@lib';
 
-import '@developmentseed/veda-ui/lib/main.css';
 import './styles/index.scss';
+
+import '@developmentseed/veda-ui/lib/main.css';
 
 const DevSeedUIThemeProvider = dynamic(
   () => import('app/store/providers/theme'),
