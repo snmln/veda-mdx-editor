@@ -4520,7 +4520,15 @@ focus-trap-react@^10.2.3:
     focus-trap "^7.6.1"
     tabbable "^6.2.0"
 
-focus-trap@^7.6.1:
+focus-trap-react@^11.0.1:
+  version "11.0.1"
+  resolved "http://verdaccio.ds.io:4873/focus-trap-react/-/focus-trap-react-11.0.1.tgz#f121efd6f68845da5eb2a0517e6551ad8167c6a9"
+  integrity sha512-vxv2lglW41sBgREiVbWUMf0QzCDn84lCQhfdyELNPkfsH2VdB3XheEYBk2HK/XhpghBtbkXCGORPX6otehi+uw==
+  dependencies:
+    focus-trap "^7.6.2"
+    tabbable "^6.2.0"
+
+focus-trap@^7.6.1, focus-trap@^7.6.2:
   version "7.6.2"
   resolved "http://verdaccio.ds.io:4873/focus-trap/-/focus-trap-7.6.2.tgz#a501988821ca23d0150a7229eb7a20a3695bdf0e"
   integrity sha512-9FhUxK1hVju2+AiQIDJ5Dd//9R2n2RAfJ0qfhF4IHGHgcoEUTMpbTeG/zbEuwaiYXfuAH6XE0/aCyxDdRM+W5w==

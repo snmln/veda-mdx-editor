@@ -26,6 +26,7 @@
     "eslint": "8.57.0",
     "eslint-config-next": "^14.2.14",
     "eslint-config-prettier": "^9.1.0",
+    "focus-trap-react": "^11.0.1",
     "geist": "1.2.2",
     "gray-matter": "^4.0.3",
     "markdown-it": "^14.1.0",
