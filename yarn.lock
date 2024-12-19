@@ -1897,11 +1897,6 @@
   resolved "http://verdaccio.ds.io:4873/@tootallnate%2fonce/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
-"@trussworks/react-uswds@^9.1.0":
-  version "9.1.0"
-  resolved "http://verdaccio.ds.io:4873/@trussworks%2freact-uswds/-/react-uswds-9.1.0.tgz#6a60156fd7b7ee90484ccbe2d898784d34f7cb36"
-  integrity sha512-vQsr73oMtDIzLHVtkgD81tL7YxzygTyH9e1P3Lv/C1tGlqoNEUmUgVEmUVzo/IwOvMN0XxxSkNkOpnM9rDzRMg==
-
 "@turf/area@^6.5.0":
   version "6.5.0"
   resolved "http://verdaccio.ds.io:4873/@turf%2farea/-/area-6.5.0.tgz#1d0d7aee01d8a4a3d4c91663ed35cc615f36ad56"
@@ -4520,15 +4515,7 @@ focus-trap-react@^10.2.3:
     focus-trap "^7.6.1"
     tabbable "^6.2.0"
 
-focus-trap-react@^11.0.1:
-  version "11.0.1"
-  resolved "http://verdaccio.ds.io:4873/focus-trap-react/-/focus-trap-react-11.0.1.tgz#f121efd6f68845da5eb2a0517e6551ad8167c6a9"
-  integrity sha512-vxv2lglW41sBgREiVbWUMf0QzCDn84lCQhfdyELNPkfsH2VdB3XheEYBk2HK/XhpghBtbkXCGORPX6otehi+uw==
-  dependencies:
-    focus-trap "^7.6.2"
-    tabbable "^6.2.0"
-
-focus-trap@^7.6.1, focus-trap@^7.6.2:
+focus-trap@^7.6.1:
   version "7.6.2"
   resolved "http://verdaccio.ds.io:4873/focus-trap/-/focus-trap-7.6.2.tgz#a501988821ca23d0150a7229eb7a20a3695bdf0e"
   integrity sha512-9FhUxK1hVju2+AiQIDJ5Dd//9R2n2RAfJ0qfhF4IHGHgcoEUTMpbTeG/zbEuwaiYXfuAH6XE0/aCyxDdRM+W5w==
