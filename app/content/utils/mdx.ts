@@ -40,6 +40,7 @@ export function resolveConfigFunctions(datum, bag): any {
   return datum;
 }
 
+// @TODO-SANDRA: pubDate is being parsed into an object instead of a string data -> FIX!
 function parseAttributes(obj) {
   const convert = (obj) => {
     return Object.keys(obj).reduce(

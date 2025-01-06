@@ -23,7 +23,8 @@ import {
   timelineDatasetsAtom,
   useTimelineDatasetAtom,
   StoriesHubContent,
-  externalDatasetsAtom
+  externalDatasetsAtom,
+  ScrollyTellingBlock,
 } from '@developmentseed/veda-ui';
 
 /**
@@ -55,6 +56,7 @@ export {
   Image,
   MapBlock,
   CompareImage,
+  ScrollyTellingBlock,
 
   // Hooks
   useFiltersWithQS,

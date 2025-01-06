@@ -1,8 +1,9 @@
 import React from 'react';
+import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { highlight } from 'sugar-high';
 
-import { Block, Prose, Caption, Figure, Image, CompareImage } from '@lib';
+import { Block, Prose, Caption, Figure, Image, CompareImage, ScrollyTellingBlock } from '@lib';
 import EnhancedMapBlock from './mdx-components/block';
 
 function Table({ data }: { data: any }) {
@@ -81,6 +82,8 @@ const components = {
   Image: Image,
   Map: EnhancedMapBlock,
   CompareImage: CompareImage,
+  ScrollyTellingBlock: ScrollyTellingBlock,
+  Link: Link,
 };
 
 export function CustomMDX(props: any) {
