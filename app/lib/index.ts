@@ -26,6 +26,7 @@ import {
   externalDatasetsAtom,
   ScrollytellingBlock,
   Chapter,
+  Chart,
 } from '@developmentseed/veda-ui';
 
 /**
@@ -59,6 +60,7 @@ export {
   CompareImage,
   ScrollytellingBlock,
   Chapter,
+  Chart,
 
   // Hooks
   useFiltersWithQS,

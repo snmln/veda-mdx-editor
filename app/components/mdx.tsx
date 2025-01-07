@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { highlight } from 'sugar-high';
 
-import { Block, Prose, Caption, Chapter, Figure, Image, CompareImage } from '@lib';
+import { Block, Prose, Caption, Chapter, Figure, Image, CompareImage, Chart } from '@lib';
 import { EnhancedMapBlock, EnhancedScrollyTellingBlock } from './mdx-components/block';
 
 function Table({ data }: { data: any }) {
@@ -85,6 +85,7 @@ const components = {
   ScrollytellingBlock: EnhancedScrollyTellingBlock,
   Link: Link,
   Chapter: Chapter,
+  Chart: Chart,
 };
 
 export function CustomMDX(props: any) {
