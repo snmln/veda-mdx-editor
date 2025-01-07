@@ -9,7 +9,7 @@ export default function HomePage() {
       </h1>
 
       <p>
-        The Visualization, Exploration, and Data Analysis (VEDA) platform is intended to show the capabilities of Analysis-Ready, Cloud-Optimized (ARCO) data. The VEDA Dashboard is one interface for the VEDA platform, that allows science teams to showcase their work for a variety of stakeholders. This flexible dashboard can be customized for your own needs. To learn more about creating your own self-hosted instance of the VEDA Dashboard, and how to manage it, visit our <Link href="https://docs.openveda.cloud/instance-management/" className="text-neutral-600 dark:text-neutral-300"> VEDA Documentation</Link>.
+        The Visualization, Exploration, and Data Analysis (VEDA) platform is intended to show the capabilities of Analysis-Ready, Cloud-Optimized (ARCO) data. The VEDA Dashboard is one interface for the VEDA platform, that allows science teams to showcase their work for a variety of stakeholders. This flexible dashboard can be customized for your own needs. To learn more about creating your own self-hosted instance of the VEDA Dashboard, and how to manage it, visit our <Link href='https://docs.openveda.cloud/instance-management/' className='text-neutral-600 dark:text-neutral-300'> VEDA Documentation</Link>.
       </p>
       <br/>
       <p>
