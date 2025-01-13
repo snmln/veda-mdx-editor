@@ -1,10 +1,11 @@
 import React from 'react';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Navbar } from './components/nav';
 import Footer from './components/footer';
 import { baseUrl } from './sitemap';
 import dynamic from 'next/dynamic';
-import { EnvConfigProvider } from '@lib';
+import { VedaUIProvider } from '@lib';
 
 import './styles/index.scss';
 
@@ -53,19 +54,25 @@ export default function RootLayout({
       <body>
         <main>
           <DevSeedUIThemeProvider>
-            <EnvConfigProvider
+            <VedaUIProvider
               config={{
                 envMapboxToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? '',
                 envApiStacEndpoint:
                   process.env.NEXT_PUBLIC_API_STAC_ENDPOINT ?? '',
                 envApiRasterEndpoint:
                   process.env.NEXT_PUBLIC_API_RASTER_ENDPOINT ?? '',
+                navigation: {
+                  LinkComponent: Link,
+                  linkProps: {
+                    pathAttributeKeyName: 'href'
+                  }
+                }
               }}
             >
               <Navbar />
               {children}
               <Footer />
-            </EnvConfigProvider>
+            </VedaUIProvider>
           </DevSeedUIThemeProvider>
         </main>
       </body>
