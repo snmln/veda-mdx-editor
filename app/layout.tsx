@@ -2,7 +2,6 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar } from './components/nav';
-import Footer from './components/footer';
 import { baseUrl } from './sitemap';
 import dynamic from 'next/dynamic';
 import { VedaUIProvider } from '@lib';
@@ -71,7 +70,6 @@ export default function RootLayout({
             >
               <Navbar />
               {children}
-              <Footer />
             </VedaUIProvider>
           </DevSeedUIThemeProvider>
         </main>

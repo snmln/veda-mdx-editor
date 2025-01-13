@@ -3,7 +3,7 @@
 import React from 'react';
 import { useDataStore } from 'app/store/providers/data';
 import { MapBlock, ScrollytellingBlock } from '@lib';
-import { transformToVedaData } from '@helpers/data';
+import { transformToVedaData } from 'app/content/utils/data';
 
 export function EnhancedMapBlock(props) {
   const { datasets } = useDataStore();
