@@ -1,5 +1,6 @@
-// @TODO: Revist type here, should use data types from veda-ui
-export const transformData = (content: any) => {
+import { DatasetData, VedaData } from "@lib";
+
+export const transformToDatasetsList = (content: any): DatasetData[] => {
   const data = content?.map((post) => ({
     ...post.metadata,
   }));
@@ -19,3 +20,15 @@ export const transformData = (content: any) => {
 
   return result;
 };
+
+export const transformToVedaData = (datasets: any): VedaData<DatasetData> => {
+  const transformed = {};
+  datasets?.map((dataset) => {
+    const id = dataset.metadata.id;
+    transformed[id] = {
+      content: dataset.content,
+      data: dataset.metadata,
+    };
+  });
+  return transformed;
+}

@@ -27,6 +27,8 @@ import {
   ScrollytellingBlock,
   Chapter,
   Chart,
+  DatasetData,
+  VedaData,
 } from '@developmentseed/veda-ui';
 
 /**
@@ -71,4 +73,4 @@ export {
   externalDatasetsAtom
 };
 
-export type { NavItem, InternalNavLink };
+export type { DatasetData, NavItem, InternalNavLink, VedaData };
