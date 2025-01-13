@@ -3,44 +3,10 @@ import path from 'path';
 import matter from 'gray-matter';
 import markdownit from 'markdown-it';
 import { DatasetLayer, StoryData } from 'app/types/veda';
+import { transformToDatasetsList } from './data';
 
 const md = markdownit();
 
-export function resolveConfigFunctions<T>(datum, bag);
-export function resolveConfigFunctions<T extends any[]>(datum, bag);
-export function resolveConfigFunctions(datum, bag): any {
-  if (Array.isArray(datum)) {
-    return datum.map((v) => resolveConfigFunctions(v, bag));
-  }
-
-  if (datum != null && typeof datum === 'object') {
-    // Use for loop instead of reduce as it faster.
-    const ready = {};
-    for (const [k, v] of Object.entries(datum as object)) {
-      ready[k] = resolveConfigFunctions(v, bag);
-    }
-    return ready;
-  }
-
-  if (typeof datum === 'function') {
-    try {
-      return datum(bag);
-    } catch (error) {
-      /* eslint-disable-next-line no-console */
-      console.error(
-        'Failed to resolve function %s(%o) with error %s',
-        datum.name,
-        bag,
-        error.message,
-      );
-      return null;
-    }
-  }
-
-  return datum;
-}
-
-// @TODO-SANDRA: pubDate is being parsed into an object instead of a string data -> FIX!
 function parseAttributes(obj) {
   const convert = (obj) => {
     return Object.keys(obj).reduce(
@@ -126,6 +92,14 @@ export function getDatasetsMetadata() {
 
 export function getDatasets() {
   return getMDXData(path.join(process.cwd(), 'app', 'content', 'datasets'));
+}
+
+export function getTransformedDatasetMetadata() {
+  return transformToDatasetsList(getDatasetsMetadata());
+}
+
+export function getTransformedDatasets() {
+  return transformToDatasetsList(getDatasets());
 }
 
 export function getStories() {
