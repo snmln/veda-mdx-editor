@@ -27,22 +27,22 @@ The repository includes a sample `.env.local.sample` file to guide developers in
 
 ### Using environment variables in code
 
-The `EnvConfigProvider` is part of the `@developmentseed/veda-ui` library and is used to pass environment variables to VEDA-UI components. This is needed so that VEDA components relying on configurations like API endpoints and Mapbox tokens can access these values.
+The `VedaUIProvider` is part of the `@developmentseed/veda-ui` library and is used to pass environment variables to VEDA-UI components. This is needed so that VEDA components relying on configurations like API endpoints and Mapbox tokens can access these values.
 
 #### Where to place it
 
-The `EnvConfigProvider` should wrap your application at a high level, such as in the `RootLayout` or a similar layout component, so that all VEDA-UI components within the application have access to the provided configurations.
+The `VedaUIProvider` should wrap your application at a high level, such as in the `RootLayout` or a similar layout component, so that all VEDA-UI components within the application have access to the provided configurations.
 
 #### Example usage
 
-Below is an example of how to configure the `EnvConfigProvider` with environment variables:
+Below is an example of how to configure the `VedaUIProvider` with environment variables:
 
 ```tsx
-import { EnvConfigProvider } from '@developmentseed/veda-ui';
+import { VedaUIProvider } from '@developmentseed/veda-ui';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <EnvConfigProvider
+    <VedaUIProvider
       config={{
         envMapboxToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? '',
         envApiStacEndpoint: process.env.NEXT_PUBLIC_API_STAC_ENDPOINT ?? '',
@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       }}
     >
       {children}
-    </EnvConfigProvider>
+    </VedaUIProvider>
   );
 }
 ```
