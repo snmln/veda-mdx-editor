@@ -1,6 +1,6 @@
 # Styling and theming
 
-This guide explains how to set up and customize styles for the application which uses the U.S. Web Design System (USWDS) as a foundation. The application can integrate with `veda-ui` for core feature components styled with USWDS or use `react-uswds` for standalone UI elements like buttons, inputs, modals, etc.
+This guide explains how to set up and customize styles for the application which uses the U.S. Web Design System (USWDS) as a foundation. The application can integrate with `veda-ui` for core feature components styled with USWDS or use `react-uswds` for standalone UI elements like grid, buttons, inputs, modals, etc.
 
 > **Note**: If you're using the provided template, this setup is already configured. You can skip the initial steps unless you're starting from scratch or modifying the default structure.
 
@@ -71,9 +71,57 @@ To use USWDS-based styles:
     import '@developmentseed/veda-ui/lib/main.css';
     ```
 
+## Using USWDS utility classes
 
+In addition to customizing the theme, you can use USWDS utility classes directly in your components for quick and consistent styling. Below are some examples of commonly used utility classes:
 
+### Example: Adding Margins and Padding
 
+```tsx
+<div className="usa-section margin-top-3 padding-2">
+  <h1 className="margin-bottom-2">Heading 1</h1>
+  <p className="padding-left-1">
+    This is an example of using USWDS utility classes for spacing.
+  </p>
+</div>
+```
 
+### Custom stylesheets
 
+If further customization is needed, you can also use custom stylesheets alongside USWDS utility classes. For example:
 
+1. Create a custom stylesheet file (e.g., `custom-styles.scss`).
+2. Add your custom styles:
+
+    ```scss
+    .custom-heading {
+        @include u-padding-x(2);
+        max-width: units("desktop");
+
+        @include at-media("desktop") {
+          @include u-padding-x(4);
+        }
+    }
+    ```
+
+3. Import the stylesheet into the `styles/index.scss` entry file:
+
+    ```scss
+    @forward 'uswds-theme';
+    @forward 'uswds';
+
+    @use 'uswds-core' as *;
+
+    @import 'custom-styles';
+
+    ```
+
+4. Use the custom class in your component:
+
+    ```tsx
+    <h1 className="custom-heading">Custom styled heading</h1>
+    ```
+
+### Notes
+
+- Refer to the [USWDS documentation](https://designsystem.digital.gov/utilities/) for a complete list of available utility classes, mixins and design tokens.
