@@ -6,7 +6,7 @@ import {
   useFiltersWithQS,
   ReactQueryProvider,
   DevseedUiThemeProvider,
-  EnvConfigProvider,
+  VedaUIProvider,
   PageMainContent,
   Block,
   Prose,
@@ -23,7 +23,12 @@ import {
   timelineDatasetsAtom,
   useTimelineDatasetAtom,
   StoriesHubContent,
-  externalDatasetsAtom
+  externalDatasetsAtom,
+  ScrollytellingBlock,
+  Chapter,
+  Chart,
+  DatasetData,
+  VedaData,
 } from '@developmentseed/veda-ui';
 
 /**
@@ -36,7 +41,7 @@ export {
   // Providers
   DevseedUiThemeProvider,
   ReactQueryProvider,
-  EnvConfigProvider,
+  VedaUIProvider,
 
   // Components
   CatalogView,
@@ -55,6 +60,9 @@ export {
   Image,
   MapBlock,
   CompareImage,
+  ScrollytellingBlock,
+  Chapter,
+  Chart,
 
   // Hooks
   useFiltersWithQS,
@@ -65,4 +73,4 @@ export {
   externalDatasetsAtom
 };
 
-export type { NavItem, InternalNavLink };
+export type { DatasetData, NavItem, InternalNavLink, VedaData };
