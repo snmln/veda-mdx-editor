@@ -71,9 +71,9 @@ To use USWDS-based styles:
     import '@developmentseed/veda-ui/lib/main.css';
     ```
 
-## Using USWDS utility classes
+## Further customizing styles with USWDS
 
-In addition to customizing the theme, you can use USWDS utility classes directly in your components for quick and consistent styling. Below are some examples of commonly used utility classes:
+In addition to customizing the theme, you can use USWDS utility classes directly in your components for quick and consistent styling. Below is an example of using USWDS utility classes:
 
 ### Example: Adding Margins and Padding
 
@@ -86,7 +86,7 @@ In addition to customizing the theme, you can use USWDS utility classes directly
 </div>
 ```
 
-### Custom stylesheets
+### Example: Custom stylesheets
 
 If further customization is needed, you can also use custom stylesheets alongside USWDS utility classes. For example:
 
