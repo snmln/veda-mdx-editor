@@ -1,51 +1,20 @@
 # NEXT JS w. VEDA UI
 
-This is a test NEXT JS instance to understand the requirement for [VEDA-UI](https://github.com/nasa-IMPACT/veda-ui) to be used with a NEXT JS instance.
+Next.js instance that uses the [VEDA-UI components library](https://github.com/nasa-IMPACT/veda-ui) and [USWDS](https://designsystem.digital.gov/), to build applications for geospatial data visualization, storytelling and analysis.
 
-This repo is based on Portfolio Blog starter from NEXT JS: <https://portfolio-blog-starter.vercel.app>
+## Getting Started
 
-## Installation and Usage
+To set up and run this project locally, refer to the [Development guide](./docs/DEVELOPMENT.md).
 
-### Install Project Dependencies
+## Documentation
 
-Ensure the following are installed on your system:
+Documentation for this project can be found in the [`docs`](./docs) directory. Below is a quick summary of available resources:
 
-- [Node.js](http://nodejs.org/) (version is specified in the [.nvmrc](.nvmrc) file)
-- [Yarn](https://yarnpkg.com/)
-
-If you’re using [`nvm`](https://github.com/creationix/nvm), activate the required Node.js version by running:
-
-```sh
-nvm install
-```
-
-### Register the VEDA-UI Package
-
-The `VEDA-UI` package is hosted on a Verdaccio instance during its experimental phase. To successfully install it, you must scope `@developmentseed/veda-ui` to the Verdaccio instance.
-
-Run the following command before installing other dependencies:
-
-```sh
-yarn config set @developmentseed:veda-ui http://verdaccio.ds.io:4873/
-```
-
-### Install Dependencies
-
-Install the project dependencies by running:
-
-```sh
-yarn install
-```
-
-### Start the Development Server
-
-To start the development server, run:
-
-```sh
-yarn dev
-```
-
-The website will then be accessible at <http://localhost:3000>.
+1. [How to Run / Development](./docs/DEVELOPMENT.md)
+2. [Overview of Architecture](./docs/ARCHITECTURE_OVERVIEW.md)
+3. [Configuration](./docs/CONFIGURATION.md)
+4. [Veda-UI Components](./docs/VEDA_UI_COMPONENTS.md)
+5. [STYLING / USWDS](./docs/STYLING.md)
 
 ## License
 
