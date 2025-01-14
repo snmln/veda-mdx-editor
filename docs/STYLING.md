@@ -2,7 +2,7 @@
 
 This guide explains how to set up and customize styles for the application which uses the U.S. Web Design System (USWDS) as a foundation. The application can integrate with `veda-ui` for core feature components styled with USWDS or use `react-uswds` for standalone UI elements like buttons, inputs, modals, etc.
 
-The application is designed to support the USWDS styling framework for consistent and accessible design.
+> **Note**: If you're using the provided template, this setup is already configured. You can skip the initial steps unless you're starting from scratch or modifying the default structure.
 
 ## Setup requirements
 

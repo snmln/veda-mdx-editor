@@ -6,7 +6,7 @@ The application uses `.env` and `.env.local` files to manage environment variabl
 
 ### `.env` variables
 
-The following variables are used to configure the API endpoints for the application:
+These variables configure general API endpoints and settings that are safe to be exposed publicly. They are used to configure the application for production or public-facing environments and are committed to version control.
 
 - **`NEXT_PUBLIC_API_STAC_ENDPOINT`**
     Defines the endpoint for accessing the STAC API
@@ -17,13 +17,9 @@ The following variables are used to configure the API endpoints for the applicat
     NEXT_PUBLIC_API_RASTER_ENDPOINT='https://openveda.cloud/api/raster'
     ```
 
-These variables are committed to the repository as they are not sensitive and are used for public API access.
-
 ### `.env variables`
 
-These variables are used for local development and are specific to each developer’s environment. These variables are not committed to version control.
-
-The repository includes a sample `.env.local.sample` file to guide developers in setting these up. Please copy this file, rename it to .env.local and fill it with the required credentials and tokens.
+These variables are specific to each developer’s local environment and often contain sensitive information like API keys or tokens. They should not be committed to version control. Instead, developers should copy the provided sample `.env.local.sample` file and rename it to `.env.local.`
 
 ### Using environment variables in code
 
