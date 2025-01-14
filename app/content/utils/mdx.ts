@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import markdownit from 'markdown-it';
 import { DatasetLayer, StoryData } from 'app/types/veda';
+import { transformToDatasetsList } from './data';
 
 const md = markdownit();
 
@@ -81,27 +82,6 @@ function getMDXMetaData(dir) {
   });
 }
 
-const transformData = (content: any) => {
-  const data = content?.map((post) => ({
-    ...post.metadata,
-  }));
-
-  const result = data?.map((d) => {
-    const updatedTax = d.taxonomy.map((t) => {
-      const updatedVals = t.values.map((v) => {
-        return {
-          id: v.replace(/ /g, '_').toLowerCase(),
-          name: v,
-        };
-      });
-      return { ...t, values: updatedVals };
-    });
-    return { ...d, taxonomy: updatedTax };
-  });
-
-  return result;
-};
-
 export function getStoriesMetadata() {
   return getMDXMetaData(path.join(process.cwd(), 'app', 'content', 'stories'));
 }
@@ -115,11 +95,11 @@ export function getDatasets() {
 }
 
 export function getTransformedDatasetMetadata() {
-  return transformData(getDatasetsMetadata());
+  return transformToDatasetsList(getDatasetsMetadata());
 }
 
 export function getTransformedDatasets() {
-  return transformData(getDatasets());
+  return transformToDatasetsList(getDatasets());
 }
 
 export function getStories() {

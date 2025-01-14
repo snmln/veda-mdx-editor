@@ -1,17 +1,19 @@
 'use client';
 
-import { useDataStore } from 'app/store/providers/data';
-import { MapBlock } from '@lib';
 import React from 'react';
+import { useDataStore } from 'app/store/providers/data';
+import { MapBlock, ScrollytellingBlock } from '@lib';
+import { transformToVedaData } from 'app/content/utils/data';
 
-export default function EnhancedMapBlock(props) {
+export function EnhancedMapBlock(props) {
   const { datasets } = useDataStore();
-
-  const transformed = datasets?.map((dataset) => ({
-    content: dataset.content,
-    slug: dataset.slug,
-    data: dataset.metadata,
-  }));
-
+  const transformed = transformToVedaData(datasets);
   return <MapBlock {...props} datasets={transformed} />;
+};
+
+export function EnhancedScrollyTellingBlock(props) {
+  const { datasets } = useDataStore();
+  const transformed = transformToVedaData(datasets);
+  return <ScrollytellingBlock {...props} datasets={transformed} />;
 }
+
