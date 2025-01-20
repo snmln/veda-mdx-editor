@@ -24,11 +24,7 @@ nvm install
     ```
 
 2. **Register the VEDA-UI package**
-    The VEDA-UI package is hosted on a Verdaccio instance during its experimental phase. To install it, configure Yarn to use the Verdaccio instance:
-
-    ```sh
-    yarn config set @developmentseed:veda-ui http://verdaccio.ds.io:4873/
-    ```
+    The VEDA-UI package is now published on the public NPM registry under the @developmentseed scope. To install it, ensure your `.npmrc` or global npm configuration points to the public registry (default).
 
 3. **Install dependencies**
 
