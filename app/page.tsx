@@ -14,12 +14,12 @@ export default function HomePage() {
           Analysis-Ready, Cloud-Optimized (ARCO) data. The VEDA Dashboard is one interface for the VEDA platform, that allows science
           teams to showcase their work for a variety of stakeholders. This flexible dashboard can be customized for your own needs.
           To learn more about creating your own self-hosted instance of the VEDA Dashboard, and how to manage it, visit our 
-          <Link href="https://docs.openveda.cloud/instance-management/"> VEDA Documentation</Link>.
+          <Link href='https://docs.openveda.cloud/instance-management/'> VEDA Documentation</Link>.
         </p>
         <br/>
         <p>
           This is a template for what your own instance of the VEDA Dashboard might look like. It includes the core VEDA Dashboard features,
-          compiled using Next JS. You can copy this template instance to start your own custom instance of the VEDA Dashboard. For more help with this, reach out to <Link href="mailto:veda@uah.edu">veda@uah.edu</Link>.
+          compiled using Next JS. You can copy this template instance to start your own custom instance of the VEDA Dashboard. For more help with this, reach out to <Link href='mailto:veda@uah.edu'>veda@uah.edu</Link>.
         </p>
       </div>
     </section>
