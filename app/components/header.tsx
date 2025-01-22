@@ -63,7 +63,6 @@ export default function Header() {
           <span style={{ color: '#1b1b1b' }}>Earthdata VEDA Dashboard</span>
         </div>
       }
-      linkProperties={linkProps}
     />
   );
 }
