@@ -1,14 +1,15 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Navbar } from './components/nav';
+import Header from './components/header';
 import { baseUrl } from './sitemap';
 import dynamic from 'next/dynamic';
 import { VedaUIProvider } from '@lib';
+import Footer from './components/footer';
 
 import './styles/index.scss';
 
-import '@developmentseed/veda-ui/lib/main.css';
+// import '@developmentseed/veda-ui/lib/main.css';
 
 const DevSeedUIThemeProvider = dynamic(
   () => import('app/store/providers/theme'),
@@ -68,8 +69,9 @@ export default function RootLayout({
                 }
               }}
             >
-              <Navbar />
+              <Header />
               {children}
+              <Footer />
             </VedaUIProvider>
           </DevSeedUIThemeProvider>
         </main>
