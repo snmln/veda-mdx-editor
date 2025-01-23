@@ -70,8 +70,12 @@ export default function RootLayout({
               }}
             >
               <Header />
-              {children}
-              <Footer />
+              <div id='layout-body' style={{minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
+                {children}
+              </div>
+              <div id='layout-footer' style={{marginTop: 'auto'}}>
+                <Footer />
+              </div>
             </VedaUIProvider>
           </DevSeedUIThemeProvider>
         </main>
