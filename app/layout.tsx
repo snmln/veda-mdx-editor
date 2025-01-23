@@ -1,10 +1,11 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Navbar } from './components/nav';
+import Header from './components/header';
 import { baseUrl } from './sitemap';
 import dynamic from 'next/dynamic';
 import { VedaUIProvider } from '@lib';
+import Footer from './components/footer';
 
 import './styles/index.scss';
 
@@ -68,8 +69,13 @@ export default function RootLayout({
                 }
               }}
             >
-              <Navbar />
-              {children}
+              <Header />
+              <div id='layout-body' style={{minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
+                {children}
+              </div>
+              <div id='layout-footer' style={{marginTop: 'auto'}}>
+                <Footer />
+              </div>
             </VedaUIProvider>
           </DevSeedUIThemeProvider>
         </main>

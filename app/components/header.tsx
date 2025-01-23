@@ -5,7 +5,7 @@ import { NavItem } from '@lib';
 import NasaLogoColor from 'app/components/nasa-logo-color.js';
 
 
-const navItems: NavItem[] = [
+export const navItems: NavItem[] = [
   {
     id: 'data-catalog',
     title: 'Data Catalog',
@@ -26,7 +26,7 @@ const navItems: NavItem[] = [
   }
 ];
 
-const subNavItems: NavItem[] = [
+export const subNavItems: NavItem[] = [
   {
     id: 'about',
     title: 'About',
@@ -41,7 +41,7 @@ const subNavItems: NavItem[] = [
   }
 ]
 
-export function Navbar() {
+export default function Header() {
   const linkProps = {
     LinkElement: Link,
     pathAttributeKeyName: 'href',
@@ -63,7 +63,6 @@ export function Navbar() {
           <span style={{ color: '#1b1b1b' }}>Earthdata VEDA Dashboard</span>
         </div>
       }
-      linkProperties={linkProps}
     />
   );
 }
