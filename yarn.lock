@@ -229,10 +229,10 @@
     style-mod "^4.1.0"
     w3c-keyname "^2.2.4"
 
-"@developmentseed/veda-ui@v5.11.4-alpha.0":
-  version "5.11.4-alpha.0"
-  resolved "http://verdaccio.ds.io:4873/@developmentseed%2fveda-ui/-/veda-ui-5.11.4-alpha.0.tgz#daa6fc917257ce2a5e2df58ecd5ce464fa30c7ca"
-  integrity sha512-mnBo91rY1Y3Y0svhz7JAzrotXq/WHRGR1temQIL/ntmxbtXIn7l77Yho5cRKDFFDaOKxPskypcWeCk9A8GmCMw==
+"@developmentseed/veda-ui@v5.11.6-main.1":
+  version "5.11.6-main.1"
+  resolved "http://verdaccio.ds.io:4873/@developmentseed%2fveda-ui/-/veda-ui-5.11.6-main.1.tgz#d8ef225e84610dd4878d2e4e35aa3a12115b283e"
+  integrity sha512-/8VFWRfazcaPuY9sthSZH+iaYM3bbirHvOOWoT7Wzs+P+CaOOoP+irHnk1tWID27+fc7c/t6yJRbonCRj0A+bQ==
   dependencies:
     "@codemirror/lang-markdown" "^6.1.1"
     "@codemirror/state" "^6.2.1"
@@ -296,7 +296,6 @@
     google-polyline "^1.0.3"
     gulp-postcss "^10.0.0"
     gulp-sass "^6.0.0"
-    he "^1.2.0"
     history "^5.1.0"
     intersection-observer "^0.12.0"
     jotai "^2.6.2"
@@ -4863,11 +4862,6 @@ hat@0.0.3:
   version "0.0.3"
   resolved "http://verdaccio.ds.io:4873/hat/-/hat-0.0.3.tgz#bb014a9e64b3788aed8005917413d4ff3d502d8a"
   integrity sha1-uwFKnmSzeIrtgAWRdBPU/z1QLYo=
-
-he@^1.2.0:
-  version "1.2.0"
-  resolved "http://verdaccio.ds.io:4873/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
-  integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
 history@^5.1.0:
   version "5.3.0"
