@@ -229,10 +229,10 @@
     style-mod "^4.1.0"
     w3c-keyname "^2.2.4"
 
-"@developmentseed/veda-ui@v5.11.6-main.1":
-  version "5.11.6-main.1"
-  resolved "http://verdaccio.ds.io:4873/@developmentseed%2fveda-ui/-/veda-ui-5.11.6-main.1.tgz#d8ef225e84610dd4878d2e4e35aa3a12115b283e"
-  integrity sha512-/8VFWRfazcaPuY9sthSZH+iaYM3bbirHvOOWoT7Wzs+P+CaOOoP+irHnk1tWID27+fc7c/t6yJRbonCRj0A+bQ==
+"@developmentseed/veda-ui@v5.11.6-1402.0":
+  version "5.11.6-1402.0"
+  resolved "http://verdaccio.ds.io:4873/@developmentseed%2fveda-ui/-/veda-ui-5.11.6-1402.0.tgz#dcd2a90c48327d0160fc75307e6367e4d674cd23"
+  integrity sha512-pQ4vbBC8pN60LUhoY6sL85V6B+DKIrYag9x5q8jyVrYYFhz3s4DRN2U83ZXvgwSZyZ6/5ztyKSbVgQYiKgthKA==
   dependencies:
     "@codemirror/lang-markdown" "^6.1.1"
     "@codemirror/state" "^6.2.1"
@@ -310,6 +310,7 @@
     markdown-it "^14.0.0"
     optics-ts "^2.4.1"
     papaparse "^5.3.2"
+    pinst "^3.0.0"
     polished "^4.1.3"
     postcss "^8.4.39"
     postcss-import "^16.1.0"
@@ -6768,6 +6769,11 @@ pify@^2.3.0:
   version "2.3.0"
   resolved "http://verdaccio.ds.io:4873/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"
   integrity sha1-7RQaasBDqEnqWISY59yosVMw6Qw=
+
+pinst@^3.0.0:
+  version "3.0.0"
+  resolved "http://verdaccio.ds.io:4873/pinst/-/pinst-3.0.0.tgz#80dec0a85f1f993c6084172020f3dbf512897eec"
+  integrity sha512-cengSmBxtCyaJqtRSvJorIIZXMXg+lJ3sIljGmtBGUVonMnMsVJbnzl6jGN1HkOWwxNuJynCJ2hXxxqCQrFDdw==
 
 plugin-error@^1.0.1:
   version "1.0.1"
