@@ -52,33 +52,29 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <main>
-          <DevSeedUIThemeProvider>
-            <VedaUIProvider
-              config={{
-                envMapboxToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? '',
-                envApiStacEndpoint:
-                  process.env.NEXT_PUBLIC_API_STAC_ENDPOINT ?? '',
-                envApiRasterEndpoint:
-                  process.env.NEXT_PUBLIC_API_RASTER_ENDPOINT ?? '',
-                navigation: {
-                  LinkComponent: Link,
-                  linkProps: {
-                    pathAttributeKeyName: 'href'
-                  }
-                }
-              }}
-            >
+        <DevSeedUIThemeProvider>
+          <VedaUIProvider
+            config={{
+              envMapboxToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? '',
+              envApiStacEndpoint:
+                process.env.NEXT_PUBLIC_API_STAC_ENDPOINT ?? '',
+              envApiRasterEndpoint:
+                process.env.NEXT_PUBLIC_API_RASTER_ENDPOINT ?? '',
+              navigation: {
+                LinkComponent: Link,
+                linkProps: {
+                  pathAttributeKeyName: 'href',
+                },
+              },
+            }}
+          >
+            <div className='minh-viewport display-flex flex-column'>
               <Header />
-              <div id='layout-body' style={{minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
-                {children}
-              </div>
-              <div id='layout-footer' style={{marginTop: 'auto'}}>
-                <Footer />
-              </div>
-            </VedaUIProvider>
-          </DevSeedUIThemeProvider>
-        </main>
+              <div className='flex-fill'>{children}</div>
+              <Footer />
+            </div>
+          </VedaUIProvider>
+        </DevSeedUIThemeProvider>
       </body>
     </html>
   );
