@@ -24,7 +24,7 @@ nvm install
     ```
 
 2. **Register the VEDA-UI package**
-    The VEDA-UI package is now published on the public NPM registry under the @developmentseed scope. To install it, ensure your `.npmrc` or global npm configuration points to the public registry (default).
+    The VEDA-UI package is now published on the public NPM registry under the @teamimpact scope. To install it, ensure your `.npmrc` or global npm configuration points to the public registry (default).
 
 3. **Install dependencies**
 

@@ -23,7 +23,7 @@ These variables are specific to each developer’s local environment and often c
 
 ### Using environment variables in code
 
-The `VedaUIProvider` is part of the `@developmentseed/veda-ui` library and is used to pass environment variables to VEDA-UI components. This is needed so that VEDA components relying on configurations like API endpoints and Mapbox tokens can access these values.
+The `VedaUIProvider` is part of the `@teamimpact/veda-ui` library and is used to pass environment variables to VEDA-UI components. This is needed so that VEDA components relying on configurations like API endpoints and Mapbox tokens can access these values.
 
 #### Where to place it
 
@@ -34,7 +34,7 @@ The `VedaUIProvider` should wrap your application at a high level, such as in th
 Below is an example of how to configure the `VedaUIProvider` with environment variables:
 
 ```tsx
-import { VedaUIProvider } from '@developmentseed/veda-ui';
+import { VedaUIProvider } from '@teamimpact/veda-ui';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

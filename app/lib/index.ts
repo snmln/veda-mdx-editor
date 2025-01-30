@@ -30,7 +30,7 @@ import {
   Chart,
   DatasetData,
   VedaData,
-} from '@developmentseed/veda-ui';
+} from '@teamimpact/veda-ui';
 
 /**
  * This file is to...
@@ -72,7 +72,7 @@ export {
   // State
   timelineDatasetsAtom,
   useTimelineDatasetAtom,
-  externalDatasetsAtom
+  externalDatasetsAtom,
 };
 
 export type { DatasetData, NavItem, InternalNavLink, VedaData };

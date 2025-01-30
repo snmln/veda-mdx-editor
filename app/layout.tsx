@@ -9,7 +9,7 @@ import Footer from './components/footer';
 
 import './styles/index.scss';
 
-import '@developmentseed/veda-ui/lib/main.css';
+import '@teamimpact/veda-ui/lib/main.css';
 
 const DevSeedUIThemeProvider = dynamic(
   () => import('app/store/providers/theme'),
