@@ -1,10 +1,11 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Navbar } from './components/nav';
+import Header from './components/header';
 import { baseUrl } from './sitemap';
 import dynamic from 'next/dynamic';
 import { VedaUIProvider } from '@lib';
+import Footer from './components/footer';
 
 import './styles/index.scss';
 
@@ -51,28 +52,29 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <main>
-          <DevSeedUIThemeProvider>
-            <VedaUIProvider
-              config={{
-                envMapboxToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? '',
-                envApiStacEndpoint:
-                  process.env.NEXT_PUBLIC_API_STAC_ENDPOINT ?? '',
-                envApiRasterEndpoint:
-                  process.env.NEXT_PUBLIC_API_RASTER_ENDPOINT ?? '',
-                navigation: {
-                  LinkComponent: Link,
-                  linkProps: {
-                    pathAttributeKeyName: 'href'
-                  }
-                }
-              }}
-            >
-              <Navbar />
-              {children}
-            </VedaUIProvider>
-          </DevSeedUIThemeProvider>
-        </main>
+        <DevSeedUIThemeProvider>
+          <VedaUIProvider
+            config={{
+              envMapboxToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? '',
+              envApiStacEndpoint:
+                process.env.NEXT_PUBLIC_API_STAC_ENDPOINT ?? '',
+              envApiRasterEndpoint:
+                process.env.NEXT_PUBLIC_API_RASTER_ENDPOINT ?? '',
+              navigation: {
+                LinkComponent: Link,
+                linkProps: {
+                  pathAttributeKeyName: 'href',
+                },
+              },
+            }}
+          >
+            <div className='minh-viewport display-flex flex-column'>
+              <Header />
+              <div className='flex-fill'>{children}</div>
+              <Footer />
+            </div>
+          </VedaUIProvider>
+        </DevSeedUIThemeProvider>
       </body>
     </html>
   );
