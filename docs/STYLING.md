@@ -68,7 +68,7 @@ To use USWDS-based styles:
 
     ```tsx
     import './styles/index.scss';
-    import '@developmentseed/veda-ui/lib/main.css';
+    import '@teamimpact/veda-ui/lib/main.css';
     ```
 
 ## Further customizing styles with USWDS
