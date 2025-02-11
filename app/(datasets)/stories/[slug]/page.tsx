@@ -21,6 +21,20 @@ export default function StoryOverview({ params }: { params: any }) {
 
   return (
     <section>
+      <script 
+        type='application/ld+json'
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Story',
+            title: post.metadata.name,
+            description: post.metadata.description,
+            coverSrc: post.metadata.media?.src,
+            coverAlt: post.metadata.media?.alt
+          }),
+        }}
+      />
       <article className='prose'>
         <PageHero
           title={post.metadata.name}
