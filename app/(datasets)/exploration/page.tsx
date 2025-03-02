@@ -15,7 +15,6 @@ export default function Page() {
   const datasets: any[] = getTransformedDatasetMetadata();
   return (
     <section>
-      <PageHero title='Exploration' isHidden />
       <ExplorationAnalysis datasets={datasets} />
     </section>
   );
