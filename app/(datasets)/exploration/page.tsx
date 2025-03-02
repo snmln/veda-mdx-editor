@@ -1,16 +1,22 @@
-import React, { Suspense } from 'react';
+import React from 'react';
+import dynamic from 'next/dynamic';
 import { getTransformedDatasetMetadata } from 'app/content/utils/mdx';
-import ExplorationAnalysis from './exploration';
 import { PageHero } from 'app/lib';
+
+const ExplorationAnalysis = dynamic(
+  () => import('./exploration'),
+  { 
+    ssr: false,
+    loading: () => <p>Loading...</p>
+  },
+);
 
 export default function Page() {
   const datasets: any[] = getTransformedDatasetMetadata();
   return (
     <section>
-      <Suspense fallback={<>Loading...</>}>
-        <PageHero title='Exploration' isHidden />
-        <ExplorationAnalysis datasets={datasets} />
-      </Suspense>
+      <PageHero title='Exploration' isHidden />
+      <ExplorationAnalysis datasets={datasets} />
     </section>
   );
 }
