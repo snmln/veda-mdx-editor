@@ -4,10 +4,8 @@ import React, { useState, useCallback, Suspense } from 'react';
 import { Tab } from '@headlessui/react';
 import dynamic from 'next/dynamic';
 import { MDXProvider } from '@mdx-js/react';
-import { MDXPreview } from '../components/mdx-preview';
 
 // Define your custom components here 
-
 import { customComponents } from '../components/custom-components';
 
 // Create a components object to pass to MDXProvider
@@ -16,6 +14,7 @@ const components = {
   // Include any other components you're using in your MDX content
 };
 
+// Dynamically import both the editor and preview components
 const MDXEditorWrapper = dynamic(
   () => import('../components/mdx-editor').then((mod) => mod.MDXEditorWrapper),
   { 
@@ -24,7 +23,14 @@ const MDXEditorWrapper = dynamic(
   }
 );
 
-
+// Dynamically import the MDXPreview component to avoid server-side rendering issues
+const MDXPreview = dynamic(
+  () => import('../components/mdx-preview').then((mod) => mod.MDXPreview),
+  {
+    ssr: false,
+    loading: () => <div className="flex items-center justify-center p-8">Loading preview...</div>
+  }
+);
 
 const initialContent = `# Welcome to the MDX Editor
 
@@ -44,8 +50,6 @@ export default function EditorPage() {
     setMdxContent(content);
   }, []);
 
-  //return (<MapBlock center={[-94.5, 41.25]} zoom={8.3} datasetId={"tornadoes-2024-paths"} layerId={"tornadoes-2024-paths"} dateTime={"2024-05-31"} />)
-  //return (<Map center={[-94.5, 41.25]} zoom={8.3} datasetId="no2" layerId="no2-monthly-diff" dateTime="2024-05-31" />)
   return (
     <div className="container mx-auto p-4 max-w-5xl min-h-screen bg-gray-50">
       <MDXProvider components={components}>
@@ -78,7 +82,9 @@ export default function EditorPage() {
             </Tab.Panel>
             <Tab.Panel>
               <div className="prose max-w-none p-4">
-                <MDXPreview source={mdxContent} />
+                <Suspense fallback={<div>Loading MDX preview...</div>}>
+                  <MDXPreview source={mdxContent} />
+                </Suspense>
               </div>
             </Tab.Panel>
           </Tab.Panels>
