@@ -2,12 +2,12 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { MDXRemote } from 'next-mdx-remote/rsc';
+import { serialize } from 'next-mdx-remote/serialize';
+import { MDXRemote } from 'next-mdx-remote';
 import { highlight } from 'sugar-high';
-
-import { Block, Prose, Caption, Chapter, Figure, Image, CompareImage, Chart } from '@lib';
-import { EnhancedMapBlock, EnhancedScrollyTellingBlock } from './mdx-components/block';
 import { customComponents } from './custom-components';
+
+// We'll handle dynamic imports in the component itself
 
 function Table({ data }: { data: any }) {
   const headers = data.headers.map((header, index) => (
@@ -69,7 +69,7 @@ function createHeading(level) {
   return Heading;
 }
 
-const components = {
+const baseComponents = {
   ...customComponents,
   h1: createHeading(1),
   h2: createHeading(2),
@@ -79,27 +79,65 @@ const components = {
   h6: createHeading(6),
   code: Code,
   Table,
-  Block: Block,
-  Prose: Prose,
-  Caption: Caption,
-  Figure: Figure,
-  Image: Image,
-  Map: EnhancedMapBlock,
-  CompareImage: CompareImage,
-  ScrollytellingBlock: EnhancedScrollyTellingBlock,
   Link: Link,
-  Chapter: Chapter,
-  Chart: Chart,
 };
 
 // Client-side only version of MDX component that doesn't use file system operations
-export function MDXPreview(props: any) {
+export function MDXPreview({ source, ...props }: { source: string, [key: string]: any }) {
+  const [mdxSource, setMdxSource] = React.useState<any>(null);
+  const [isClient, setIsClient] = React.useState(false);
+
+  // Use this to detect if we're on the client
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  React.useEffect(() => {
+    async function prepareMDX() {
+      if (!source) return;
+      
+      try {
+        const serialized = await serialize(source);
+        setMdxSource(serialized);
+      } catch (error) {
+        console.error("Error serializing MDX:", error);
+      }
+    }
+    
+    if (isClient && source) {
+      prepareMDX();
+    }
+  }, [source, isClient]);
+
+  // Show loading state if not on client yet or MDX is still being processed
+  if (!isClient || !mdxSource) {
+    return <div>Loading preview...</div>;
+  }
+
+  // Only import browser-dependent components on the client side
+  const [dynamicComponents, setDynamicComponents] = React.useState<any>({});
+
+  React.useEffect(() => {
+    // Dynamically import components that might use browser APIs
+    import('./mdx-preview-components')
+      .then((module) => {
+        setDynamicComponents(module.default);
+      })
+      .catch((error) => {
+        console.error("Error loading dynamic components:", error);
+      });
+  }, []);
+
   return (
-    <MDXRemote
-      {...props}
-      components={{ ...components, ...(props.components || {}) }}
-    >
-      {props.children}
-    </MDXRemote>
+    <React.Suspense fallback={<div>Loading components...</div>}>
+      <MDXRemote
+        {...mdxSource}
+        components={{ 
+          ...baseComponents, 
+          ...dynamicComponents,
+          ...(props.components || {}) 
+        }}
+      />
+    </React.Suspense>
   );
 }
