@@ -17,7 +17,7 @@ module.exports = {
     ];
   },
   reactStrictMode: false,
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
       // The following aliases are added to ensure that both the Next.js instance and
@@ -48,7 +48,25 @@ module.exports = {
       os: false,
     };
     
+    // Fix issues with next-mdx-remote
+    if (!isServer) {
+      // Don't resolve 'fs' module on the client to prevent this error
+      config.resolve.fallback.fs = false;
+    }
+    
+    // Add next-mdx-remote to transpiled modules
+    config.module = config.module || {};
+    config.module.rules = config.module.rules || [];
+    config.module.rules.push({
+      test: /next-mdx-remote/,
+      use: 'next-swc-loader',
+    });
+    
     return config;
+  },
+  // Exclude next-mdx-remote from the server-side bundle
+  experimental: {
+    serverComponentsExternalPackages: ['next-mdx-remote'],
   },
   sassOptions: {
     includePaths: [
