@@ -86,15 +86,17 @@ const baseComponents = {
 export function MDXPreview({ source, ...props }: { source: string, [key: string]: any }) {
   const [mdxSource, setMdxSource] = React.useState<any>(null);
   const [isClient, setIsClient] = React.useState(false);
+  const [dynamicComponents, setDynamicComponents] = React.useState<any>({});
 
   // Use this to detect if we're on the client
   React.useEffect(() => {
     setIsClient(true);
   }, []);
 
+  // Load MDX content
   React.useEffect(() => {
     async function prepareMDX() {
-      if (!source) return;
+      if (!source || !isClient) return;
       
       try {
         const serialized = await serialize(source);
@@ -104,20 +106,13 @@ export function MDXPreview({ source, ...props }: { source: string, [key: string]
       }
     }
     
-    if (isClient && source) {
-      prepareMDX();
-    }
+    prepareMDX();
   }, [source, isClient]);
 
-  // Show loading state if not on client yet or MDX is still being processed
-  if (!isClient || !mdxSource) {
-    return <div>Loading preview...</div>;
-  }
-
-  // Only import browser-dependent components on the client side
-  const [dynamicComponents, setDynamicComponents] = React.useState<any>({});
-
+  // Load dynamic components
   React.useEffect(() => {
+    if (!isClient) return;
+    
     // Dynamically import components that might use browser APIs
     import('./mdx-preview-components')
       .then((module) => {
@@ -126,7 +121,12 @@ export function MDXPreview({ source, ...props }: { source: string, [key: string]
       .catch((error) => {
         console.error("Error loading dynamic components:", error);
       });
-  }, []);
+  }, [isClient]);
+
+  // Show loading state if not on client yet or MDX is still being processed
+  if (!isClient || !mdxSource) {
+    return <div>Loading preview...</div>;
+  }
 
   return (
     <React.Suspense fallback={<div>Loading components...</div>}>
