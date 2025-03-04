@@ -41,6 +41,15 @@ module.exports = {
       ),
       'jotai-optics': path.resolve(__dirname, 'node_modules', 'jotai-optics'),
     };
+    
+    // Provide fallbacks for Node.js core modules
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      path: false,
+      os: false,
+    };
+    
     return config;
   },
   sassOptions: {
