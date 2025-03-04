@@ -2,12 +2,15 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { serialize } from 'next-mdx-remote/serialize';
-import { MDXRemote } from 'next-mdx-remote';
 import { highlight } from 'sugar-high';
 import { customComponents } from './custom-components';
+import dynamic from 'next/dynamic';
 
-// We'll handle dynamic imports in the component itself
+// Import MDX components with dynamic import to avoid server-side rendering issues
+const MDXRemote = dynamic(() => 
+  import('next-mdx-remote').then((mod) => mod.MDXRemote),
+  { ssr: false }
+);
 
 function Table({ data }: { data: any }) {
   const headers = data.headers.map((header, index) => (
@@ -82,62 +85,78 @@ const baseComponents = {
   Link: Link,
 };
 
-// Client-side only version of MDX component that doesn't use file system operations
+// A simplified MDX preview component that doesn't rely on file system operations
 export function MDXPreview({ source, ...props }: { source: string, [key: string]: any }) {
-  const [mdxSource, setMdxSource] = React.useState<any>(null);
+  const [compiledSource, setCompiledSource] = React.useState<any>(null);
   const [isClient, setIsClient] = React.useState(false);
-  const [dynamicComponents, setDynamicComponents] = React.useState<any>({});
+  const [components, setComponents] = React.useState(baseComponents);
 
   // Use this to detect if we're on the client
   React.useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Load MDX content
-  React.useEffect(() => {
-    async function prepareMDX() {
-      if (!source || !isClient) return;
-      
-      try {
-        const serialized = await serialize(source);
-        setMdxSource(serialized);
-      } catch (error) {
-        console.error("Error serializing MDX:", error);
-      }
-    }
-    
-    prepareMDX();
-  }, [source, isClient]);
-
-  // Load dynamic components
+  // Load dynamic components when on client
   React.useEffect(() => {
     if (!isClient) return;
     
-    // Dynamically import components that might use browser APIs
+    // Load dynamic components
     import('./mdx-preview-components')
-      .then((module) => {
-        setDynamicComponents(module.default);
+      .then((mod) => {
+        setComponents(prev => ({
+          ...prev,
+          ...mod.default
+        }));
       })
-      .catch((error) => {
-        console.error("Error loading dynamic components:", error);
+      .catch(err => {
+        console.error("Failed to load dynamic components:", err);
       });
   }, [isClient]);
 
-  // Show loading state if not on client yet or MDX is still being processed
-  if (!isClient || !mdxSource) {
-    return <div>Loading preview...</div>;
+  // Process MDX content when on client
+  React.useEffect(() => {
+    if (!isClient || !source) return;
+    
+    // Use a simple approach for now - just display the markdown as text
+    // This avoids the JSX transformation issues
+    const processMarkdown = async () => {
+      try {
+        // Dynamically import the serialize function
+        const { serialize } = await import('next-mdx-remote/serialize');
+        const serialized = await serialize(source);
+        setCompiledSource(serialized);
+      } catch (error) {
+        console.error("Error processing MDX:", error);
+      }
+    };
+    
+    processMarkdown();
+  }, [source, isClient]);
+
+  if (!isClient) {
+    return <div>Loading preview (client-side only)...</div>;
   }
 
+  if (!compiledSource) {
+    return <div>Processing MDX content...</div>;
+  }
+
+  // Use dynamic import for MDXRemote
   return (
-    <React.Suspense fallback={<div>Loading components...</div>}>
-      <MDXRemote
-        {...mdxSource}
-        components={{ 
-          ...baseComponents, 
-          ...dynamicComponents,
-          ...(props.components || {}) 
-        }}
-      />
-    </React.Suspense>
+    <div className="mdx-preview">
+      <React.Suspense fallback={<div>Rendering MDX...</div>}>
+        {typeof MDXRemote === 'function' ? (
+          <MDXRemote
+            {...compiledSource}
+            components={{
+              ...components,
+              ...(props.components || {})
+            }}
+          />
+        ) : (
+          <div>Loading MDX renderer...</div>
+        )}
+      </React.Suspense>
+    </div>
   );
 }
