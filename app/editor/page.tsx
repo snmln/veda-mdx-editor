@@ -16,7 +16,7 @@ const components = {
 
 // Dynamically import both the editor and preview components
 const MDXEditorWrapper = dynamic(
-  () => import('../components/mdx-editor').then((mod) => mod.MDXEditorWrapper),
+  () => import('../components/mdx-editor-enhanced').then((mod) => mod.MDXEditorEnhanced),
   { 
     ssr: false,
     loading: () => <div className="h-[600px] flex items-center justify-center">Loading editor...</div>
@@ -25,7 +25,7 @@ const MDXEditorWrapper = dynamic(
 
 // Dynamically import the MDXPreview component to avoid server-side rendering issues
 const MDXPreview = dynamic(
-  () => import('../components/mdx-preview').then((mod) => mod.MDXPreview),
+  () => import('../components/mdx-preview-enhanced').then((mod) => mod.MDXPreviewEnhanced),
   {
     ssr: false,
     loading: () => <div className="flex items-center justify-center p-8">Loading preview...</div>

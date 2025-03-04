@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
@@ -8,10 +8,14 @@ import type { ComponentType } from 'react';
 import { MDXProvider } from '@mdx-js/react';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
-import { Block, Figure, MapBlock, Caption } from '@lib';
+import { Block, Figure, Caption } from '@lib';
 import { EnhancedScrollyTellingBlock } from './mdx-components/block';
 import { ClientMapBlock } from './mdx-preview-map';
 import { customComponents } from './custom-components';
+import DataProvider from 'app/store/providers/data';
+import VedaUIConfigProvider from 'app/store/providers/veda-ui-config';
+import DevseedUIThemeProvider from 'app/store/providers/theme';
+import type { DatasetWithContent } from 'app/types/content';
 
 type MDXComponents = {
   [key: string]: ComponentType<any>;
@@ -21,11 +25,11 @@ function slugify(str) {
   return str
     .toString()
     .toLowerCase()
-    .trim() // Remove whitespace from both ends of a string
-    .replace(/\s+/g, '-') // Replace spaces with -
-    .replace(/&/g, '-and-') // Replace & with 'and'
-    .replace(/[^\w\-]+/g, '') // Remove all non-word characters except for -
-    .replace(/\-\-+/g, '-'); // Replace multiple - with single -
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/&/g, '-and-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-');
 }
 
 function createHeading(level) {
@@ -55,7 +59,6 @@ const components: MDXComponents = {
   ...customComponents,
   Block: Block,
   Figure: Figure,
-  MapBlock: MapBlock,
   Caption: Caption,
   Map: ClientMapBlock,
   ScrollytellingBlock: EnhancedScrollyTellingBlock,
@@ -109,23 +112,112 @@ const components: MDXComponents = {
   ),
 };
 
+// Mock dataset for the no2-monthly-diff layer
+const mockDatasets = [
+  {
+    metadata: {
+      id: 'no2',
+      name: 'Nitrogen Dioxide',
+      description: 'Nitrogen dioxide data for analysis',
+      taxonomy: [
+        {
+          name: 'Topics',
+          values: [
+            { id: 'air_quality', name: 'Air Quality' }
+          ]
+        }
+      ],
+      layers: [
+        {
+          id: 'no2-monthly-diff',
+          stacCol: 'no2-monthly-diff',
+          name: 'No2 (Diff)',
+          type: 'raster',
+          description: 'Nitrogen dioxide difference data',
+          zoomExtent: [0, 20],
+          compare: null,
+          legend: {
+            unit: { label: 'molecules/cm3' },
+            type: 'gradient',
+            min: '-3934857984753',
+            max: '3348573489573',
+            stops: ['#3A88BD', '#C9E0ED', '#E4EEF3', '#FDDCC9', '#DD7059']
+          }
+        },
+        {
+          id: 'no2-monthly',
+          stacCol: 'no2-monthly',
+          name: 'No2 PT',
+          type: 'raster',
+          description: 'Nitrogen dioxide data',
+          zoomExtent: [0, 20],
+          compare: null,
+          legend: {
+            unit: { label: 'molecules/cm3' },
+            type: 'gradient',
+            min: '0',
+            max: '100',
+            stops: ['#99c5e0', '#f9eaa9', '#f7765d', '#c13b72', '#461070', '#050308']
+          }
+        }
+      ]
+    },
+    slug: 'no2',
+    content: ''
+  },
+  {
+    metadata: {
+      id: 'nighttime-lights',
+      name: 'Nighttime Lights',
+      description: 'Nighttime lights data for analysis',
+      taxonomy: [
+        {
+          name: 'Topics',
+          values: [
+            { id: 'nighttime_lights', name: 'Nighttime Lights' }
+          ]
+        }
+      ],
+      layers: [
+        {
+          id: 'nightlights-hd-monthly',
+          stacCol: 'nightlights-hd-monthly',
+          name: 'Nightlights HD Monthly',
+          type: 'raster',
+          description: 'Nighttime lights data',
+          zoomExtent: [0, 20],
+          compare: null,
+          legend: {
+            unit: { label: 'intensity' },
+            type: 'gradient',
+            min: '0',
+            max: '100',
+            stops: ['#000000', '#0C0C3C', '#0000FF', '#FFFF00', '#FFFFFF']
+          }
+        }
+      ]
+    },
+    slug: 'nighttime-lights',
+    content: ''
+  }
+] as unknown as DatasetWithContent[];
+
 interface MDXPreviewProps {
   source: string;
   [key: string]: any;
 }
 
-// Client-side only version of MDX component that doesn't rely on file system operations
-export function MDXPreview({ source, ...props }: MDXPreviewProps) {
-  const [content, setContent] = React.useState<MDXRemoteSerializeResult | null>(null);
-  const [error, setError] = React.useState<string | null>(null);
-  const [isClient, setIsClient] = React.useState(false);
+export function MDXPreviewEnhanced({ source, ...props }: MDXPreviewProps) {
+  const [content, setContent] = useState<MDXRemoteSerializeResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
   
   // Use this to detect if we're on the client
-  React.useEffect(() => {
+  useEffect(() => {
     setIsClient(true);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isClient || !source) return;
     
     const serializeMdx = async () => {
@@ -165,10 +257,16 @@ export function MDXPreview({ source, ...props }: MDXPreviewProps) {
   }
 
   return (
-    <MDXProvider components={components}>
-      <div className="mdx-content prose prose-lg max-w-none">
-        <MDXRemote {...content} components={{...components, ...(props.components || {})}} />
-      </div>
-    </MDXProvider>
+    <DevseedUIThemeProvider>
+      <VedaUIConfigProvider>
+        <DataProvider initialDatasets={mockDatasets as any}>
+          <MDXProvider components={components}>
+            <div className="mdx-content prose prose-lg max-w-none">
+              <MDXRemote {...content} components={{...components, ...(props.components || {})}} />
+            </div>
+          </MDXProvider>
+        </DataProvider>
+      </VedaUIConfigProvider>
+    </DevseedUIThemeProvider>
   );
 }
