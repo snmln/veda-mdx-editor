@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { getStoriesMetadata } from 'app/content/utils/mdx';
-
+import { MapBlock } from '@lib';
 const mainTopSectionData = [
   {
     title: 'Earth scientists',
@@ -31,6 +31,8 @@ const topStory = featuredStories[0];
 const otherStories = featuredStories.slice(1);
 
 export default function HomePage() {
+
+  //return (<MapBlock center={[-94.5, 41.25]} zoom={8.3} datasetId={"tornadoes-2024-paths"} layerId={"tornadoes-2024-paths"} dateTime={"2024-05-31"} />)
   return (
     <section>
       <div className='grid-container'>
@@ -38,6 +40,13 @@ export default function HomePage() {
           <h2>
             VEDA Template is here to help scientists to engage with wider
             audience
+            <Link 
+            href="/editor"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg inline-block transition-colors"
+          >
+            Open Editor
+          </Link>
+            
           </h2>
         </div>
         <div className='grid-row grid-gap-lg card--homepage-main margin-top-2'>

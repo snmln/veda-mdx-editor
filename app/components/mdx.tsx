@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
@@ -7,6 +9,8 @@ import { Block, Prose, Caption, Chapter, Figure, Image, CompareImage, Chart } fr
 import { EnhancedMapBlock, EnhancedScrollyTellingBlock } from './mdx-components/block';
 import { getDatasetsMetadata } from 'app/content/utils/mdx';
 import Providers from 'app/(datasets)/providers';
+
+import { customComponents } from './custom-components';
 
 function Table({ data }: { data: any }) {
   const headers = data.headers.map((header, index) => (
@@ -69,6 +73,7 @@ function createHeading(level) {
 }
 
 const components = {
+  ...customComponents,
   h1: createHeading(1),
   h2: createHeading(2),
   h3: createHeading(3),
