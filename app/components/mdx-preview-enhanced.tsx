@@ -26,6 +26,32 @@ const ClientMapBlock = dynamic(
   }
 );
 
+// Wrapper for ClientMapBlock that handles string props
+const MapWrapper = (props) => {
+  // Parse center as JSON if it's a string
+  const center = typeof props.center === 'string' && props.center.startsWith('[') 
+    ? JSON.parse(props.center) 
+    : props.center || [-94.5, 41.25];
+  
+  // Parse zoom as number if it's a string
+  const zoom = typeof props.zoom === 'string' 
+    ? parseFloat(props.zoom) || 8.3 
+    : props.zoom || 8.3;
+  
+  // Pass the parsed props to ClientMapBlock
+  return (
+    <ClientMapBlock
+      center={center}
+      zoom={zoom}
+      datasetId={props.datasetId}
+      layerId={props.layerId}
+      dateTime={props.dateTime}
+      compareDateTime={props.compareDateTime}
+      compareLabel={props.compareLabel}
+    />
+  );
+};
+
 type MDXComponents = {
   [key: string]: ComponentType<any>;
 };
@@ -69,7 +95,7 @@ const components: MDXComponents = {
   Block: Block,
   Figure: Figure,
   Caption: Caption,
-  Map: ClientMapBlock,
+  Map: MapWrapper, // Use our wrapper instead of ClientMapBlock directly
   ScrollytellingBlock: EnhancedScrollyTellingBlock,
   
   // HTML element styling
