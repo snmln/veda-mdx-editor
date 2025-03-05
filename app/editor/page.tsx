@@ -60,16 +60,25 @@ export default function EditorPage() {
     // No longer saving to localStorage
   }, []);
 
-  // Add state to track the current tab and force re-render
+  // Add state to track the current tab
   const [selectedTab, setSelectedTab] = useState(0);
   const [editorKey, setEditorKey] = useState(0);
+  const [preservedContent, setPreservedContent] = useState(mdxContent);
 
   // Handle tab change
   const handleTabChange = (index) => {
-    // If switching back to the editor tab (index 0), increment the key to force re-render
+    // If switching to preview tab, preserve the current content
+    if (index === 1 && selectedTab === 0) {
+      setPreservedContent(mdxContent);
+    }
+    
+    // If switching back to the editor tab, increment the key to force re-render
+    // and ensure we use the preserved content
     if (index === 0 && selectedTab !== 0) {
+      // We don't need to update mdxContent here as it will be handled by the editor's onChange
       setEditorKey(prev => prev + 1);
     }
+    
     setSelectedTab(index);
   };
 
@@ -99,7 +108,7 @@ export default function EditorPage() {
               <Suspense fallback={<div>Loading editor...</div>}>
                 <MDXEditorWrapper
                   key={editorKey} // Add key to force re-render
-                  markdown={mdxContent}
+                  markdown={selectedTab === 0 && editorKey > 0 ? preservedContent : mdxContent}
                   onChange={handleContentChange}
                 />
               </Suspense>
