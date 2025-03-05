@@ -45,6 +45,13 @@ Try editing this content!
 `;
 
 export default function EditorPage() {
+  // Clear any existing localStorage data on component mount
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('mdxEditorContent');
+    }
+  }, []);
+
   // Use state to store MDX content without localStorage
   const [mdxContent, setMdxContent] = useState(initialContent);
   
