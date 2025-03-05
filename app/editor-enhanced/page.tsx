@@ -46,9 +46,22 @@ Try inserting a Map component using the toolbar!
 `;
 
 export default function EditorEnhancedPage() {
-  const [mdxContent, setMdxContent] = useState(initialContent);
+  // Store the MDX content in localStorage to persist it between tab switches
+  const [mdxContent, setMdxContent] = useState(() => {
+    // Try to get the content from localStorage on initial load
+    if (typeof window !== 'undefined') {
+      const savedContent = localStorage.getItem('mdxEditorEnhancedContent');
+      return savedContent || initialContent;
+    }
+    return initialContent;
+  });
+  
   const handleContentChange = useCallback((content: string) => {
     setMdxContent(content);
+    // Save the content to localStorage whenever it changes
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('mdxEditorEnhancedContent', content);
+    }
   }, []);
 
   return (
