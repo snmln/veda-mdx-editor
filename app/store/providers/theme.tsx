@@ -1,7 +1,7 @@
 'use client';
 import React, { ReactNode } from 'react';
 import { createUITheme } from '@devseed-ui/theme-provider';
-import { DevseedUiThemeProvider, PageMainContent } from '@lib';
+import { DevseedUiThemeProvider } from '@lib';
 
 // Values here should be manually synced until we consolidate all the styles to USWDS
 // Be mindful that these values are used more for VEDA UI component, not for instance
@@ -67,7 +67,7 @@ function DevseedUIThemeProvider({
 }) {
   return (
     <DevseedUiThemeProvider theme={createUITheme(VEDA_OVERRIDE_THEME)}>
-      <PageMainContent>{children}</PageMainContent>
+      {children}
     </DevseedUiThemeProvider>
   );
 }

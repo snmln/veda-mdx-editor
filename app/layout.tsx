@@ -6,22 +6,15 @@ import './styles/index.scss';
 import '@teamimpact/veda-ui/lib/main.css';
 
 // @NOTE: Dynamically load to ensure only CSR since these depends on VedaUI ContextProvider for routing...
-const Header = dynamic(
-  () => import('./components/header'),
-  { 
-    ssr: false,
-    loading: () => <p>Loading...</p> // @NOTE @TODO: We need a loading state!!!
-  },
-);
+const Header = dynamic(() => import('./components/header'), {
+  ssr: false,
+  loading: () => <p>Loading...</p>, // @NOTE @TODO: We need a loading state!!!
+});
 
-const Footer = dynamic(
-  () => import('./components/footer'),
-  { 
-    ssr: false,
-    loading: () => <p>Loading...</p>
-  },
-);
-
+const Footer = dynamic(() => import('./components/footer'), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -59,9 +52,11 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <div className='min-viewport display-flex flex-column'>
+        <div className='minh-viewport display-flex flex-column'>
           <Header />
-          <div className='flex-fill'>{children}</div>
+          <main id='pagebody' className='flex-fill' tabIndex={-1}>
+            {children}
+          </main>
           <Footer />
         </div>
       </body>
