@@ -263,19 +263,35 @@ const components = {
 
 export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps) {
   const editorRef = useRef<MDXEditorMethods>(null);
+  const [key, setKey] = useState(0); // Add a key to force re-render
 
+  // Force re-render when switching back to the editor tab
   useEffect(() => {
-    // Force re-render of editor when component mounts
+    const handleVisibilityChange = () => {
+      if (!document.hidden && editorRef.current) {
+        // When the tab becomes visible again, force a re-render
+        setKey(prevKey => prevKey + 1);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    // Also re-render when the component mounts
     if (editorRef.current) {
       const editor = editorRef.current as any;
       editor.setMarkdown(markdown);
     }
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [markdown]);
 
   return (
     <MDXProvider components={components}>
       <div className="h-[600px] border rounded-lg overflow-hidden">
         <MDXEditor
+          key={key} // Add key to force re-render
           ref={editorRef}
           markdown={markdown}
           onChange={(content) => {
