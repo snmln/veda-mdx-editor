@@ -82,19 +82,19 @@ const InsertMapButton = () => {
 
   const handleClick = () => {
     // Insert a default Map component with no2-monthly-diff dataset/layer
+    // Use string props like MyLeaf instead of expression props
     insertJsx({
       name: 'Map',
-      kind: 'text', // Changed to 'text' like MyLeaf
+      kind: 'text',
       props: {
-        center: { type: 'expression', value: '[-94.5, 41.25]' },
-        zoom: { type: 'expression', value: '8.3' },
-        datasetId: { type: 'expression', value: '"no2"' },
-        layerId: { type: 'expression', value: '"no2-monthly-diff"' },
-        dateTime: { type: 'expression', value: '"2024-05-31"' },
-        compareDateTime: { type: 'expression', value: '"2023-05-31"' },
-        compareLabel: { type: 'expression', value: '"May 2024 VS May 2023"' },
+        center: '[-94.5, 41.25]',
+        zoom: '8.3',
+        datasetId: 'no2',
+        layerId: 'no2-monthly-diff',
+        dateTime: '2024-05-31',
+        compareDateTime: '2023-05-31',
+        compareLabel: 'May 2024 VS May 2023',
       }
-      // Removed children property to match MyLeaf
     });
   };
 
@@ -113,17 +113,18 @@ const MapComponentEditor = (props: any) => {
   // Extract the node and onChange from props
   const { onChange, jsxComponentDescriptor, initialValue } = props;
   
+  // Extract values directly from props - they're now direct string values
   const [datasetId, setDatasetId] = useState(
-    initialValue?.props?.datasetId?.value?.replace(/"/g, '') || 'no2'
+    initialValue?.props?.datasetId || 'no2'
   );
   const [layerId, setLayerId] = useState(
-    initialValue?.props?.layerId?.value?.replace(/"/g, '') || 'no2-monthly-diff'
+    initialValue?.props?.layerId || 'no2-monthly-diff'
   );
   const [compareDateTime, setCompareDateTime] = useState(
-    initialValue?.props?.compareDateTime?.value?.replace(/"/g, '') || '2023-05-31'
+    initialValue?.props?.compareDateTime || '2023-05-31'
   );
   const [compareLabel, setCompareLabel] = useState(
-    initialValue?.props?.compareLabel?.value?.replace(/"/g, '') || 'May 2024 VS May 2023'
+    initialValue?.props?.compareLabel || 'May 2024 VS May 2023'
   );
   const [availableLayers, setAvailableLayers] = useState(
     availableDatasets.find(d => d.id === datasetId)?.layers || []
@@ -144,11 +145,11 @@ const MapComponentEditor = (props: any) => {
   const handleDatasetChange = (e) => {
     setDatasetId(e.target.value);
     
-    // Update the JSX component props
+    // Update the JSX component props - now directly set the string value
     if (onChange && initialValue) {
       const newProps = {
         ...initialValue.props,
-        datasetId: { type: 'expression', value: `"${e.target.value}"` },
+        datasetId: e.target.value,
       };
       onChange({ ...initialValue, props: newProps });
     }
@@ -157,11 +158,11 @@ const MapComponentEditor = (props: any) => {
   const handleLayerChange = (e) => {
     setLayerId(e.target.value);
     
-    // Update the JSX component props
+    // Update the JSX component props - now directly set the string value
     if (onChange && initialValue) {
       const newProps = {
         ...initialValue.props,
-        layerId: { type: 'expression', value: `"${e.target.value}"` },
+        layerId: e.target.value,
       };
       onChange({ ...initialValue, props: newProps });
     }
@@ -170,11 +171,11 @@ const MapComponentEditor = (props: any) => {
   const handleCompareDateTimeChange = (e) => {
     setCompareDateTime(e.target.value);
     
-    // Update the JSX component props
+    // Update the JSX component props - now directly set the string value
     if (onChange && initialValue) {
       const newProps = {
         ...initialValue.props,
-        compareDateTime: { type: 'expression', value: `"${e.target.value}"` },
+        compareDateTime: e.target.value,
       };
       onChange({ ...initialValue, props: newProps });
     }
@@ -183,11 +184,11 @@ const MapComponentEditor = (props: any) => {
   const handleCompareLabelChange = (e) => {
     setCompareLabel(e.target.value);
     
-    // Update the JSX component props
+    // Update the JSX component props - now directly set the string value
     if (onChange && initialValue) {
       const newProps = {
         ...initialValue.props,
-        compareLabel: { type: 'expression', value: `"${e.target.value}"` },
+        compareLabel: e.target.value,
       };
       onChange({ ...initialValue, props: newProps });
     }
@@ -256,14 +257,14 @@ const MapComponentEditor = (props: any) => {
 
 // Enhanced Map component for the editor that includes both the map preview and configuration
 const EnhancedMapComponent = (props) => {
-  // Extract values from props
-  const center = props.center?.value?.replace(/['"]/g, '') || '[-94.5, 41.25]';
-  const zoom = props.zoom?.value?.replace(/['"]/g, '') || '8.3';
-  const datasetId = props.datasetId?.value?.replace(/['"]/g, '') || 'no2';
-  const layerId = props.layerId?.value?.replace(/['"]/g, '') || 'no2-monthly-diff';
-  const dateTime = props.dateTime?.value?.replace(/['"]/g, '') || '2024-05-31';
-  const compareDateTime = props.compareDateTime?.value?.replace(/['"]/g, '') || '2023-05-31';
-  const compareLabel = props.compareLabel?.value?.replace(/['"]/g, '') || 'May 2024 VS May 2023';
+  // Extract values from props - now they're direct string values, not nested in value property
+  const center = props.center || '[-94.5, 41.25]';
+  const zoom = props.zoom || '8.3';
+  const datasetId = props.datasetId || 'no2';
+  const layerId = props.layerId || 'no2-monthly-diff';
+  const dateTime = props.dateTime || '2024-05-31';
+  const compareDateTime = props.compareDateTime || '2023-05-31';
+  const compareLabel = props.compareLabel || 'May 2024 VS May 2023';
 
   // Parse center as JSON if it's a string
   const parsedCenter = typeof center === 'string' ? 
@@ -305,16 +306,17 @@ const EnhancedMapComponent = (props) => {
 const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
     name: 'Map',
-    kind: 'text', // Changed to 'text' like MyLeaf
-    source: '@teamimpact/veda-ui', // Correct library name for the import
+    kind: 'text',
+    source: '@teamimpact/veda-ui',
     props: [
-      { name: 'center', type: 'expression' },
-      { name: 'zoom', type: 'expression' },
-      { name: 'datasetId', type: 'expression' },
-      { name: 'layerId', type: 'expression' },
-      { name: 'dateTime', type: 'expression' },
-      { name: 'compareDateTime', type: 'expression' },
-      { name: 'compareLabel', type: 'expression' },
+      // Use string props like MyLeaf instead of expression props
+      { name: 'center', type: 'string' },
+      { name: 'zoom', type: 'string' },
+      { name: 'datasetId', type: 'string' },
+      { name: 'layerId', type: 'string' },
+      { name: 'dateTime', type: 'string' },
+      { name: 'compareDateTime', type: 'string' },
+      { name: 'compareLabel', type: 'string' },
     ],
     hasChildren: true,
     Editor: GenericJsxEditor,
