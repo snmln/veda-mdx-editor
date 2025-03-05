@@ -45,22 +45,12 @@ Try editing this content!
 `;
 
 export default function EditorPage() {
-  // Store the MDX content in localStorage to persist it between tab switches
-  const [mdxContent, setMdxContent] = useState(() => {
-    // Try to get the content from localStorage on initial load
-    if (typeof window !== 'undefined') {
-      const savedContent = localStorage.getItem('mdxEditorContent');
-      return savedContent || initialContent;
-    }
-    return initialContent;
-  });
+  // Use state to store MDX content without localStorage
+  const [mdxContent, setMdxContent] = useState(initialContent);
   
   const handleContentChange = useCallback((content: string) => {
     setMdxContent(content);
-    // Save the content to localStorage whenever it changes
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('mdxEditorContent', content);
-    }
+    // No longer saving to localStorage
   }, []);
 
   // Add state to track the current tab and force re-render
