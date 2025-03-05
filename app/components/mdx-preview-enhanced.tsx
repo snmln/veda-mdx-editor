@@ -8,14 +8,23 @@ import type { ComponentType } from 'react';
 import { MDXProvider } from '@mdx-js/react';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
+import dynamic from 'next/dynamic';
 import { Block, Figure, Caption } from '@lib';
 import { EnhancedScrollyTellingBlock } from './mdx-components/block';
-import { ClientMapBlock } from './mdx-preview-map';
 import { customComponents } from './custom-components';
 import DataProvider from 'app/store/providers/data';
 import VedaUIConfigProvider from 'app/store/providers/veda-ui-config';
 import DevseedUIThemeProvider from 'app/store/providers/theme';
 import type { DatasetWithContent } from 'app/types/content';
+
+// Import ClientMapBlock dynamically to avoid SSR issues
+const ClientMapBlock = dynamic(
+  () => import('./mdx-preview-map').then((mod) => mod.ClientMapBlock),
+  { 
+    ssr: false,
+    loading: () => <div className="h-[400px] flex items-center justify-center">Loading map...</div>
+  }
+);
 
 type MDXComponents = {
   [key: string]: ComponentType<any>;

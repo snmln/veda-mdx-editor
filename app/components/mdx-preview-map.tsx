@@ -1,12 +1,21 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { MapBlock } from '@lib';
+import dynamic from 'next/dynamic';
 import { transformToVedaData } from 'app/content/utils/data';
 import DataProvider from 'app/store/providers/data';
 import VedaUIConfigProvider from 'app/store/providers/veda-ui-config';
 import DevseedUIThemeProvider from 'app/store/providers/theme';
 import type { DatasetWithContent } from 'app/types/content';
+
+// Import MapBlock dynamically to avoid SSR issues
+const MapBlock = dynamic(
+  () => import('@lib').then((mod) => mod.MapBlock),
+  { 
+    ssr: false,
+    loading: () => <div className="h-[400px] flex items-center justify-center">Loading map...</div>
+  }
+);
 
 // Mock dataset for the no2-monthly-diff layer
 const mockDatasets = [

@@ -38,23 +38,6 @@ interface MDXEditorWrapperProps {
   onChange: (content: string) => void;
 }
 
-const jsxComponentDescriptors: JsxComponentDescriptor[] = [
-  {
-    name: 'Map',
-    kind: 'flow',
-    source: '@teamimpact/veda-ui', // Correct library name for the import
-    props: [
-      { name: 'center', type: 'expression' },
-      { name: 'zoom', type: 'expression' },
-      { name: 'datasetId', type: 'expression' },
-      { name: 'layerId', type: 'expression' },
-      { name: 'dateTime', type: 'expression' },
-    ],
-    hasChildren: false,
-    Editor: GenericJsxEditor
-  },
-];
-
 // Available datasets and layers for the dropdown
 const availableDatasets = [
   { 
@@ -77,59 +60,140 @@ const availableDatasets = [
 
 const InsertMapButton = () => {
   const insertJsx = usePublisher(insertJsx$);
-  const [datasetId, setDatasetId] = useState('no2');
-  const [layerId, setLayerId] = useState('no2-monthly-diff');
-  const [availableLayers, setAvailableLayers] = useState(availableDatasets[0].layers);
-
-  // Update available layers when dataset changes
-  useEffect(() => {
-    const selectedDataset = availableDatasets.find(d => d.id === datasetId);
-    if (selectedDataset) {
-      setAvailableLayers(selectedDataset.layers);
-      setLayerId(selectedDataset.layers[0].id);
-    }
-  }, [datasetId]);
 
   const handleClick = () => {
+    // Insert a default Map component with no2-monthly-diff dataset/layer
     insertJsx({
       name: 'Map',
       kind: 'flow',
       props: {
         center: { type: 'expression', value: '[-94.5, 41.25]' },
         zoom: { type: 'expression', value: '8.3' },
-        datasetId: { type: 'expression', value: `"${datasetId}"` },
-        layerId: { type: 'expression', value: `"${layerId}"` },
+        datasetId: { type: 'expression', value: '"no2"' },
+        layerId: { type: 'expression', value: '"no2-monthly-diff"' },
         dateTime: { type: 'expression', value: '"2024-05-31"' },
       },
     });
   };
 
   return (
-    <div className="flex items-center space-x-2">
-      <select 
-        value={datasetId}
-        onChange={(e) => setDatasetId(e.target.value)}
-        className="text-sm border rounded px-2 py-1"
-      >
-        {availableDatasets.map(dataset => (
-          <option key={dataset.id} value={dataset.id}>{dataset.name}</option>
-        ))}
-      </select>
-      <select 
-        value={layerId}
-        onChange={(e) => setLayerId(e.target.value)}
-        className="text-sm border rounded px-2 py-1"
-      >
-        {availableLayers.map(layer => (
-          <option key={layer.id} value={layer.id}>{layer.name}</option>
-        ))}
-      </select>
-      <Button onClick={handleClick} title="Insert Map">
-        <MapIcon className="w-4 h-4" /> Insert Map
-      </Button>
+    <Button onClick={handleClick} title="Insert Map">
+      <MapIcon className="w-4 h-4" /> Insert Map
+    </Button>
+  );
+};
+
+// Custom editor for Map component that shows dataset/layer selection in the settings panel
+const MapComponentEditor = (props: any) => {
+  // Use GenericJsxEditor for the base functionality
+  const GenericEditor = GenericJsxEditor;
+  
+  // Extract the node and onChange from props
+  const { onChange, jsxComponentDescriptor, initialValue } = props;
+  
+  const [datasetId, setDatasetId] = useState(
+    initialValue?.props?.datasetId?.value?.replace(/"/g, '') || 'no2'
+  );
+  const [layerId, setLayerId] = useState(
+    initialValue?.props?.layerId?.value?.replace(/"/g, '') || 'no2-monthly-diff'
+  );
+  const [availableLayers, setAvailableLayers] = useState(
+    availableDatasets.find(d => d.id === datasetId)?.layers || []
+  );
+
+  // Update available layers when dataset changes
+  useEffect(() => {
+    const selectedDataset = availableDatasets.find(d => d.id === datasetId);
+    if (selectedDataset) {
+      setAvailableLayers(selectedDataset.layers);
+      if (!selectedDataset.layers.find(l => l.id === layerId)) {
+        setLayerId(selectedDataset.layers[0].id);
+      }
+    }
+  }, [datasetId, layerId]);
+
+  // Handle dataset or layer change
+  const handleDatasetChange = (e) => {
+    setDatasetId(e.target.value);
+    
+    // Update the JSX component props
+    if (onChange && initialValue) {
+      const newProps = {
+        ...initialValue.props,
+        datasetId: { type: 'expression', value: `"${e.target.value}"` },
+      };
+      onChange({ ...initialValue, props: newProps });
+    }
+  };
+  
+  const handleLayerChange = (e) => {
+    setLayerId(e.target.value);
+    
+    // Update the JSX component props
+    if (onChange && initialValue) {
+      const newProps = {
+        ...initialValue.props,
+        layerId: { type: 'expression', value: `"${e.target.value}"` },
+      };
+      onChange({ ...initialValue, props: newProps });
+    }
+  };
+
+  return (
+    <div>
+      {/* Render the original editor */}
+      <GenericEditor {...props} />
+      
+      {/* Add our custom dataset/layer selectors */}
+      <div className="mt-4 p-4 border rounded bg-gray-50">
+        <h3 className="font-bold mb-2">Map Settings</h3>
+        
+        <div className="mb-3">
+          <label className="block text-sm font-medium mb-1">Dataset</label>
+          <select 
+            value={datasetId}
+            onChange={handleDatasetChange}
+            className="w-full text-sm border rounded px-2 py-1"
+          >
+            {availableDatasets.map(dataset => (
+              <option key={dataset.id} value={dataset.id}>{dataset.name}</option>
+            ))}
+          </select>
+        </div>
+        
+        <div className="mb-3">
+          <label className="block text-sm font-medium mb-1">Layer</label>
+          <select 
+            value={layerId}
+            onChange={handleLayerChange}
+            className="w-full text-sm border rounded px-2 py-1"
+          >
+            {availableLayers.map(layer => (
+              <option key={layer.id} value={layer.id}>{layer.name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
     </div>
   );
 };
+
+const jsxComponentDescriptors: JsxComponentDescriptor[] = [
+  {
+    name: 'Map',
+    kind: 'flow',
+    source: '@teamimpact/veda-ui', // Correct library name for the import
+    props: [
+      { name: 'center', type: 'expression' },
+      { name: 'zoom', type: 'expression' },
+      { name: 'datasetId', type: 'expression' },
+      { name: 'layerId', type: 'expression' },
+      { name: 'dateTime', type: 'expression' },
+    ],
+    hasChildren: false,
+    Editor: MapComponentEditor // Use our custom editor instead of GenericJsxEditor
+  },
+];
 
 const components = {
   Block,
