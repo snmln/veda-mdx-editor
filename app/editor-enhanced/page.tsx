@@ -64,11 +64,24 @@ export default function EditorEnhancedPage() {
     }
   }, []);
 
+  // Add state to track the current tab and force re-render
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [editorKey, setEditorKey] = useState(0);
+
+  // Handle tab change
+  const handleTabChange = (index) => {
+    // If switching back to the editor tab (index 0), increment the key to force re-render
+    if (index === 0 && selectedTab !== 0) {
+      setEditorKey(prev => prev + 1);
+    }
+    setSelectedTab(index);
+  };
+
   return (
     <div className="container mx-auto p-4 max-w-5xl min-h-screen bg-gray-50">
       <h1 className="text-2xl font-bold mb-4">Enhanced MDX Editor with Map Support</h1>
       <MDXProvider components={components}>
-        <Tab.Group>
+        <Tab.Group selectedIndex={selectedTab} onChange={handleTabChange}>
           <Tab.List className="flex space-x-4 mb-4">
             <Tab className={({ selected }) =>
               `px-4 py-2 rounded-lg ${
@@ -90,6 +103,7 @@ export default function EditorEnhancedPage() {
             <Tab.Panel>
               <Suspense fallback={<div>Loading editor...</div>}>
                 <MDXEditorWrapper
+                  key={editorKey} // Add key to force re-render
                   markdown={mdxContent}
                   onChange={handleContentChange}
                 />
