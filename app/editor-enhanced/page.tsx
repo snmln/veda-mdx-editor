@@ -46,6 +46,13 @@ Try inserting a Map component using the toolbar!
 `;
 
 export default function EditorEnhancedPage() {
+  // Clear any existing localStorage data on component mount
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('mdxEditorEnhancedContent');
+    }
+  }, []);
+
   // Use state to store MDX content without localStorage
   const [mdxContent, setMdxContent] = useState(initialContent);
   
