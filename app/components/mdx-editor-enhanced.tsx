@@ -264,28 +264,42 @@ const components = {
 export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps) {
   const editorRef = useRef<MDXEditorMethods>(null);
   const [key, setKey] = useState(0); // Add a key to force re-render
+  const [internalMarkdown, setInternalMarkdown] = useState(markdown);
+
+  // Update internal markdown when prop changes
+  useEffect(() => {
+    setInternalMarkdown(markdown);
+  }, [markdown]);
 
   // Force re-render when switching back to the editor tab
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden && editorRef.current) {
         // When the tab becomes visible again, force a re-render
+        // but preserve the current markdown content
+        const currentContent = editorRef.current.getMarkdown();
+        setInternalMarkdown(currentContent);
         setKey(prevKey => prevKey + 1);
       }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     
-    // Also re-render when the component mounts
-    if (editorRef.current) {
-      const editor = editorRef.current as any;
-      editor.setMarkdown(markdown);
-    }
-
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [markdown]);
+  }, []);
+
+  // Apply markdown content when editor ref is available or key changes
+  useEffect(() => {
+    if (editorRef.current) {
+      const editor = editorRef.current as any;
+      // Use setTimeout to ensure the editor is fully initialized
+      setTimeout(() => {
+        editor.setMarkdown(internalMarkdown);
+      }, 0);
+    }
+  }, [internalMarkdown, key, editorRef.current]);
 
   return (
     <MDXProvider components={components}>
@@ -293,9 +307,10 @@ export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps)
         <MDXEditor
           key={key} // Add key to force re-render
           ref={editorRef}
-          markdown={markdown}
+          markdown={internalMarkdown}
           onChange={(content) => {
             console.log("MDX Content:", content);
+            setInternalMarkdown(content);
             onChange(content);
           }}
           contentEditableClassName="prose prose-lg max-w-none min-h-[500px] outline-none px-4 py-2"
