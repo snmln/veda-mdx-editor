@@ -234,6 +234,54 @@ const MapComponentEditor = (props: any) => {
   );
 };
 
+// Enhanced Map component for the editor that includes both the map preview and configuration
+const EnhancedMapComponent = (props) => {
+  // Extract values from props
+  const center = props.center?.value?.replace(/['"]/g, '') || '[-94.5, 41.25]';
+  const zoom = props.zoom?.value?.replace(/['"]/g, '') || '8.3';
+  const datasetId = props.datasetId?.value?.replace(/['"]/g, '') || 'no2';
+  const layerId = props.layerId?.value?.replace(/['"]/g, '') || 'no2-monthly-diff';
+  const dateTime = props.dateTime?.value?.replace(/['"]/g, '') || '2024-05-31';
+  const compareDateTime = props.compareDateTime?.value?.replace(/['"]/g, '') || '2023-05-31';
+  const compareLabel = props.compareLabel?.value?.replace(/['"]/g, '') || 'May 2024 VS May 2023';
+
+  // Parse center as JSON if it's a string
+  const parsedCenter = typeof center === 'string' ? 
+    (center.startsWith('[') ? JSON.parse(center) : center) : 
+    center;
+
+  // Parse zoom as number if it's a string
+  const parsedZoom = typeof zoom === 'string' ? 
+    (isNaN(parseFloat(zoom)) ? 8.3 : parseFloat(zoom)) : 
+    zoom;
+
+  return (
+    <div className="my-4 border rounded-lg overflow-hidden">
+      {/* Map preview */}
+      <div className="h-[300px] relative">
+        <Map 
+          center={parsedCenter}
+          zoom={parsedZoom}
+          datasetId={datasetId}
+          layerId={layerId}
+          dateTime={dateTime}
+          compareDateTime={compareDateTime}
+          compareLabel={compareLabel}
+        />
+      </div>
+      
+      {/* Map info banner */}
+      <div className="bg-blue-50 p-2 border-t border-blue-200 flex items-center">
+        <MapIcon className="w-5 h-5 text-blue-500 mr-2" />
+        <span className="text-sm text-blue-700">
+          <strong>Map:</strong> {datasetId}/{layerId}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+// Register the Map component with the MDXEditor
 const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
     name: 'Map',
@@ -258,7 +306,7 @@ const components = {
   Figure,
   MapBlock,
   Caption,
-  Map
+  Map: EnhancedMapComponent // Use our enhanced map component in the editor
 };
 
 export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps) {
