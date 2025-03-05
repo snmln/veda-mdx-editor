@@ -84,7 +84,7 @@ const InsertMapButton = () => {
     // Insert a default Map component with no2-monthly-diff dataset/layer
     insertJsx({
       name: 'Map',
-      kind: 'flow',
+      kind: 'text', // Changed to 'text' like MyLeaf
       props: {
         center: { type: 'expression', value: '[-94.5, 41.25]' },
         zoom: { type: 'expression', value: '8.3' },
@@ -93,9 +93,8 @@ const InsertMapButton = () => {
         dateTime: { type: 'expression', value: '"2024-05-31"' },
         compareDateTime: { type: 'expression', value: '"2023-05-31"' },
         compareLabel: { type: 'expression', value: '"May 2024 VS May 2023"' },
-      },
-      // Add children to match the hasChildren: true in the component descriptor
-      children: []
+      }
+      // Removed children property to match MyLeaf
     });
   };
 
@@ -306,7 +305,7 @@ const EnhancedMapComponent = (props) => {
 const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
     name: 'Map',
-    kind: 'flow',
+    kind: 'text', // Changed to 'text' like MyLeaf
     source: '@teamimpact/veda-ui', // Correct library name for the import
     props: [
       { name: 'center', type: 'expression' },
@@ -317,8 +316,8 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       { name: 'compareDateTime', type: 'expression' },
       { name: 'compareLabel', type: 'expression' },
     ],
-    hasChildren: true, // Changed to true like MyLeaf
-    Editor: GenericJsxEditor, // Use GenericJsxEditor like MyLeaf
+    hasChildren: true,
+    Editor: GenericJsxEditor,
   },
   {
       name: 'MyLeaf',
