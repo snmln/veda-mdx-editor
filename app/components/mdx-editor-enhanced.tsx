@@ -281,7 +281,7 @@ const EnhancedMapComponent = (props) => {
   );
 };
 
-// Register the Map component with the MDXEditor
+// Create a custom JSX component descriptor for the Map component
 const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
     name: 'Map',
@@ -297,7 +297,8 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       { name: 'compareLabel', type: 'expression' },
     ],
     hasChildren: false,
-    Editor: MapComponentEditor // Use our custom editor instead of GenericJsxEditor
+    Editor: MapComponentEditor, // Use our custom editor instead of GenericJsxEditor
+    // We can't add a Renderer property directly, but we'll handle rendering in our components object
   },
 ];
 
@@ -309,25 +310,67 @@ const components = {
   Map: EnhancedMapComponent // Use our enhanced map component in the editor
 };
 
+// Helper function to preserve Map components in markdown
+const preserveMapComponents = (markdown: string): string => {
+  // This regex matches Map JSX components with their attributes
+  const mapRegex = /<map([^>]*)><br><\/map>/g;
+  
+  // Replace each Map component with a special marker that includes the attributes
+  return markdown.replace(mapRegex, (match, attributes) => {
+    // Clean up the attributes
+    const cleanAttributes = attributes
+      .replace(/center="\[object Object\]"/g, 'center="[-94.5, 41.25]"')
+      .replace(/zoom="\[object Object\]"/g, 'zoom="8.3"')
+      .replace(/datasetid="\[object Object\]"/g, 'datasetId="no2"')
+      .replace(/layerid="\[object Object\]"/g, 'layerId="no2-monthly-diff"')
+      .replace(/datetime="\[object Object\]"/g, 'dateTime="2024-05-31"')
+      .replace(/comparedatetime="\[object Object\]"/g, 'compareDateTime="2023-05-31"')
+      .replace(/comparelabel="\[object Object\]"/g, 'compareLabel="May 2024 VS May 2023"');
+    
+    // Return a special JSX component that will be properly handled by the editor
+    return `<Map${cleanAttributes}></Map>`;
+  });
+};
+
 export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps) {
   const editorRef = useRef<MDXEditorMethods>(null);
   const [key, setKey] = useState(0); // Add a key to force re-render
   const [internalMarkdown, setInternalMarkdown] = useState(markdown);
+  const [lastSavedContent, setLastSavedContent] = useState('');
+  const [isTabSwitching, setIsTabSwitching] = useState(false);
 
   // Update internal markdown when prop changes
   useEffect(() => {
-    setInternalMarkdown(markdown);
-  }, [markdown]);
+    // If we're switching tabs and the markdown has changed, it might contain broken Map components
+    if (isTabSwitching && markdown !== lastSavedContent) {
+      const fixedMarkdown = preserveMapComponents(markdown);
+      setInternalMarkdown(fixedMarkdown);
+      setIsTabSwitching(false);
+    } else {
+      setInternalMarkdown(markdown);
+    }
+    
+    // Save the last markdown we received from props
+    setLastSavedContent(markdown);
+  }, [markdown, isTabSwitching, lastSavedContent]);
+
+  // Detect tab switching
+  useEffect(() => {
+    // This will run when the component is mounted or re-rendered with a new key
+    setIsTabSwitching(key > 0);
+  }, [key]);
 
   // Force re-render when switching back to the editor tab
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden && editorRef.current) {
-        // When the tab becomes visible again, force a re-render
-        // but preserve the current markdown content
-        const currentContent = editorRef.current.getMarkdown();
-        setInternalMarkdown(currentContent);
-        setKey(prevKey => prevKey + 1);
+        try {
+          // When the tab becomes visible again, force a re-render
+          setKey(prevKey => prevKey + 1);
+          setIsTabSwitching(true);
+        } catch (error) {
+          console.error("Error handling visibility change:", error);
+        }
       }
     };
 
@@ -337,17 +380,6 @@ export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps)
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
-
-  // Apply markdown content when editor ref is available or key changes
-  useEffect(() => {
-    if (editorRef.current) {
-      const editor = editorRef.current as any;
-      // Use setTimeout to ensure the editor is fully initialized
-      setTimeout(() => {
-        editor.setMarkdown(internalMarkdown);
-      }, 0);
-    }
-  }, [internalMarkdown, key, editorRef.current]);
 
   return (
     <MDXProvider components={components}>

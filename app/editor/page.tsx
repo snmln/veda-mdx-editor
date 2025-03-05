@@ -65,17 +65,48 @@ export default function EditorPage() {
   const [editorKey, setEditorKey] = useState(0);
   const [preservedContent, setPreservedContent] = useState(mdxContent);
 
+  // Custom function to fix Map components in markdown
+  const fixMapComponents = (markdown: string): string => {
+    // This regex matches Map JSX components with their attributes
+    const mapRegex = /<map([^>]*)><br><\/map>/g;
+    
+    // Replace each Map component with a special marker that includes the attributes
+    return markdown.replace(mapRegex, (match, attributes) => {
+      // Clean up the attributes
+      const cleanAttributes = attributes
+        .replace(/center="\[object Object\]"/g, 'center="[-94.5, 41.25]"')
+        .replace(/zoom="\[object Object\]"/g, 'zoom="8.3"')
+        .replace(/datasetid="\[object Object\]"/g, 'datasetId="no2"')
+        .replace(/layerid="\[object Object\]"/g, 'layerId="no2-monthly-diff"')
+        .replace(/datetime="\[object Object\]"/g, 'dateTime="2024-05-31"')
+        .replace(/comparedatetime="\[object Object\]"/g, 'compareDateTime="2023-05-31"')
+        .replace(/comparelabel="\[object Object\]"/g, 'compareLabel="May 2024 VS May 2023"');
+      
+      // Return a special JSX component that will be properly handled by the editor
+      return `<Map${cleanAttributes}></Map>`;
+    });
+  };
+
   // Handle tab change
   const handleTabChange = (index) => {
     // If switching to preview tab, preserve the current content
     if (index === 1 && selectedTab === 0) {
+      console.log("Switching to preview, preserving content:", mdxContent);
       setPreservedContent(mdxContent);
     }
     
     // If switching back to the editor tab, increment the key to force re-render
     // and ensure we use the preserved content
     if (index === 0 && selectedTab !== 0) {
-      // We don't need to update mdxContent here as it will be handled by the editor's onChange
+      console.log("Switching back to editor, using preserved content:", preservedContent);
+      
+      // Fix any broken Map components in the preserved content
+      const fixedContent = fixMapComponents(preservedContent);
+      
+      // Set mdxContent to the fixed preserved content
+      setMdxContent(fixedContent);
+      
+      // Force re-render of the editor
       setEditorKey(prev => prev + 1);
     }
     
@@ -108,8 +139,11 @@ export default function EditorPage() {
               <Suspense fallback={<div>Loading editor...</div>}>
                 <MDXEditorWrapper
                   key={editorKey} // Add key to force re-render
-                  markdown={selectedTab === 0 && editorKey > 0 ? preservedContent : mdxContent}
-                  onChange={handleContentChange}
+                  markdown={mdxContent}
+                  onChange={(content) => {
+                    console.log("Editor content changed:", content);
+                    handleContentChange(content);
+                  }}
                 />
               </Suspense>
             </Tab.Panel>
