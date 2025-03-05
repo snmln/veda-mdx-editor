@@ -38,6 +38,25 @@ interface MDXEditorWrapperProps {
   onChange: (content: string) => void;
 }
 
+
+const InsertMyLeaf = () => {
+  const insertJsx = usePublisher(insertJsx$)
+  return (
+    <Button
+      onClick={() =>
+        insertJsx({
+          name: 'MyLeaf',
+          kind: 'text',
+          props: { foo: 'foo-value', bar: 'bar-value', onClick: { type: 'expression', value: '() => console.log("Clicked")' } }
+        })
+      }
+    >
+      Leaf
+    </Button>
+  )
+}
+
+
 // Available datasets and layers for the dropdown
 const availableDatasets = [
   { 
@@ -75,6 +94,8 @@ const InsertMapButton = () => {
         compareDateTime: { type: 'expression', value: '"2023-05-31"' },
         compareLabel: { type: 'expression', value: '"May 2024 VS May 2023"' },
       },
+      // Add children to match the hasChildren: true in the component descriptor
+      children: []
     });
   };
 
@@ -296,10 +317,25 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       { name: 'compareDateTime', type: 'expression' },
       { name: 'compareLabel', type: 'expression' },
     ],
-    hasChildren: false,
-    Editor: MapComponentEditor, // Use our custom editor instead of GenericJsxEditor
-    // We can't add a Renderer property directly, but we'll handle rendering in our components object
+    hasChildren: true, // Changed to true like MyLeaf
+    Editor: GenericJsxEditor, // Use GenericJsxEditor like MyLeaf
   },
+  {
+      name: 'MyLeaf',
+      kind: 'text', // 'text' for inline, 'flow' for block
+      // the source field is used to construct the import statement at the top of the markdown document.
+      // it won't be actually sourced.
+      source: './external',
+      // Used to construct the property popover of the generic editor
+      props: [
+        { name: 'foo', type: 'string' },
+        { name: 'bar', type: 'string' },
+        { name: 'onClick', type: 'expression' }
+      ],
+      // whether the component has children or not
+      hasChildren: true,
+      Editor: GenericJsxEditor
+    },
 ];
 
 const components = {
@@ -412,6 +448,7 @@ export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps)
                   <CreateLink />
                   <CodeToggle />
                   <InsertMapButton />
+                  <InsertMyLeaf />
                 </>
               )
             })
