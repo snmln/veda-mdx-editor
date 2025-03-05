@@ -72,6 +72,8 @@ const InsertMapButton = () => {
         datasetId: { type: 'expression', value: '"no2"' },
         layerId: { type: 'expression', value: '"no2-monthly-diff"' },
         dateTime: { type: 'expression', value: '"2024-05-31"' },
+        compareDateTime: { type: 'expression', value: '"2023-05-31"' },
+        compareLabel: { type: 'expression', value: '"May 2024 VS May 2023"' },
       },
     });
   };
@@ -96,6 +98,12 @@ const MapComponentEditor = (props: any) => {
   );
   const [layerId, setLayerId] = useState(
     initialValue?.props?.layerId?.value?.replace(/"/g, '') || 'no2-monthly-diff'
+  );
+  const [compareDateTime, setCompareDateTime] = useState(
+    initialValue?.props?.compareDateTime?.value?.replace(/"/g, '') || '2023-05-31'
+  );
+  const [compareLabel, setCompareLabel] = useState(
+    initialValue?.props?.compareLabel?.value?.replace(/"/g, '') || 'May 2024 VS May 2023'
   );
   const [availableLayers, setAvailableLayers] = useState(
     availableDatasets.find(d => d.id === datasetId)?.layers || []
@@ -138,6 +146,32 @@ const MapComponentEditor = (props: any) => {
       onChange({ ...initialValue, props: newProps });
     }
   };
+  
+  const handleCompareDateTimeChange = (e) => {
+    setCompareDateTime(e.target.value);
+    
+    // Update the JSX component props
+    if (onChange && initialValue) {
+      const newProps = {
+        ...initialValue.props,
+        compareDateTime: { type: 'expression', value: `"${e.target.value}"` },
+      };
+      onChange({ ...initialValue, props: newProps });
+    }
+  };
+  
+  const handleCompareLabelChange = (e) => {
+    setCompareLabel(e.target.value);
+    
+    // Update the JSX component props
+    if (onChange && initialValue) {
+      const newProps = {
+        ...initialValue.props,
+        compareLabel: { type: 'expression', value: `"${e.target.value}"` },
+      };
+      onChange({ ...initialValue, props: newProps });
+    }
+  };
 
   return (
     <div>
@@ -173,6 +207,28 @@ const MapComponentEditor = (props: any) => {
             ))}
           </select>
         </div>
+        
+        <div className="mb-3">
+          <label className="block text-sm font-medium mb-1">Compare Date (YYYY-MM-DD)</label>
+          <input 
+            type="text"
+            value={compareDateTime}
+            onChange={handleCompareDateTimeChange}
+            placeholder="2023-05-31"
+            className="w-full text-sm border rounded px-2 py-1"
+          />
+        </div>
+        
+        <div className="mb-3">
+          <label className="block text-sm font-medium mb-1">Compare Label</label>
+          <input 
+            type="text"
+            value={compareLabel}
+            onChange={handleCompareLabelChange}
+            placeholder="May 2024 VS May 2023"
+            className="w-full text-sm border rounded px-2 py-1"
+          />
+        </div>
       </div>
     </div>
   );
@@ -189,6 +245,8 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       { name: 'datasetId', type: 'expression' },
       { name: 'layerId', type: 'expression' },
       { name: 'dateTime', type: 'expression' },
+      { name: 'compareDateTime', type: 'expression' },
+      { name: 'compareLabel', type: 'expression' },
     ],
     hasChildren: false,
     Editor: MapComponentEditor // Use our custom editor instead of GenericJsxEditor
