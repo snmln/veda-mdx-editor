@@ -7,7 +7,6 @@ import {
   ReactQueryProvider,
   DevseedUiThemeProvider,
   VedaUIProvider,
-  PageMainContent,
   Block,
   Prose,
   Figure,
@@ -48,7 +47,6 @@ export {
   // Components
   CatalogView,
   PageHero,
-  PageMainContent,
   PageHeader,
   PageFooter,
   ExplorationAndAnalysis,
