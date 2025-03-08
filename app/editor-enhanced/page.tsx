@@ -5,7 +5,7 @@ import { Tab } from '@headlessui/react';
 import dynamic from 'next/dynamic';
 import { MDXProvider } from '@mdx-js/react';
 
-// Define your custom components here 
+// Import customComponents (Make sure this path is *exactly* correct)
 import { customComponents } from '../components/custom-components';
 
 // Create a components object to pass to MDXProvider
@@ -14,16 +14,15 @@ const components = {
   // Include any other components you're using in your MDX content
 };
 
-// Dynamically import both the editor and preview components
+// Dynamically import the editor and preview components
 const MDXEditorWrapper = dynamic(
-  () => import('../components/mdx-editor-simple').then((mod) => mod.MDXEditorSimple),
-  { 
+  () => import('../components/mdx-editor-enhanced').then((mod) => mod.MDXEditorEnhanced),
+  {
     ssr: false,
     loading: () => <div className="h-[600px] flex items-center justify-center">Loading editor...</div>
   }
 );
 
-// Dynamically import the MDXPreview component to avoid server-side rendering issues
 const MDXPreview = dynamic(
   () => import('../components/mdx-preview-enhanced').then((mod) => mod.MDXPreviewEnhanced),
   {
@@ -32,51 +31,40 @@ const MDXPreview = dynamic(
   }
 );
 
-const initialContent = `# Welcome to the Enhanced MDX Editor
+// No need for MDXEditorSimple anymore
 
-This is a live editor where you can write and preview MDX content with Map components.
+const initialContent = `# Welcome to the MDX Editor
+
+This is a live editor where you can write and preview MDX content.
 
 ## Features
 - Live preview
 - Markdown formatting
-- Map components with dataset selection
-- Client-side rendering of Map components
+- Code blocks
 
-Try inserting a Map component using the toolbar!
-`;
+Try editing this content!
+<Map center="[-94.5, 41.25]" zoom="8.3" datasetId="no2" layerId="no2-monthly-diff" dateTime="2024-05-31" compareDateTime="2023-05-31" compareLabel="May 2024 VS May 2023"></Map>
+`; // Initial content WITH a Map component
 
-export default function EditorEnhancedPage() {
-  // Clear any existing localStorage data on component mount
-  React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('mdxEditorEnhancedContent');
-    }
-  }, []);
-
-  // Use state to store MDX content without localStorage
+export default function EditorPage() {
   const [mdxContent, setMdxContent] = useState(initialContent);
-  
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [editorKey, setEditorKey] = useState(0); // Key for forcing re-render
+
   const handleContentChange = useCallback((content: string) => {
     setMdxContent(content);
-    // No longer saving to localStorage
   }, []);
 
-  // Add state to track the current tab and force re-render
-  const [selectedTab, setSelectedTab] = useState(0);
-  const [editorKey, setEditorKey] = useState(0);
-
-  // Handle tab change
-  const handleTabChange = (index) => {
-    // If switching back to the editor tab (index 0), increment the key to force re-render
-    if (index === 0 && selectedTab !== 0) {
-      setEditorKey(prev => prev + 1);
-    }
+  const handleTabChange = (index: number) => {
     setSelectedTab(index);
+    if (index === 0) {
+      // Increment the key ONLY when switching back to the editor
+      setEditorKey((prevKey) => prevKey + 1);
+    }
   };
 
   return (
     <div className="container mx-auto p-4 max-w-5xl min-h-screen bg-gray-50">
-      <h1 className="text-2xl font-bold mb-4">Enhanced MDX Editor with Map Support</h1>
       <MDXProvider components={components}>
         <Tab.Group selectedIndex={selectedTab} onChange={handleTabChange}>
           <Tab.List className="flex space-x-4 mb-4">
@@ -100,7 +88,7 @@ export default function EditorEnhancedPage() {
             <Tab.Panel>
               <Suspense fallback={<div>Loading editor...</div>}>
                 <MDXEditorWrapper
-                  key={editorKey} // Add key to force re-render
+                  key={editorKey}  {/* Force re-mount on tab switch */}
                   markdown={mdxContent}
                   onChange={handleContentChange}
                 />

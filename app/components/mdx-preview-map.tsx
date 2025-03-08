@@ -1,3 +1,4 @@
+// app/components/mdx-preview-map.tsx
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -11,7 +12,7 @@ import type { DatasetWithContent } from 'app/types/content';
 // Import MapBlock dynamically to avoid SSR issues
 const MapBlock = dynamic(
   () => import('@lib').then((mod) => mod.MapBlock),
-  { 
+  {
     ssr: false,
     loading: () => <div className="h-[400px] flex items-center justify-center">Loading map...</div>
   }
@@ -58,7 +59,7 @@ const mockDatasets = [
 
 export function ClientMapBlock(props) {
   const transformed = transformToVedaData(mockDatasets as any);
-  
+
   return (
     <DevseedUIThemeProvider>
       <VedaUIConfigProvider>
@@ -71,3 +72,6 @@ export function ClientMapBlock(props) {
     </DevseedUIThemeProvider>
   );
 }
+
+// Make sure ClientMapBlock is the default export for dynamic imports to work correctly
+export default ClientMapBlock;
