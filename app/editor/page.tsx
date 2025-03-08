@@ -1,12 +1,12 @@
-// app/editor/page.tsx
+// app/editor/page.tsx with stable React key for editor state preservation
 'use client';
 
 import React, { useState, useCallback, Suspense, useEffect } from 'react';
 import { Tab } from '@headlessui/react';
 import dynamic from 'next/dynamic';
-import { MDXProvider } from '@mdx-js/react';
 import { customComponents } from '../components/custom-components';
 
+// Only import the editor once and keep it mounted
 const MDXEditorWrapper = dynamic(
   () => import('../components/mdx-editor-enhanced').then((mod) => mod.MDXEditorEnhanced),
   {
@@ -47,7 +47,9 @@ const STORAGE_KEY = 'mdx-editor-content';
 
 export default function EditorPage() {
   const [mdxContent, setMdxContent] = useState(initialContent);
-
+  // Using a stable key to preserve editor state
+  const stableEditorKey = "stable-editor-instance";
+  
   // Load from localStorage on component mount if enabled
   useEffect(() => {
     if (USE_LOCAL_STORAGE && typeof window !== 'undefined') {
@@ -77,35 +79,35 @@ export default function EditorPage() {
       )}
 
       <Tab.Group>
-      <Tab.List className="flex space-x-4 mb-4">
-        <Tab className={({ selected }) =>
-          `px-4 py-2 rounded-lg font-medium ${
-            selected ? 'bg-blue-600  ' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`
-        }>
-          Editor
-        </Tab>
-        <Tab className={({ selected }) =>
-          `px-4 py-2 rounded-lg font-medium ${
-            selected ? 'bg-blue-600  ' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`
-        }>
-          Preview
-        </Tab>
-      </Tab.List>
+        <Tab.List className="flex space-x-4 mb-4">
+          <Tab className={({ selected }) =>
+            `px-4 py-2 rounded-lg font-medium ${selected ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`
+          }>
+            Editor
+          </Tab>
+          <Tab className={({ selected }) =>
+            `px-4 py-2 rounded-lg font-medium ${selected ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`
+          }>
+            Preview
+          </Tab>
+        </Tab.List>
 
-        <Tab.Panels className="border rounded-lg p-4 bg-white shadow-lg">
-          <Tab.Panel>
-            <Suspense fallback={<div>Loading editor...</div>}>
+        <Tab.Panels className="border rounded-lg bg-white shadow-lg h-[600px] overflow-hidden">
+          <Tab.Panel className="h-full">
+            {/* Use a stable key to preserve the editor instance */}
+            <Suspense fallback={<div className="h-full flex items-center justify-center">Loading editor...</div>}>
               <MDXEditorWrapper
+                key={stableEditorKey}
                 markdown={mdxContent}
                 onChange={handleContentChange}
               />
             </Suspense>
           </Tab.Panel>
-          <Tab.Panel>
-            <div className="prose max-w-none p-4">
-              <Suspense fallback={<div>Loading MDX preview...</div>}>
+          <Tab.Panel className="h-full">
+            <div className="prose max-w-none p-6 h-full overflow-auto">
+              <Suspense fallback={<div className="flex items-center justify-center h-full">Loading MDX preview...</div>}>
                 <SimpleMDXPreview source={mdxContent} />
               </Suspense>
             </div>
