@@ -13,7 +13,7 @@ const ClientMapBlock = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-[250px] flex items-center justify-center bg-blue-50 border rounded">
+      <div className="h-[180px] flex items-center justify-center bg-blue-50 border rounded">
         <div className="text-blue-500">Loading map preview...</div>
       </div>
     )
@@ -72,106 +72,129 @@ const MapEditorWithPreview = (props: any) => {
   }, [center, zoom, datasetId, layerId, dateTime, compareDateTime, compareLabel]);
 
   return (
-    <div className="my-4 border rounded-lg overflow-hidden">
-      {/* Map live preview */}
-      <div className="relative">
-        <ClientMapBlock
-          center={parsedCenter}
-          zoom={parsedZoom}
-          datasetId={datasetId}
-          layerId={layerId}
-          dateTime={dateTime}
-          compareDateTime={compareDateTime}
-          compareLabel={compareLabel}
-        />
+    <div className="my-2 border rounded-lg overflow-hidden shadow-sm bg-white">
+      {/* Map live preview with properties above */}
+      <div className="flex flex-col">
+        <div className="flex justify-between items-center mb-1">
+          <h3 className={`font-medium ${isEditing ? 'text-blue-700' : 'text-gray-500'} text-sm`}>
+            {isEditing ? 'Map Properties' : ''}
+          </h3>
+          <button 
+            className="bg-blue-600 hover:bg-blue-700   px-3 py-1 rounded-md shadow flex items-center text-xs"
+            onClick={() => setIsEditing(!isEditing)}
+          >
+            {isEditing ? 'Close Editor' : 'Edit Map'}
+          </button>
+        </div>
         
-        {/* Edit button overlay */}
-        <button 
-          className="absolute bottom-3 right-3 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow flex items-center text-sm"
-          onClick={() => setIsEditing(!isEditing)}
-        >
-          {isEditing ? 'Close' : 'Edit Properties'}
-        </button>
+        {/* Properties panel with table layout for perfect alignment */}
+        {isEditing && (
+          <div className="bg-white p-3 border rounded-md shadow-sm mb-2">
+            <table className="w-full border-collapse">
+              <tbody>
+                <tr className="h-8">
+                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Dataset ID:</td>
+                  <td>
+                    <input
+                      type="text"
+                      value={datasetId}
+                      onChange={(e) => setDatasetId(e.target.value)}
+                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                    />
+                  </td>
+                </tr>
+                
+                <tr className="h-8">
+                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Layer ID:</td>
+                  <td>
+                    <input
+                      type="text"
+                      value={layerId}
+                      onChange={(e) => setLayerId(e.target.value)}
+                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                    />
+                  </td>
+                </tr>
+                
+                <tr className="h-8">
+                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Center:</td>
+                  <td>
+                    <input
+                      type="text"
+                      value={center}
+                      onChange={(e) => setCenter(e.target.value)}
+                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                    />
+                  </td>
+                </tr>
+                
+                <tr className="h-8">
+                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Zoom:</td>
+                  <td>
+                    <input
+                      type="text"
+                      value={zoom}
+                      onChange={(e) => setZoom(e.target.value)}
+                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                    />
+                  </td>
+                </tr>
+                
+                <tr className="h-8">
+                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Date Time:</td>
+                  <td>
+                    <input
+                      type="text"
+                      value={dateTime}
+                      onChange={(e) => setDateTime(e.target.value)}
+                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                    />
+                  </td>
+                </tr>
+                
+                <tr className="h-8">
+                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Compare Date:</td>
+                  <td>
+                    <input
+                      type="text"
+                      value={compareDateTime}
+                      onChange={(e) => setCompareDateTime(e.target.value)}
+                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                    />
+                  </td>
+                </tr>
+                
+                <tr className="h-8">
+                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Compare Label:</td>
+                  <td>
+                    <input
+                      type="text"
+                      value={compareLabel}
+                      onChange={(e) => setCompareLabel(e.target.value)}
+                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+        
+        <div className="relative">
+          <ClientMapBlock
+            center={parsedCenter}
+            zoom={parsedZoom}
+            datasetId={datasetId}
+            layerId={layerId}
+            dateTime={dateTime}
+            compareDateTime={compareDateTime}
+            compareLabel={compareLabel}
+          />
+        </div>
       </div>
       
       {/* Editable properties panel - only visible when editing */}
-      {isEditing && (
-        <div className="bg-gray-50 p-4 border-t">
-          <h3 className="font-medium text-gray-700 mb-3">Map Properties</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Dataset ID</label>
-              <input
-                type="text"
-                value={datasetId}
-                onChange={(e) => setDatasetId(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md text-sm"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Layer ID</label>
-              <input
-                type="text"
-                value={layerId}
-                onChange={(e) => setLayerId(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md text-sm"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Center</label>
-              <input
-                type="text"
-                value={center}
-                onChange={(e) => setCenter(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md text-sm"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Zoom</label>
-              <input
-                type="text"
-                value={zoom}
-                onChange={(e) => setZoom(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md text-sm"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date Time</label>
-              <input
-                type="text"
-                value={dateTime}
-                onChange={(e) => setDateTime(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md text-sm"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Compare Date Time</label>
-              <input
-                type="text"
-                value={compareDateTime}
-                onChange={(e) => setCompareDateTime(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md text-sm"
-              />
-            </div>
-            
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Compare Label</label>
-              <input
-                type="text"
-                value={compareLabel}
-                onChange={(e) => setCompareLabel(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md text-sm"
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Map properties panel is now above the map */}
     </div>
   );
 };

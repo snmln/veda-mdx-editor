@@ -77,20 +77,22 @@ export default function EditorPage() {
       )}
 
       <Tab.Group>
-        <Tab.List className="flex space-x-4 mb-4">
-          <Tab className={({ selected }) =>
-            `px-4 py-2 rounded-lg ${selected ? 'bg-blue-500 text-white' : 'bg-gray-200'
-            }`
-          }>
-            Editor
-          </Tab>
-          <Tab className={({ selected }) =>
-            `px-4 py-2 rounded-lg ${selected ? 'bg-blue-500 text-white' : 'bg-gray-200'
-            }`
-          }>
-            Preview
-          </Tab>
-        </Tab.List>
+      <Tab.List className="flex space-x-4 mb-4">
+        <Tab className={({ selected }) =>
+          `px-4 py-2 rounded-lg font-medium ${
+            selected ? 'bg-blue-600  ' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`
+        }>
+          Editor
+        </Tab>
+        <Tab className={({ selected }) =>
+          `px-4 py-2 rounded-lg font-medium ${
+            selected ? 'bg-blue-600  ' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`
+        }>
+          Preview
+        </Tab>
+      </Tab.List>
 
         <Tab.Panels className="border rounded-lg p-4 bg-white shadow-lg">
           <Tab.Panel>

@@ -73,8 +73,8 @@ const InsertMapButton = () => {
     };
 
     return (
-        <Button onClick={handleClick} title="Insert Map">
-            <MapIcon className="w-4 h-4" /> Insert Map
+        <Button onClick={handleClick} title="Insert Map" className="text-xs">
+            <MapIcon className="w-3 h-3 mr-1" /> Map
         </Button>
     );
 };
