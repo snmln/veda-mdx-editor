@@ -42,7 +42,7 @@ export default function HomePage() {
             audience
             <Link 
             href="/editor"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg inline-block transition-colors"
+            className="bg-blue-500 hover:bg-blue-600   font-semibold py-3 px-6 rounded-lg inline-block transition-colors"
           >
             Open Editor
           </Link>

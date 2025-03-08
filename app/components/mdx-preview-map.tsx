@@ -14,7 +14,7 @@ const MapBlock = dynamic(
   () => import('@lib').then((mod) => mod.MapBlock),
   {
     ssr: false,
-    loading: () => <div className="h-[400px] flex items-center justify-center">Loading map...</div>
+    loading: () => <div className="h-[250px] flex items-center justify-center">Loading map...</div>
   }
 );
 
@@ -64,7 +64,7 @@ export function ClientMapBlock(props) {
     <DevseedUIThemeProvider>
       <VedaUIConfigProvider>
         <DataProvider initialDatasets={mockDatasets}>
-          <div className="relative w-full h-[400px] border rounded">
+          <div className="relative w-full h-[250px] border rounded">
             <MapBlock {...props} datasets={transformed} />
           </div>
         </DataProvider>
