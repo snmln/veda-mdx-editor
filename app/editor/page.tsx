@@ -1,7 +1,7 @@
 // app/editor/page.tsx with stable React key for editor state preservation
 'use client';
 
-import React, { useState, useCallback, Suspense, useEffect } from 'react';
+import React, { useState, useCallback, Suspense } from 'react';
 import { Tab } from '@headlessui/react';
 import dynamic from 'next/dynamic';
 import { customComponents } from '../components/custom-components';
@@ -40,54 +40,27 @@ Try editing this content!
  
 `;
 
-// Flag to control localStorage usage
-const USE_LOCAL_STORAGE = false; // You can set to false to disable localStorage
-
-const STORAGE_KEY = 'mdx-editor-content';
-
 export default function EditorPage() {
   const [mdxContent, setMdxContent] = useState(initialContent);
   // Using a stable key to preserve editor state
   const stableEditorKey = "stable-editor-instance";
-  
-  // Load from localStorage on component mount if enabled
-  useEffect(() => {
-    if (USE_LOCAL_STORAGE && typeof window !== 'undefined') {
-      const storedContent = localStorage.getItem(STORAGE_KEY);
-      if (storedContent) {
-        setMdxContent(storedContent);
-      }
-    }
-  }, []);
 
   const handleContentChange = useCallback((content: string) => {
     setMdxContent(content);
-    
-    // Only save to localStorage if enabled
-    if (USE_LOCAL_STORAGE && typeof window !== 'undefined') {
-      localStorage.setItem(STORAGE_KEY, content);
-    }
   }, []);
 
   return (
     <div className="container mx-auto p-4 max-w-5xl min-h-screen bg-gray-50">
-      {!USE_LOCAL_STORAGE && (
-        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded">
-          <p className="font-bold">Note:</p>
-          <p>localStorage is currently disabled. Your changes will not be saved between page refreshes.</p>
-        </div>
-      )}
-
       <Tab.Group>
         <Tab.List className="flex space-x-4 mb-4">
           <Tab className={({ selected }) =>
-            `px-4 py-2 rounded-lg font-medium ${selected ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            `px-4 py-2 rounded-lg font-medium ${selected ? 'bg-blue-600 text-blue' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`
           }>
             Editor
           </Tab>
           <Tab className={({ selected }) =>
-            `px-4 py-2 rounded-lg font-medium ${selected ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            `px-4 py-2 rounded-lg font-medium ${selected ? 'bg-blue-600 text-blue' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`
           }>
             Preview
