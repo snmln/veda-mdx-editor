@@ -1,9 +1,12 @@
-// app/editor/page.tsx with completely fixed layout and proper hiding
+// app/editor/page.tsx with hybrid approach
 'use client';
 
-import React, { useState, useCallback, Suspense, useEffect, useRef } from 'react';
+import React, { useState, useCallback, Suspense, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { customComponents } from '../components/custom-components';
+
+// Use a stable key to preserve the editor state
+const EDITOR_KEY = 'stable-mdx-editor-instance';
 
 const MDXEditorWrapper = dynamic(
   () => import('../components/mdx-editor-enhanced').then((mod) => mod.MDXEditorEnhanced),
@@ -38,50 +41,42 @@ Try editing this content!
  
 `;
 
-// Flag to control localStorage usage
-const USE_LOCAL_STORAGE = false; // You can set to false to disable localStorage
-
-const STORAGE_KEY = 'mdx-editor-content';
-
 export default function EditorPage() {
   const [mdxContent, setMdxContent] = useState(initialContent);
   const [selectedTab, setSelectedTab] = useState(0);
-  const [editorInitialized, setEditorInitialized] = useState(false);
-
-  // Load from localStorage on component mount if enabled
-  useEffect(() => {
-    if (USE_LOCAL_STORAGE && typeof window !== 'undefined') {
-      const storedContent = localStorage.getItem(STORAGE_KEY);
-      if (storedContent) {
-        setMdxContent(storedContent);
-      }
-    }
-    setEditorInitialized(true);
-  }, []);
+  const [editorMounted, setEditorMounted] = useState(false);
+  const editorContainerRef = useRef(null);
 
   const handleContentChange = useCallback((content: string) => {
     setMdxContent(content);
-    
-    // Only save to localStorage if enabled
-    if (USE_LOCAL_STORAGE && typeof window !== 'undefined') {
-      localStorage.setItem(STORAGE_KEY, content);
-    }
   }, []);
 
-  // This function prevents re-parsing the MDX when switching tabs
+  // Set editor as mounted once it's loaded
+  useEffect(() => {
+    setEditorMounted(true);
+  }, []);
+
+  // This function handles tab switching
   const handleTabChange = (index) => {
     setSelectedTab(index);
+    
+    // If switching to preview, we need to ensure editor is visually hidden
+    if (index === 1 && editorContainerRef.current) {
+      const container = editorContainerRef.current;
+      container.style.visibility = 'hidden';
+      container.style.position = 'absolute';
+      container.style.pointerEvents = 'none';
+    } else if (index === 0 && editorContainerRef.current) {
+      // If switching to editor, restore visibility
+      const container = editorContainerRef.current;
+      container.style.visibility = 'visible';
+      container.style.position = 'static';
+      container.style.pointerEvents = 'auto';
+    }
   };
 
   return (
     <div className="container mx-auto p-4 max-w-5xl min-h-screen bg-gray-50">
-      {!USE_LOCAL_STORAGE && (
-        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded">
-          <p className="font-bold">Note:</p>
-          <p>localStorage is currently disabled. Your changes will not be saved between page refreshes.</p>
-        </div>
-      )}
-
       {/* Custom Tab Buttons */}
       <div className="flex space-x-4 mb-4">
         <button 
@@ -102,23 +97,30 @@ export default function EditorPage() {
         </button>
       </div>
 
-      {/* Content container */}
-      <div className="border rounded-lg bg-white shadow-lg h-[600px] overflow-hidden">
-        {/* Only one panel is rendered at a time, but the editor stays mounted once initialized */}
-        {selectedTab === 0 ? (
-          // Editor Panel
-          <div className="h-full w-full">
-            {editorInitialized && (
-              <Suspense fallback={<div className="h-full flex items-center justify-center">Loading editor...</div>}>
-                <MDXEditorWrapper
-                  markdown={mdxContent}
-                  onChange={handleContentChange}
-                />
-              </Suspense>
-            )}
-          </div>
-        ) : (
-          // Preview Panel
+      {/* Content Panel */}
+      <div className="border rounded-lg bg-white shadow-lg h-[600px] overflow-hidden relative">
+        {/* Editor Container - Always mounted but can be visually hidden */}
+        <div 
+          ref={editorContainerRef}
+          className={`h-full w-full ${selectedTab === 0 ? '' : 'sr-only'}`}
+          style={{ 
+            visibility: selectedTab === 0 ? 'visible' : 'hidden',
+            position: selectedTab === 0 ? 'static' : 'absolute' 
+          }}
+        >
+          {editorMounted && (
+            <Suspense fallback={<div className="h-full flex items-center justify-center">Loading editor...</div>}>
+              <MDXEditorWrapper
+                key={EDITOR_KEY}
+                markdown={mdxContent}
+                onChange={handleContentChange}
+              />
+            </Suspense>
+          )}
+        </div>
+        
+        {/* Preview Panel - Only mounted when active */}
+        {selectedTab === 1 && (
           <div className="h-full w-full">
             <div className="prose max-w-none p-6 h-full overflow-auto">
               <Suspense fallback={<div className="flex items-center justify-center h-full">Loading MDX preview...</div>}>
