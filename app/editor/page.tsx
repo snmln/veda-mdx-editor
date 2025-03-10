@@ -1,4 +1,4 @@
-// app/editor/page.tsx with hybrid approach
+// app/editor/page.tsx with source view tab
 'use client';
 
 import React, { useState, useCallback, Suspense, useRef, useEffect } from 'react';
@@ -36,7 +36,7 @@ This is a live editor where you can write and preview MDX content.
 -   Code blocks
 -   Insert custom Map components
 
-
+Try editing this content!
 
  
 `;
@@ -49,7 +49,6 @@ export default function EditorPage() {
 
   const handleContentChange = useCallback((content: string) => {
     setMdxContent(content);
-    console.log(mdxContent)
   }, []);
 
   // Set editor as mounted once it's loaded
@@ -61,8 +60,8 @@ export default function EditorPage() {
   const handleTabChange = (index) => {
     setSelectedTab(index);
     
-    // If switching to preview, we need to ensure editor is visually hidden
-    if (index === 1 && editorContainerRef.current) {
+    // If switching to preview or source, hide editor
+    if ((index === 1 || index === 2) && editorContainerRef.current) {
       const container = editorContainerRef.current;
       container.style.visibility = 'hidden';
       container.style.position = 'absolute';
@@ -96,6 +95,14 @@ export default function EditorPage() {
         >
           Preview
         </button>
+        <button 
+          onClick={() => handleTabChange(2)}
+          className={`px-4 py-2 rounded-lg font-medium ${selectedTab === 2 
+            ? 'bg-blue-600 text-blue' 
+            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+        >
+          Source
+        </button>
       </div>
 
       {/* Content Panel */}
@@ -127,6 +134,17 @@ export default function EditorPage() {
               <Suspense fallback={<div className="flex items-center justify-center h-full">Loading MDX preview...</div>}>
                 <SimpleMDXPreview source={mdxContent} />
               </Suspense>
+            </div>
+          </div>
+        )}
+
+        {/* Source View - Only mounted when active */}
+        {selectedTab === 2 && (
+          <div className="h-full w-full">
+            <div className="p-4 h-full overflow-auto">
+              <div className="bg-white-50 rounded-lg border border-gray-300 p-4 h-full font-mono text-sm overflow-auto">
+                <pre className="whitespace-pre-wrap break-words">{mdxContent}</pre>
+              </div>
             </div>
           </div>
         )}
