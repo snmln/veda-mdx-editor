@@ -36,7 +36,7 @@ This is a live editor where you can write and preview MDX content.
 -   Code blocks
 -   Insert custom Map components
 
-Try editing this content!
+
 
  
 `;
@@ -49,6 +49,7 @@ export default function EditorPage() {
 
   const handleContentChange = useCallback((content: string) => {
     setMdxContent(content);
+    console.log(mdxContent)
   }, []);
 
   // Set editor as mounted once it's loaded
@@ -82,7 +83,7 @@ export default function EditorPage() {
         <button 
           onClick={() => handleTabChange(0)}
           className={`px-4 py-2 rounded-lg font-medium ${selectedTab === 0 
-            ? 'bg-blue-600 text-white' 
+            ? 'bg-blue-600 text-blue' 
             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
         >
           Editor
@@ -90,7 +91,7 @@ export default function EditorPage() {
         <button 
           onClick={() => handleTabChange(1)}
           className={`px-4 py-2 rounded-lg font-medium ${selectedTab === 1 
-            ? 'bg-blue-600 text-white' 
+            ? 'bg-blue-600 text-blue' 
             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
         >
           Preview
