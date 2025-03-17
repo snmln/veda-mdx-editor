@@ -86,7 +86,6 @@ function createHeading(level) {
 }
 
 const components = {
-  ...customComponents,
   h1: createHeading(1),
   h2: createHeading(2),
   h3: createHeading(3),
