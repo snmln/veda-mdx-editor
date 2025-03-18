@@ -28,7 +28,15 @@ const md = markdownit();
 
 function parseAttributes(obj) {
   const convert = (obj) => {
-    return Object.keys(obj).reduce(
+    const mdxData = {
+      ...obj,
+      layers: obj.layers?.map((l) => ({
+        ...l,
+        parentDataset: { id: obj.id },
+      })),
+    };
+
+    return Object.keys(mdxData).reduce(
       (acc, key) => {
         if (typeof obj[key] === 'object' && obj[key] !== null) {
           acc[key] = convert(obj[key]);
