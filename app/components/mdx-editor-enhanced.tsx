@@ -25,9 +25,14 @@ import {
     usePublisher,
     insertJsx$,
 } from '@mdxeditor/editor';
-import { MapIcon } from '@heroicons/react/24/outline';
+import { MapIcon, DocumentPlusIcon } from '@heroicons/react/24/outline';
 import '@mdxeditor/editor/style.css';
 import dynamic from 'next/dynamic';
+
+import { remarkDummyButtonSerialize, remarkDummyButtonDeserialize } from './remark-scrollytelling';
+
+import { dummyButtonPlugin } from './mdx-plugins/plugins/dummyButtonPlugin'
+import { InsertDummyButton } from './mdx-plugins/plugins/InsertDummyButton'
 
 // Import our map editor with live preview component
 const MapEditorWrapper = dynamic(
@@ -79,6 +84,8 @@ const InsertMapButton = () => {
     );
 };
 
+
+
 const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     {
         name: 'Map',
@@ -103,7 +110,7 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
                 </div>
             );
         }
-    }
+    } 
 ];
 
 export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps) {
@@ -113,7 +120,12 @@ export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps)
                 markdown={markdown}
                 onChange={onChange}
                 contentEditableClassName="prose prose-lg max-w-none min-h-[500px] outline-none px-4 py-2"
+                // remarkPlugins={[
+                //   remarkDummyButtonDeserialize, // first deserialize (MDX -> editor)
+                //   remarkDummyButtonSerialize    // then serialize (editor -> MDX)
+                // ]}
                 plugins={[
+                    dummyButtonPlugin(),
                     headingsPlugin(),
                     listsPlugin(),
                     quotePlugin(),
@@ -137,6 +149,7 @@ export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps)
                                 <CreateLink />
                                 <CodeToggle />
                                 <InsertMapButton />
+                                <InsertDummyButton />
                             </>
                         )
                     }),

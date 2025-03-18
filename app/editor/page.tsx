@@ -49,6 +49,10 @@ export default function EditorPage() {
 
   const handleContentChange = useCallback((content: string) => {
     setMdxContent(content);
+    //console.log('MDX Content changed:', content);
+
+    console.log('🔎 Updated MDX content:', content);
+    alert(`Updated MDX content:\n${content.substring(0, 200)}...`);
   }, []);
 
   // Set editor as mounted once it's loaded
