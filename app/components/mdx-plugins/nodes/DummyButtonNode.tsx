@@ -1,3 +1,5 @@
+//app/components/mdx-plugins/nodes/DummyButtonNode.tsx
+
 import { DecoratorNode } from 'lexical'
 
 export class DummyButtonNode extends DecoratorNode<JSX.Element> {

@@ -1,3 +1,5 @@
+//app/components/mdx-plugins/plugins/dummyButtonPlugin.ts
+
 import { createCommand, LexicalCommand, $insertNodes } from 'lexical'
 import { 
   realmPlugin, 
