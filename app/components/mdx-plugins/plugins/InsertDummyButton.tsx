@@ -1,3 +1,5 @@
+//app/components/mdx-plugins/plugins/InsertDummyButton.tsx
+
 import React from 'react'
 import { useCellValue, rootEditor$, Button } from '@mdxeditor/editor'
 import { DocumentPlusIcon } from '@heroicons/react/24/outline'

@@ -1,3 +1,5 @@
+//app/components/mdx-plugins/visitors/ScrollytellingMdastVisitor.ts
+
 import { MdastImportVisitor } from '@mdxeditor/editor'
 import { DummyButtonNode } from '../nodes/DummyButtonNode'
 
