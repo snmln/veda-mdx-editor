@@ -3,7 +3,7 @@
 'use client';
 
 import {
-  CatalogView,
+  CatalogContent,
   PageHero,
   useFiltersWithQS,
   ReactQueryProvider,
@@ -48,7 +48,7 @@ export {
   VedaUIProvider,
 
   // Components
-  CatalogView,
+  CatalogContent,
   PageHero,
   PageHeader,
   PageFooter,
