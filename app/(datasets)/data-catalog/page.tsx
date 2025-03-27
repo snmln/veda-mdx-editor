@@ -17,7 +17,11 @@ export default function Page() {
   return (
     <div className='grid-container'>
       <section>
-      <h1 className='font-ui-lg'>Data Catalog</h1>
+        <div className='margin-top-8 margin-bottom-3'>
+          <h1 className='font-sans-2xl'>Data Catalog</h1>
+          <p className='font-sans-sm'>This dashboard explores key indicators to track and compare changes over time.</p>
+        </div>
+        
         <Catalog datasets={transformed} />
       </section>
     </div>

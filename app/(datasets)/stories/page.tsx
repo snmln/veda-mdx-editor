@@ -19,7 +19,10 @@ export default function Page() {
 
   return (
     <div className='grid-container'>
-      <h1 className='font-ui-lg'>Stories</h1>
+      <div className='margin-top-8 margin-bottom-3'>
+        <h1 className='font-sans-2xl'>Stories</h1>
+        <p className='font-sans-sm'>This dashboard explores key indicators to track and compare changes over time.</p>
+      </div>
       <StoriesHub stories={stories} />
     </div>
   );
