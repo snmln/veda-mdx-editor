@@ -2,15 +2,13 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import { CustomMDX } from 'app/components/mdx';
 import { getStories } from 'app/content/utils/mdx';
-import { PageHero, LegacyGlobalStyles } from '@lib';
+import { PageHero } from '@lib';
 import './index.scss';
 
 async function generateStaticParams() {
   const posts = getStories();
 
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export default function StoryOverview({ params }: { params: any }) {
@@ -37,12 +35,14 @@ export default function StoryOverview({ params }: { params: any }) {
         }}
       />
       <article className='prose'>
-        <PageHero
-          title={post.metadata.name}
-          description={post.metadata.description}
-          coverSrc={post.metadata.media?.src}
-          coverAlt={post.metadata.media?.alt}
-        />
+        <div className='text-white'>
+          <PageHero
+            title={post.metadata.name}
+            description={post.metadata.description}
+            coverSrc={post.metadata.media?.src}
+            coverAlt={post.metadata.media?.alt}
+          />
+        </div>
         <CustomMDX source={post.content} />
       </article>
     </section>
