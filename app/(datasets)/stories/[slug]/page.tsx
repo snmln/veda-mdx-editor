@@ -2,7 +2,8 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import { CustomMDX } from 'app/components/mdx';
 import { getStories } from 'app/content/utils/mdx';
-import { PageHero } from '@lib';
+import { PageHero, LegacyGlobalStyles } from '@lib';
+import './index.scss';
 
 async function generateStaticParams() {
   const posts = getStories();
@@ -21,7 +22,7 @@ export default function StoryOverview({ params }: { params: any }) {
 
   return (
     <section>
-      <script 
+      <script
         type='application/ld+json'
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
@@ -31,7 +32,7 @@ export default function StoryOverview({ params }: { params: any }) {
             title: post.metadata.name,
             description: post.metadata.description,
             coverSrc: post.metadata.media?.src,
-            coverAlt: post.metadata.media?.alt
+            coverAlt: post.metadata.media?.alt,
           }),
         }}
       />

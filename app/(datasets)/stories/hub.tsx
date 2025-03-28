@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { StoriesHubContent, LegacyGlobalStyles, useFiltersWithQS } from '@lib';
+import { StoriesHubContent, useFiltersWithQS } from '@lib';
 import Providers from '../providers';
 
 export default function Hub({ stories: allStories }: { stories: any }) {
@@ -8,7 +8,6 @@ export default function Hub({ stories: allStories }: { stories: any }) {
 
   return (
     <Providers>
-      <LegacyGlobalStyles />
       <StoriesHubContent
         allStories={allStories}
         onFilterchanges={() => controlVars}
