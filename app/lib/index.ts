@@ -33,6 +33,7 @@ import {
   DatasetData,
   StoryData,
   VedaData,
+  LegacyGlobalStyles,
 } from '@teamimpact/veda-ui';
 
 /**
@@ -75,6 +76,7 @@ export {
   timelineDatasetsAtom,
   useTimelineDatasetAtom,
   externalDatasetsAtom,
+  LegacyGlobalStyles,
 };
 
 export type {
