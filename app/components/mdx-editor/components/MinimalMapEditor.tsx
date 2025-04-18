@@ -6,6 +6,50 @@ import { MapIcon } from '@heroicons/react/24/outline';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { MapContextProvider, useMapContext } from '../utils/MapContext';
 import dynamic from 'next/dynamic';
+import { LexicalNode } from 'lexical';
+
+interface MapProps {
+    center: string;
+    zoom: string;
+    datasetId: string;
+    layerId: string;
+    dateTime: string;
+    compareDateTime: string;
+    compareLabel: string;
+    node?: LexicalNode & { setProps?: (props: Partial<MapProps>) => void };
+}
+
+interface MapFieldProps {
+    label: string;
+    value: string;
+    onChange: (value: string) => void;
+}
+
+// Create a placeholder node type that satisfies the LexicalNode interface
+const createPlaceholderNode = (): LexicalNode & { setProps?: (props: Partial<MapProps>) => void } => {
+    return {
+        __type: 'placeholder',
+        __key: 'placeholder',
+        __parent: null,
+        __prev: null,
+        __next: null,
+        setProps: () => console.warn('setProps called on a placeholder node')
+    } as unknown as LexicalNode & { setProps?: (props: Partial<MapProps>) => void };
+};
+
+const MapField: React.FC<MapFieldProps> = ({ label, value, onChange }) => (
+    <tr className="h-8">
+        <td className="text-xs font-medium text-gray-600 w-32 pr-2">{label}:</td>
+        <td>
+            <input
+                type="text"
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
+            />
+        </td>
+    </tr>
+);
 
 // Import the actual map component for live preview
 const ClientMapBlock = dynamic(
@@ -21,8 +65,7 @@ const ClientMapBlock = dynamic(
 );
 
 // Map editor component that includes both preview and editable properties
-const MapEditorWithPreview = (props: any) => {
-  // Get context values - but handle the case where they might be undefined
+const MapEditorWithPreview: React.FC<MapProps> = (props) => {
   const contextValue = useMapContext();
   const [isEditing, setIsEditing] = useState(false);
   const [center, setCenter] = useState(props.center || '[-94.5, 41.25]');
@@ -42,11 +85,12 @@ const MapEditorWithPreview = (props: any) => {
   // Safe update function
   const updateProps = () => {
     try {
-      if (contextValue && contextValue.parentEditor && contextValue.lexicalNode) {
+      if (contextValue?.parentEditor && contextValue?.lexicalNode) {
         contextValue.parentEditor.update(() => {
           try {
-            if (contextValue.lexicalNode && typeof contextValue.lexicalNode.setProps === 'function') {
-              contextValue.lexicalNode.setProps({
+            const node = contextValue.lexicalNode as LexicalNode & { setProps?: (props: Partial<MapProps>) => void };
+            if (node?.setProps) {
+              node.setProps({
                 center,
                 zoom,
                 datasetId,
@@ -73,108 +117,30 @@ const MapEditorWithPreview = (props: any) => {
 
   return (
     <div className="my-2 border rounded-lg overflow-hidden shadow-sm bg-white">
-      {/* Map live preview with properties above */}
       <div className="flex flex-col">
         <div className="flex justify-between items-center mb-1">
           <h3 className={`font-medium ${isEditing ? 'text-blue-700' : 'text-gray-500'} text-sm`}>
             {isEditing ? 'Map Properties' : ''}
           </h3>
           <button 
-            className="bg-blue-600 hover:bg-blue-700   px-3 py-1 rounded-md shadow flex items-center text-xs"
+            className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md shadow flex items-center text-xs"
             onClick={() => setIsEditing(!isEditing)}
           >
             {isEditing ? 'Close Editor' : 'Edit Map'}
           </button>
         </div>
         
-        {/* Properties panel with table layout for perfect alignment */}
         {isEditing && (
           <div className="bg-white p-3 border rounded-md shadow-sm mb-2">
             <table className="w-full border-collapse">
               <tbody>
-                <tr className="h-8">
-                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Dataset ID:</td>
-                  <td>
-                    <input
-                      type="text"
-                      value={datasetId}
-                      onChange={(e) => setDatasetId(e.target.value)}
-                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                    />
-                  </td>
-                </tr>
-                
-                <tr className="h-8">
-                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Layer ID:</td>
-                  <td>
-                    <input
-                      type="text"
-                      value={layerId}
-                      onChange={(e) => setLayerId(e.target.value)}
-                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                    />
-                  </td>
-                </tr>
-                
-                <tr className="h-8">
-                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Center:</td>
-                  <td>
-                    <input
-                      type="text"
-                      value={center}
-                      onChange={(e) => setCenter(e.target.value)}
-                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                    />
-                  </td>
-                </tr>
-                
-                <tr className="h-8">
-                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Zoom:</td>
-                  <td>
-                    <input
-                      type="text"
-                      value={zoom}
-                      onChange={(e) => setZoom(e.target.value)}
-                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                    />
-                  </td>
-                </tr>
-                
-                <tr className="h-8">
-                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Date Time:</td>
-                  <td>
-                    <input
-                      type="text"
-                      value={dateTime}
-                      onChange={(e) => setDateTime(e.target.value)}
-                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                    />
-                  </td>
-                </tr>
-                
-                <tr className="h-8">
-                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Compare Date:</td>
-                  <td>
-                    <input
-                      type="text"
-                      value={compareDateTime}
-                      onChange={(e) => setCompareDateTime(e.target.value)}
-                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                    />
-                  </td>
-                </tr>
-                
-                <tr className="h-8">
-                  <td className="text-xs font-medium text-gray-600 w-32 pr-2">Compare Label:</td>
-                  <td>
-                    <input
-                      type="text"
-                      value={compareLabel}
-                      onChange={(e) => setCompareLabel(e.target.value)}
-                      className="w-full px-2 py-1 border border-blue-200 rounded-md text-xs focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                    />
-                  </td>
-                </tr>
+                <MapField label="Dataset ID" value={datasetId} onChange={setDatasetId} />
+                <MapField label="Layer ID" value={layerId} onChange={setLayerId} />
+                <MapField label="Center" value={center} onChange={setCenter} />
+                <MapField label="Zoom" value={zoom} onChange={setZoom} />
+                <MapField label="Date Time" value={dateTime} onChange={setDateTime} />
+                <MapField label="Compare Date" value={compareDateTime} onChange={setCompareDateTime} />
+                <MapField label="Compare Label" value={compareLabel} onChange={setCompareLabel} />
               </tbody>
             </table>
           </div>
@@ -192,28 +158,20 @@ const MapEditorWithPreview = (props: any) => {
           />
         </div>
       </div>
-      
-      {/* Editable properties panel - only visible when editing */}
-      {/* Map properties panel is now above the map */}
     </div>
   );
 };
 
 // This wrapper is used when the component is used in the editor
-const MapEditorWrapper = (props: any) => {
+const MapEditorWrapper: React.FC<MapProps> = (props) => {
   try {
     const [editor] = useLexicalComposerContext();
-    
-    // Create a safe version of props.node
-    const safeNode = props.node || {
-      setProps: () => console.warn('setProps called on a placeholder node')
-    };
     
     return (
       <MapContextProvider
         value={{
           parentEditor: editor,
-          lexicalNode: safeNode
+          lexicalNode: props.node || createPlaceholderNode()
         }}
       >
         <MapEditorWithPreview {...props} />
@@ -221,7 +179,6 @@ const MapEditorWrapper = (props: any) => {
     );
   } catch (error) {
     console.error('Error in MapEditorWrapper:', error);
-    // Fallback if anything goes wrong with the context
     return (
       <div className="p-4 bg-yellow-100 rounded border border-yellow-400">
         <p className="text-yellow-800">Map component could not be loaded properly.</p>
