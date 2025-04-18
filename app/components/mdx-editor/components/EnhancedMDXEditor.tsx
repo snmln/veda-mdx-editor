@@ -31,8 +31,8 @@ import dynamic from 'next/dynamic';
 
 import { remarkDummyButtonSerialize, remarkDummyButtonDeserialize } from './remark-scrollytelling';
 
-import { scrollytellingButtonPlugin } from './mdx-plugins/plugins/scrollytellingButtonPlugin'
-import { InsertScrollytellingButton } from './mdx-plugins/plugins/InsertScrollytellingButton'
+import { scrollytellingButtonPlugin } from '../plugins/scrollytelling/scrollytellingButtonPlugin'
+import { InsertScrollytellingButton } from '../plugins/scrollytelling/InsertScrollytellingButton'
 
 // Import our map editor with live preview component
 const MapEditorWrapper = dynamic(
