@@ -18,30 +18,72 @@ const MapBlock = dynamic(
   }
 );
 
-// Mock dataset for the no2-monthly-diff layer
+// Mock dataset based on the NO2 dataset configuration
 const mockDatasets = [
   {
     metadata: {
       id: 'no2',
       name: 'Nitrogen Dioxide',
-      description: 'Nitrogen dioxide data for analysis',
+      featured: true,
+      sourceExclusive: 'Mock',
+      description: "Since the outbreak of the novel coronavirus, atmospheric concentrations of nitrogen dioxide have changed by as much as 60% in some regions.",
       taxonomy: [
         {
           name: 'Topics',
           values: [
+            { id: 'covid_19', name: 'Covid 19' },
+            { id: 'agriculture', name: 'Agriculture' },
             { id: 'air_quality', name: 'Air Quality' }
           ]
+        },
+        {
+          name: 'Sector',
+          values: [{ id: 'electricity', name: 'Electricity' }]
+        },
+        {
+          name: 'Producer',
+          values: [{ id: 'nasa', name: 'NASA' }]
         }
       ],
       layers: [
+        {
+          id: 'no2-monthly',
+          stacCol: 'no2-monthly',
+          name: 'No2 PT',
+          type: 'raster',
+          description: 'Levels in 10¹⁵ molecules cm⁻². Darker colors indicate higher nitrogen dioxide (NO₂) levels associated and more activity. Lighter colors indicate lower levels of NO₂ and less activity.',
+          zoomExtent: [0, 20],
+          compare: {
+            datasetId: 'nighttime-lights',
+            layerId: 'nightlights-hd-monthly',
+            mapLabel: ({ dateFns, datetime, compareDatetime }) => `${dateFns.format(datetime, "LLL yyyy")} VS ${dateFns.format(compareDatetime, "LLL yyyy")}`
+          },
+          legend: {
+            unit: { label: 'Molecules cm3' },
+            type: 'gradient',
+            min: 'Less',
+            max: 'More',
+            stops: ['#99c5e0', '#f9eaa9', '#f7765d', '#c13b72', '#461070', '#050308']
+          },
+          info: {
+            source: 'NASA',
+            spatialExtent: 'Global',
+            temporalResolution: 'Monthly',
+            unit: '10¹⁵ molecules cm⁻²'
+          }
+        },
         {
           id: 'no2-monthly-diff',
           stacCol: 'no2-monthly-diff',
           name: 'No2 (Diff)',
           type: 'raster',
-          description: 'Nitrogen dioxide difference data',
+          description: 'Levels in 10¹⁵ molecules cm⁻². Shows the difference in NO₂ levels between time periods.',
           zoomExtent: [0, 20],
-          compare: null,
+          compare: {
+            datasetId: 'no2',
+            layerId: 'no2-monthly-diff',
+            mapLabel: ({ dateFns, datetime, compareDatetime }) => `${dateFns.format(datetime, "LLL yyyy")} VS ${dateFns.format(compareDatetime, "LLL yyyy")}`
+          },
           legend: {
             unit: { label: 'molecules/cm3' },
             type: 'gradient',
