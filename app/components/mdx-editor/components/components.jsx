@@ -1,4 +1,3 @@
-// components/custom-components.jsx
 'use client';
 
 import React from 'react';

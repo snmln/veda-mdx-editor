@@ -1,4 +1,3 @@
-// app/components/mdx-preview-map.tsx
 'use client';
 
 import React, { useEffect, useState } from 'react';
