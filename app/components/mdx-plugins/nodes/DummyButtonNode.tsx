@@ -25,6 +25,6 @@ export class DummyButtonNode extends DecoratorNode<JSX.Element> {
   updateDOM() { return false }
 
   decorate() { 
-    return <div className="border rounded p-2 bg-purple-100">Dummy Button Placeholder</div>
+    return <div className="border rounded p-2 bg-purple-100">Scrollytelling Block Placeholder</div>
   }
 }

@@ -1,9 +1,12 @@
 //app/components/mdx-plugins/visitors/ScrollytellingMdastVisitor.ts
 
 import { MdastImportVisitor } from '@mdxeditor/editor'
-import { DummyButtonNode } from '../nodes/DummyButtonNode'
+import { ScrollytellingNode } from '../nodes/ScrollytellingNode'
 
-export const ScrollytellingMdastVisitor: MdastImportVisitor = {
+export const ScrollytellingMdastVisitor: MdastImportVisitor<any> = {
+  // Test for the outer ScrollytellingBlock element
   testNode: node => node.type === 'mdxJsxFlowElement' && node.name === 'ScrollytellingBlock',
-  visitNode: _node => new DummyButtonNode(),
+  
+  // Simply convert it to a ScrollytellingNode - the content details don't matter for visualization
+  visitNode: _node => new ScrollytellingNode()
 }
