@@ -23,9 +23,7 @@ This fork implements a proof-of-concept (POC) for integrating MDXEditor with VED
 
 ## Architecture
 
-The implementation follows architecture with the following key components:
-
-*It is based on this documentation: https://mdxeditor.dev/editor/docs/jsx*
+The custom components are implemented based on this  architecture mentined here https://mdxeditor.dev/editor/docs/jsx
 
 ### Core Components
 - `MDXEditor.tsx`: Main editor component that integrates with @mdxeditor/editor
