@@ -2,7 +2,7 @@
 
 A proof-of-concept (POC) implementation for integrating MDXEditor with VEDA components, enabling rich content editing capabilities for VEDA datasets and maps. This implementation includes a custom editor interface that supports VEDA-specific components and preview functionality.
 
-## Demo
+ 
 
 ### Screenshot
 ![VEDA MDX Editor Screenshot](demo.gif)
