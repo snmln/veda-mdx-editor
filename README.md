@@ -2,9 +2,15 @@
 
 A proof-of-concept (POC) implementation for integrating MDXEditor with VEDA components, enabling rich content editing capabilities for VEDA datasets and maps. This implementation includes a custom editor interface that supports VEDA-specific components and preview functionality.
 
+## Demo
+
+[![VEDA MDX Editor Demo](demo.mp4)](demo.mp4)
+
+*Click the image above to watch the demo video*
+
 ## Overview
 
-This fork implements a proof-of-concept (POC) for integrating MDXEditor with VEDA components, enabling rich content editing capabilities for VEDA datasets and maps. The implementation includes a custom editor interface that supports VEDA-specific components and preview functionality.
+This PR implements a proof-of-concept (POC) for integrating MDXEditor with VEDA components, enabling rich content editing capabilities for VEDA datasets and maps. The implementation includes a custom editor interface that supports VEDA-specific components and preview functionality.
 
 ## Architecture
 
@@ -45,6 +51,8 @@ The implementation follows a modular architecture with the following key compone
 - Integrates with VEDA's existing component system
 - Implements custom preview components for VEDA-specific features
 - Maintains compatibility with existing VEDA data structures
+
+
 
 ## Files Modified/Added
 
