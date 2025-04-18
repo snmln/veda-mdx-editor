@@ -181,7 +181,7 @@ const MapEditorWrapper: React.FC<MapProps> = (props) => {
     return (
       <div className="p-4 bg-yellow-100 rounded border border-yellow-400">
         <p className="text-yellow-800">Map component could not be loaded properly.</p>
-        <ClientMapBlock
+        {/* <ClientMapBlock
           center={[-94.5, 41.25]}
           zoom={8.3}
           datasetId="no2"
@@ -189,7 +189,7 @@ const MapEditorWrapper: React.FC<MapProps> = (props) => {
           dateTime="2024-05-31"
           compareDateTime="2023-05-31"
           compareLabel="May 2024 VS May 2023"
-        />
+        /> */}
       </div>
     );
   }

@@ -1,4 +1,3 @@
-// app/components/simple-mdx-preview.tsx
 'use client';
 
 import React, { Suspense } from 'react';
