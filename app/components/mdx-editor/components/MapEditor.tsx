@@ -1,4 +1,3 @@
-// app/components/minimal-map-editor.tsx
 'use client';
 
 import React, { useEffect, useState } from 'react';
