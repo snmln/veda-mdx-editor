@@ -55,9 +55,17 @@ https://github.com/mdx-editor/editor/blob/main/src/plugins/codemirror/index.tsx
 ## Implementation Status
 
 - ✅ **Map Component**: Fully functional with preview support
-- ❌ **Scrollytelling**: Currently not working (code left in place for future implementation)
+- ❌ **Scrollytelling**: Currently not working (code left in place for future reference)
   - The scrollytelling plugin and components are included but not fully integrated
   - Future work will focus on completing this functionality
+  - Was exploring making a custom MDX Editor plugin which has full control over how it produces output JSX because I was not able to get default nested componets to work properly to produce something like this 
+   - ```
+   <ScrollytellingBlock >
+   <Chapter/>
+   <Chapter/>
+  <ScrollytellingBlock />
+```
+   - https://github.com/mdx-editor/editor/blob/main/src/plugins/jsx/LexicalMdxExpressionVisitor.ts
 
 ## Technical Implementation
 
