@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import { MDXProvider } from '@mdx-js/react';
 
 // Import customComponents (Make sure this path is *exactly* correct)
-import { customComponents } from '../components/mdx-editor/components/custom-components';
+import { customComponents } from '../components/mdx-editor/components/components';
 
 // Create a components object to pass to MDXProvider
 const components = {
@@ -16,7 +16,7 @@ const components = {
 
 // Dynamically import the editor and preview components
 const MDXEditorWrapper = dynamic(
-  () => import('../components/mdx-editor-enhanced').then((mod) => mod.MDXEditorEnhanced),
+  () => import('../components/mdx-editor/components/MDXEditor').then((mod) => mod.MDXEditorEnhanced),
   {
     ssr: false,
     loading: () => <div className="h-[600px] flex items-center justify-center">Loading editor...</div>
@@ -24,7 +24,7 @@ const MDXEditorWrapper = dynamic(
 );
 
 const MDXPreview = dynamic(
-  () => import('../components/mdx-preview-enhanced').then((mod) => mod.MDXPreviewEnhanced),
+  () => import('../components/mdx-editor/components/MDXPreview').then((mod) => mod.SimpleMDXPreview),
   {
     ssr: false,
     loading: () => <div className="flex items-center justify-center p-8">Loading preview...</div>

@@ -3,22 +3,30 @@
 
 import React, { useState, useCallback, Suspense, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { customComponents } from '../components/mdx-editor/components/custom-components';
+import { customComponents } from '../components/mdx-editor/components/components';
 
 // Use a stable key to preserve the editor state
 const EDITOR_KEY = 'stable-mdx-editor-instance';
 
-const MDXEditorWrapper = dynamic(
-  () => import('../components/mdx-editor/components/EnhancedMDXEditor').then((mod) => mod.MDXEditorEnhanced),
+interface EditorStyle {
+    style: {
+        height: string;
+        display: string;
+        alignItems: string;
+        justifyContent: string;
+    };
+}
+
+const MDXEditorEnhanced = dynamic(
+  () => import('../components/mdx-editor/components/MDXEditor').then((mod) => mod.MDXEditorEnhanced),
   {
     ssr: false,
     loading: () => <div className="h-[600px] flex items-center justify-center">Loading editor...</div>
   }
 );
 
-// Use the simple preview component that works
 const SimpleMDXPreview = dynamic(
-  () => import('../components/mdx-editor/components/SimpleMDXPreview').then((mod) => mod.SimpleMDXPreview),
+  () => import('../components/mdx-editor/components/MDXPreview').then((mod) => mod.SimpleMDXPreview),
   {
     ssr: false,
     loading: () => <div className="h-[600px] flex items-center justify-center">Loading preview...</div>
@@ -122,7 +130,7 @@ export default function EditorPage() {
         >
           {editorMounted && (
             <Suspense fallback={<div className="h-full flex items-center justify-center">Loading editor...</div>}>
-              <MDXEditorWrapper
+              <MDXEditorEnhanced
                 key={EDITOR_KEY}
                 markdown={mdxContent}
                 onChange={handleContentChange}
