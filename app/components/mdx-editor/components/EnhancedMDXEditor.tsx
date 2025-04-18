@@ -25,11 +25,9 @@ import {
     usePublisher,
     insertJsx$,
 } from '@mdxeditor/editor';
-import { MapIcon, DocumentPlusIcon } from '@heroicons/react/24/outline';
+import { MapIcon } from '@heroicons/react/24/outline';
 import '@mdxeditor/editor/style.css';
 import dynamic from 'next/dynamic';
-
-import { remarkDummyButtonSerialize, remarkDummyButtonDeserialize } from './remark-scrollytelling';
 
 import { scrollytellingButtonPlugin } from '../plugins/scrollytelling/scrollytellingButtonPlugin'
 import { InsertScrollytellingButton } from '../plugins/scrollytelling/InsertScrollytellingButton'
@@ -48,8 +46,18 @@ interface MDXEditorWrapperProps {
     onChange: (content: string) => void;
 }
 
+interface MapProps {
+    center: string;
+    zoom: string;
+    datasetId: string;
+    layerId: string;
+    dateTime: string;
+    compareDateTime: string;
+    compareLabel: string;
+}
+
 // Default map props to ensure consistency
-const DEFAULT_MAP_PROPS = {
+const DEFAULT_MAP_PROPS: MapProps = {
     center: '[-94.5, 41.25]',
     zoom: '8.3',
     datasetId: 'no2',
@@ -64,7 +72,6 @@ const InsertMapButton = () => {
 
     const handleClick = () => {
         try {
-            // Insert with default props
             insertJsx({
                 name: 'Map',
                 kind: 'text',
@@ -72,7 +79,6 @@ const InsertMapButton = () => {
             });
         } catch (error) {
             console.error('Error inserting Map component:', error);
-            // Provide user feedback
             alert('Could not insert Map component. See console for details.');
         }
     };
@@ -84,32 +90,22 @@ const InsertMapButton = () => {
     );
 };
 
-
-
 const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     {
         name: 'Map',
         kind: 'text',
         source: '@teamimpact/veda-ui',
         props: [
-            { name: 'center', type: 'string', defaultValue: DEFAULT_MAP_PROPS.center },
-            { name: 'zoom', type: 'string', defaultValue: DEFAULT_MAP_PROPS.zoom },
-            { name: 'datasetId', type: 'string', defaultValue: DEFAULT_MAP_PROPS.datasetId },
-            { name: 'layerId', type: 'string', defaultValue: DEFAULT_MAP_PROPS.layerId },
-            { name: 'dateTime', type: 'string', defaultValue: DEFAULT_MAP_PROPS.dateTime },
-            { name: 'compareDateTime', type: 'string', defaultValue: DEFAULT_MAP_PROPS.compareDateTime },
-            { name: 'compareLabel', type: 'string', defaultValue: DEFAULT_MAP_PROPS.compareLabel },
+            { name: 'center', type: 'string' },
+            { name: 'zoom', type: 'string' },
+            { name: 'datasetId', type: 'string' },
+            { name: 'layerId', type: 'string' },
+            { name: 'dateTime', type: 'string' },
+            { name: 'compareDateTime', type: 'string' },
+            { name: 'compareLabel', type: 'string' },
         ],
         hasChildren: false,
-        Editor: MapEditorWrapper,
-        // This component will be rendered in preview mode
-        render: (props) => {
-            return (
-                <div className="border border-blue-200 rounded p-2 bg-blue-50 text-sm text-blue-700">
-                    Map component: {props.datasetId || DEFAULT_MAP_PROPS.datasetId}/{props.layerId || DEFAULT_MAP_PROPS.layerId}
-                </div>
-            );
-        }
+        Editor: MapEditorWrapper
     } 
 ];
 
@@ -120,10 +116,6 @@ export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps)
                 markdown={markdown}
                 onChange={onChange}
                 contentEditableClassName="prose prose-lg max-w-none min-h-[500px] outline-none px-4 py-2"
-                // remarkPlugins={[
-                //   remarkDummyButtonDeserialize, // first deserialize (MDX -> editor)
-                //   remarkDummyButtonSerialize    // then serialize (editor -> MDX)
-                // ]}
                 plugins={[
                     scrollytellingButtonPlugin(),
                     headingsPlugin(),
@@ -134,11 +126,7 @@ export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps)
                     codeBlockPlugin(),
                     frontmatterPlugin(),
                     jsxPlugin({ 
-                        jsxComponentDescriptors,
-                        // Add error handling for JSX rendering
-                        onError: (error) => {
-                            console.error('JSX Plugin Error:', error);
-                        }
+                        jsxComponentDescriptors
                     }),
                     toolbarPlugin({
                         toolbarContents: () => (
