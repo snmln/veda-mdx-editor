@@ -4,9 +4,17 @@ A proof-of-concept (POC) implementation for integrating MDXEditor with VEDA comp
 
 ## Demo
 
+### Screenshot
+![VEDA MDX Editor Screenshot](demo.png)
+
+*Screenshot showing the editor interface*
+
+### Video Demo
 [![VEDA MDX Editor Demo](demo.mp4)](demo.mp4)
 
 *Click the image above to watch the demo video*
+
+
 
 ## Overview
 
