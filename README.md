@@ -79,18 +79,24 @@ https://github.com/mdx-editor/editor/blob/main/src/plugins/codemirror/index.tsx
 ## Files Modified/Added
 
 ```
-app/components/mdx-editor/
+app/
 ├── components/
-│   ├── MapPreview.tsx
-│   ├── MDXPreview.tsx
-│   ├── MapEditor.tsx
-│   ├── MDXEditor.tsx
-│   └── components.jsx
-├── utils/
-│   └── MapContext.tsx
-└── plugins/
-    ├── scrollytelling/
-    └── remark-scrollytelling.ts
+│   └── mdx-editor/
+│       ├── components/
+│       │   ├── MapPreview.tsx
+│       │   ├── MDXPreview.tsx
+│       │   ├── MapEditor.tsx
+│       │   ├── MDXEditor.tsx
+│       │   └── components.jsx
+│       ├── utils/
+│       │   └── MapContext.tsx
+│       └── plugins/
+│           ├── scrollytelling/
+│           └── remark-scrollytelling.ts
+├── editor/
+│   └── page.tsx
+├── package.json
+└── tsconfig.json
 ```
 
 ## Setup Instructions
