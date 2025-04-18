@@ -53,7 +53,7 @@ const MapField: React.FC<MapFieldProps> = ({ label, value, onChange }) => (
 
 // Import the actual map component for live preview
 const ClientMapBlock = dynamic(
-  () => import('./MDXMapPreview').then((mod) => mod.ClientMapBlock),
+  () => import('./MapPreview').then((mod) => mod.ClientMapBlock),
   {
     ssr: false,
     loading: () => (
