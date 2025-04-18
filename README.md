@@ -86,7 +86,7 @@ app/components/mdx-editor/
    ```bash
    yarn install
    ```
-3. Create a `.env.local` file in the root directory with the following content:
+3. Specify NEXT_PUBLIC_MAPBOX_TOKEN value in the `.env` file:
    ```
    NEXT_PUBLIC_MAPBOX_TOKEN=your_mapbox_token_here
    ```
