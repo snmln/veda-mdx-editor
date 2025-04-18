@@ -1,5 +1,5 @@
 import { LexicalExportVisitor } from '@mdxeditor/editor'
-import { ScrollytellingNode } from '../nodes/ScrollytellingNode'
+import { ScrollytellingNode } from './ScrollytellingNode'
 
 export const ScrollytellingLexicalVisitor: LexicalExportVisitor<ScrollytellingNode, any> = {
   testLexicalNode: (node) => node instanceof ScrollytellingNode,

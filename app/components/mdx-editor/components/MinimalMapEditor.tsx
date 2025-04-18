@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { MapIcon } from '@heroicons/react/24/outline';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { MapContextProvider, useMapContext } from './MapContext';
+import { MapContextProvider, useMapContext } from '../utils/MapContext';
 import dynamic from 'next/dynamic';
 
 // Import the actual map component for live preview

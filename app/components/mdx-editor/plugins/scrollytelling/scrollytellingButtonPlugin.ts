@@ -8,9 +8,9 @@ import {
   addLexicalNode$, 
   createRootEditorSubscription$
 } from '@mdxeditor/editor'
-import { ScrollytellingNode } from '../nodes/ScrollytellingNode'
-import { ScrollytellingLexicalVisitor } from '../visitors/ScrollytellingLexicalVisitor'
-import { ScrollytellingMdastVisitor } from '../visitors/ScrollytellingMdastVisitor'
+import { ScrollytellingNode } from './ScrollytellingNode'
+import { ScrollytellingLexicalVisitor } from './ScrollytellingLexicalVisitor'
+import { ScrollytellingMdastVisitor } from './ScrollytellingMdastVisitor'
 
 // Define the command for inserting the node
 export const INSERT_SCROLLYTELLING_NODE: LexicalCommand<void> = createCommand('INSERT_SCROLLYTELLING_NODE')

@@ -1,7 +1,7 @@
 //app/components/mdx-plugins/visitors/ScrollytellingMdastVisitor.ts
 
 import { MdastImportVisitor } from '@mdxeditor/editor'
-import { ScrollytellingNode } from '../nodes/ScrollytellingNode'
+import { ScrollytellingNode } from './ScrollytellingNode'
 
 export const ScrollytellingMdastVisitor: MdastImportVisitor<any> = {
   // Test for the outer ScrollytellingBlock element
