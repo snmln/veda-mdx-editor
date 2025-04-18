@@ -31,12 +31,12 @@ import dynamic from 'next/dynamic';
 
 import { remarkDummyButtonSerialize, remarkDummyButtonDeserialize } from './remark-scrollytelling';
 
-import { dummyButtonPlugin } from './mdx-plugins/plugins/dummyButtonPlugin'
-import { InsertDummyButton } from './mdx-plugins/plugins/InsertDummyButton'
+import { scrollytellingButtonPlugin } from './mdx-plugins/plugins/scrollytellingButtonPlugin'
+import { InsertScrollytellingButton } from './mdx-plugins/plugins/InsertScrollytellingButton'
 
 // Import our map editor with live preview component
 const MapEditorWrapper = dynamic(
-  () => import('./minimal-map-editor'),
+  () => import('./MinimalMapEditor'),
   {
     ssr: false,
     loading: () => <div className="p-4 text-center">Loading map editor...</div>
@@ -125,7 +125,7 @@ export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps)
                 //   remarkDummyButtonSerialize    // then serialize (editor -> MDX)
                 // ]}
                 plugins={[
-                    dummyButtonPlugin(),
+                    scrollytellingButtonPlugin(),
                     headingsPlugin(),
                     listsPlugin(),
                     quotePlugin(),
@@ -149,7 +149,7 @@ export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps)
                                 <CreateLink />
                                 <CodeToggle />
                                 <InsertMapButton />
-                                <InsertDummyButton />
+                                <InsertScrollytellingButton />
                             </>
                         )
                     }),

@@ -8,24 +8,15 @@ import { customComponents } from './custom-components';
 
 // Correctly import the default export from mdx-preview-map with error handling
 const ClientMapBlock = dynamic(
-  () => import('./mdx-preview-map')
-    .then(mod => mod.default || mod)
+  () => import('./MDXMapPreview')
+    .then(mod => mod.ClientMapBlock)
     .catch(err => {
-      console.error('Error loading map component:', err);
-      // Return a fallback component
-      return props => (
-        <div className="h-[400px] flex items-center justify-center bg-red-50 border border-red-300 rounded">
-          <div className="text-red-500">Failed to load map component</div>
-        </div>
-      );
+      console.error('Error loading map preview:', err);
+      return () => <div>Error loading map preview</div>;
     }),
   {
     ssr: false,
-    loading: () => (
-      <div className="h-[400px] flex items-center justify-center bg-blue-50 border rounded">
-        <div className="text-blue-500">Loading map...</div>
-      </div>
-    )
+    loading: () => <div>Loading map preview...</div>
   }
 );
 

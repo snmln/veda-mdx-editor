@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic';
 
 // Import the actual map component for live preview
 const ClientMapBlock = dynamic(
-  () => import('./mdx-preview-map'),
+  () => import('./MDXMapPreview').then((mod) => mod.ClientMapBlock),
   {
     ssr: false,
     loading: () => (
