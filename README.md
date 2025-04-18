@@ -65,7 +65,7 @@ https://github.com/mdx-editor/editor/blob/main/src/plugins/codemirror/index.tsx
    <Chapter/>
   <ScrollytellingBlock />
 ```
-   - https://github.com/mdx-editor/editor/blob/main/src/plugins/jsx/LexicalMdxExpressionVisitor.ts
+   - Ref: https://github.com/mdx-editor/editor/blob/main/src/plugins/jsx/LexicalMdxExpressionVisitor.ts
 
 ## Technical Implementation
 
