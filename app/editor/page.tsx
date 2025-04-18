@@ -3,13 +3,13 @@
 
 import React, { useState, useCallback, Suspense, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { customComponents } from '../components/custom-components';
+import { customComponents } from '../components/mdx-editor/components/custom-components';
 
 // Use a stable key to preserve the editor state
 const EDITOR_KEY = 'stable-mdx-editor-instance';
 
 const MDXEditorWrapper = dynamic(
-  () => import('../components/mdx-editor-enhanced').then((mod) => mod.MDXEditorEnhanced),
+  () => import('../components/mdx-editor/components/EnhancedMDXEditor').then((mod) => mod.MDXEditorEnhanced),
   {
     ssr: false,
     loading: () => <div className="h-[600px] flex items-center justify-center">Loading editor...</div>
@@ -17,11 +17,11 @@ const MDXEditorWrapper = dynamic(
 );
 
 // Use the simple preview component that works
-const SimpleMDXPreview = dynamic( 
-  () => import('../components/simple-mdx-preview').then((mod) => mod.SimpleMDXPreview),
+const SimpleMDXPreview = dynamic(
+  () => import('../components/mdx-editor/components/SimpleMDXPreview').then((mod) => mod.SimpleMDXPreview),
   {
     ssr: false,
-    loading: () => <div className="flex items-center justify-center p-8">Loading preview...</div>
+    loading: () => <div className="h-[600px] flex items-center justify-center">Loading preview...</div>
   }
 );
 
@@ -52,7 +52,7 @@ export default function EditorPage() {
     //console.log('MDX Content changed:', content);
 
     console.log('🔎 Updated MDX content:', content);
-    alert(`Updated MDX content:\n${content.substring(0, 200)}...`);
+    //alert(`Updated MDX content:\n${content.substring(0, 200)}...`);
   }, []);
 
   // Set editor as mounted once it's loaded

@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import { MDXProvider } from '@mdx-js/react';
 
 // Import customComponents (Make sure this path is *exactly* correct)
-import { customComponents } from '../components/custom-components';
+import { customComponents } from '../components/mdx-editor/components/custom-components';
 
 // Create a components object to pass to MDXProvider
 const components = {
