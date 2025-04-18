@@ -34,7 +34,7 @@ import { InsertScrollytellingButton } from '../plugins/scrollytelling/InsertScro
 
 // Import our map editor with live preview component
 const MapEditorWrapper = dynamic(
-  () => import('./MinimalMapEditor'),
+  () => import('./MapEditor'),
   {
     ssr: false,
     loading: () => <div className="p-4 text-center">Loading map editor...</div>

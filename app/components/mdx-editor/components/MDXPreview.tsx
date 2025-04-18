@@ -4,19 +4,18 @@
 import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import { customComponents } from './custom-components';
+import { customComponents } from './components';
 
 // Correctly import the default export from mdx-preview-map with error handling
 const ClientMapBlock = dynamic(
-  () => import('./MDXMapPreview')
-    .then(mod => mod.ClientMapBlock)
-    .catch(err => {
-      console.error('Error loading map preview:', err);
-      return () => <div>Error loading map preview</div>;
-    }),
+  () => import('./MapPreview'),
   {
     ssr: false,
-    loading: () => <div>Loading map preview...</div>
+    loading: () => (
+      <div className="h-[250px] flex items-center justify-center bg-blue-50 border rounded">
+        <div className="text-blue-500">Loading map preview...</div>
+      </div>
+    )
   }
 );
 
