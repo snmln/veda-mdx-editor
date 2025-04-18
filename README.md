@@ -104,6 +104,9 @@ app/components/mdx-editor/
 - Map component integration testing
 - MDX rendering verification
 
+## STAC collection
+- Currently this dataset is hardcoded https://openveda.cloud/api/stac/collections/no2-monthly-diff, https://openveda.cloud/stac/collections/no2-monthly-diff/?.language=en
+
 ## Future Improvements
 
 - Complete scrollytelling implementation
