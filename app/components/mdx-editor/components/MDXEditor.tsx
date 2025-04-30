@@ -142,7 +142,7 @@ export function MDXEditorEnhanced({ markdown, onChange }: MDXEditorWrapperProps)
                         )
                     }),
                 ]}
-                className="w-full h-full"
+                className="w-full h-full test"
             />
         </div>
     );
