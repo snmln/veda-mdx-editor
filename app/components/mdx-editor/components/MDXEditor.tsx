@@ -99,6 +99,7 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   },
 ];
 
+
 export function MDXEditorEnhanced({
   markdown,
   onChange,
@@ -148,3 +149,4 @@ export function MDXEditorEnhanced({
     </div>
   );
 }
+
