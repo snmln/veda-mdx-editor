@@ -1,6 +1,6 @@
 @use 'uswds-core' with (
-  $theme-image-path: '/img',
-  $theme-font-path: '/fonts',
+  $theme-image-path: '~/node_modules/@uswds/uswds/dist/img',
+  $theme-font-path: '~/node_modules/@uswds/uswds/dist/fonts',
   $theme-show-notifications: false,
   $utilities-use-important: true,
   $theme-font-weight-semibold: '600',
@@ -11,6 +11,6 @@
   ),
   $theme-color-base-darkest: 'gray-cool-80',
   $theme-color-base-ink: 'gray-cool-90',
-  $theme-color-primary: 'red-50',
+  $theme-color-primary: 'blue-50',
   $theme-color-secondary: 'yellow-30',
 );
