@@ -23,7 +23,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: recursive
-        ref: develop
+        ref: main
         fetch-depth: 0
     - name: Use Node.js ${{ env.NODE }}
       uses: actions/setup-node@v4
@@ -52,15 +52,15 @@ jobs:
         body: "This is an automatic PR that updates veda-ui dependency to version `${{ github.event.client_payload.VERSION_NUMBER }}`."
         base: main
         branch: ci-update-vedaui-${{ github.event.client_payload.VERSION_NUMBER }}
-    # - name: Notify release through Slack
-    #   uses: slackapi/slack-github-action@v2.0.0
-    #   with:
-    #     webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-    #     webhook-type: incoming-webhook
-    #     payload: |
-    #       text: "*VEDA UI Release ${{ env.VERSION }}*: ${{ job.status }}\n Preview link: ${{ steps.making-pr.outputs.pull-request-url }}"
-    #       blocks:
-    #         - type: "section"
-    #           text:
-    #             type: "mrkdwn"
-    #             text:  "*VEDA UI Release ${{ env.VERSION }}*: ${{ job.status }}\n Preview link: ${{ steps.making-pr.outputs.pull-request-url }}"
+    - name: Notify veda-ui update through Slack
+      uses: slackapi/slack-github-action@v2.0.0
+      with:
+        webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+        webhook-type: incoming-webhook
+        payload: |
+          text: "*veda-ui library bump ${{ env.VERSION }}*: ${{ job.status }}\n Preview link: ${{ steps.making-pr.outputs.pull-request-url }}"
+          blocks:
+            - type: "section"
+              text:
+                type: "mrkdwn"
+                text:  "*veda-ui library bump ${{ env.VERSION }}*: ${{ job.status }}\n Preview link: ${{ steps.making-pr.outputs.pull-request-url }}"
