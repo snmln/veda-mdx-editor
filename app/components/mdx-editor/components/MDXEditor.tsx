@@ -3,7 +3,6 @@
 'use client';
 
 import React from 'react';
-import { MDXEditor } from '@mdxeditor/editor';
 import {
   headingsPlugin,
   listsPlugin,
@@ -27,10 +26,15 @@ import {
   usePublisher,
   insertJsx$,
   ListsToggle,
+  MDXEditor,
+  NestedLexicalEditor,
+  CodeMirrorEditor,
+  useMdastNodeUpdater,
 } from '@mdxeditor/editor';
 import { MapIcon } from '@heroicons/react/24/outline';
 import '@mdxeditor/editor/style.css';
 import dynamic from 'next/dynamic';
+import { BlockNode, Marker } from './components';
 
 import { scrollytellingButtonPlugin } from '../plugins/scrollytelling/scrollytellingButtonPlugin';
 import { InsertScrollytellingButton } from '../plugins/scrollytelling/InsertScrollytellingButton';
@@ -38,6 +42,12 @@ import {
   InsertMapButton,
   InsertLineGraph,
   InsertTextBlock,
+  InsertTwoColumn,
+  MapText,
+  TwoColumn,
+  LeftColumnEditor,
+  RightColumnComponent,
+  InsertTwoColumnButton,
 } from './ToolbarComponents';
 // Import our map editor with live preview component
 const MapEditorWrapper = dynamic(() => import('./MapEditor'), {
@@ -51,6 +61,97 @@ interface MDXEditorWrapperProps {
 }
 
 const jsxComponentDescriptors: JsxComponentDescriptor[] = [
+  {
+    name: 'TwoColumn',
+    kind: 'flow',
+    source: './components', // Adjust the path
+    hasChildren: true,
+    props: [{ name: 'children', type: 'object' }],
+    Editor: (props) => {
+      const { mdastNode } = props;
+      const updateMdastNode = useMdastNodeUpdater();
+
+      const leftChildren = mdastNode.children?.find(
+        (child: any) =>
+          child.type === 'mdxJsxFlowElement' && child.name === 'LeftColumn',
+      );
+      const rightChildren = mdastNode.children?.find(
+        (child: any) =>
+          child.type === 'mdxJsxFlowElement' && child.name === 'RightColumn',
+      );
+      //TO DO: CORRECT left and right positions
+
+      const setInitialChildren = () => {
+        const checkForColumns = (children) =>
+          children.name === 'LeftColumn' || children.name === 'RightColumn';
+
+        if (!mdastNode.children.some(checkForColumns)) {
+          const currentIndex = mdastNode.children.findIndex(
+            (obj) => obj.name === 'LeftColumn',
+          );
+          if (currentIndex != 0) {
+            const [foundElement] = mdastNode.children.splice(currentIndex, 1);
+            return mdastNode.children.unshift(foundElement);
+          }
+          return mdastNode;
+        } else {
+          return mdastNode.children.push(
+            { type: 'mdxJsxFlowElement', name: 'LeftColumn', children: [] },
+            { type: 'mdxJsxFlowElement', name: 'RightColumn', children: [] },
+          );
+        }
+      };
+      setInitialChildren();
+
+
+
+      const columnFields = (column) => {
+        return (
+          <NestedLexicalEditor
+            getContent={(node) => node.children}
+            getUpdatedMdastNode={(mdastNode, children: any) => {
+              const newLeft = {
+                type: 'mdxJsxFlowElement',
+                name: column,
+                children: children || [],
+              };
+
+              const existingChildren =
+                mdastNode.children?.filter((c: any) => c.name !== column) || [];
+              const newChildren = [newLeft, ...existingChildren];
+              updateMdastNode({ ...mdastNode, children: newChildren });
+            }}
+          />
+        );
+      };
+      return (
+        <div className='grid-container maxw-full'>
+          <div className='grid-row'>
+            <div className='grid-col border rounded-md p-2'>
+              {columnFields('LeftColumn')}
+            </div>
+            <div className='grid-col border rounded-md p-2'>
+              {columnFields('RightColumn')}
+            </div>
+          </div>
+        </div>
+      );
+    },
+  },
+  {
+    name: 'LeftColumn', // Define LeftColumn
+    kind: 'flow', // Or 'block' depending on desired behavior
+    source: './components',
+    hasChildren: true,
+    props: [{ name: 'children', type: 'object' }],
+  },
+  {
+    name: 'RightColumn', // Define RightColumn
+    kind: 'flow', // Or 'block'
+    source: './components',
+    hasChildren: true,
+    props: [{ name: 'children', type: 'object' }],
+  },
   {
     name: 'Map',
     kind: 'text',
@@ -69,19 +170,24 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   },
   {
     name: 'Block',
-    kind: 'text',
+    kind: 'flow',
     source: './external',
     props: [{ name: 'type', type: 'string' }],
     hasChildren: true,
     Editor: GenericJsxEditor,
-  },
-  {
-    name: 'Prose',
-    kind: 'text',
-    source: './external',
-    props: [{ name: 'type', type: 'string' }],
-    hasChildren: true,
-    Editor: GenericJsxEditor,
+
+    // Editor: () => {
+    //   return (
+    //     <div className='border-05 border-primary'>
+    //       <NestedLexicalEditor
+    //         getContent={(node) => node.children}
+    //         getUpdatedMdastNode={(mdastNode, children: any) => {
+    //           return { ...mdastNode, children };
+    //         }}
+    //       />
+    //     </div>
+    //   );
+    // },
   },
   {
     name: 'Chart',
@@ -98,7 +204,6 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     Editor: GenericJsxEditor,
   },
 ];
-
 
 export function MDXEditorEnhanced({
   markdown,
@@ -122,6 +227,14 @@ export function MDXEditorEnhanced({
           imagePlugin(),
           jsxPlugin({
             jsxComponentDescriptors,
+            jsxComponentModules: [
+              {
+                components: {
+                  Marker,
+                  BlockNode,
+                },
+              },
+            ],
           }),
           toolbarPlugin({
             toolbarContents: () => (
@@ -137,8 +250,9 @@ export function MDXEditorEnhanced({
                 </div>
                 <div className='grid-row padding-y-1'>
                   <InsertMapButton />
-                  <InsertLineGraph />
-                  <InsertTextBlock />
+                  {/* <InsertTwoColumn /> */}
+                  <MapText />
+                  <InsertTwoColumnButton />
                 </div>
               </div>
             ),
@@ -149,4 +263,3 @@ export function MDXEditorEnhanced({
     </div>
   );
 }
-
