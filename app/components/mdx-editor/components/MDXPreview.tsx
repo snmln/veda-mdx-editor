@@ -98,7 +98,6 @@ const ChartWrapper = (props) => {
 
     return (
       <ClientChartBlock
-        compareLabel={props.compareLabel || DEFAULT_MAP_PROPS.compareLabel}
         dataPath={props.dataPath || DEFAULT_CHART_PROPS.dataPath}
         dateFormat={props.dateFormat || DEFAULT_CHART_PROPS.dateFormat}
         idKey={props.idKey || DEFAULT_CHART_PROPS.idKey}

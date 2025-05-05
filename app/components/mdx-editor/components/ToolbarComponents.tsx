@@ -12,6 +12,14 @@ interface MapProps {
   compareDateTime: string;
   compareLabel: string;
 }
+interface ChartProps {
+  dataPath: string;
+  dateFormat: string;
+  idKey: string;
+  xKey: string;
+  yKey: string;
+}
+
 const DEFAULT_MAP_PROPS: MapProps = {
   center: '[-94.5, 41.25]',
   zoom: '8.3',
@@ -20,6 +28,14 @@ const DEFAULT_MAP_PROPS: MapProps = {
   dateTime: '2024-05-31',
   compareDateTime: '2023-05-31',
   compareLabel: 'May 2024 VS May 2023',
+};
+
+const DEFAULT_CHART_PROPS: ChartProps = {
+  dataPath: '/charts/story/hurricane-maria-ida-chart1.csv',
+  dateFormat: '%m/%Y',
+  idKey: 'Zip',
+  xKey: 'Month',
+  yKey: 'Number of Tarps',
 };
 export const InsertMapButton = () => {
   const insertJsx = usePublisher(insertJsx$);
@@ -38,8 +54,12 @@ export const InsertMapButton = () => {
   };
 
   return (
-    <Button onClick={handleClick} title='Insert Map' className='text-sm display-flex flex-align-center padding-1'>
-      <Icon.Map className='margin-right-05 width-3 height-3'/>
+    <Button
+      onClick={handleClick}
+      title='Insert Map'
+      className='text-sm display-flex flex-align-center padding-1'
+    >
+      <Icon.Map className='margin-right-05 width-3 height-3' />
       Add Map
     </Button>
   );
@@ -62,7 +82,11 @@ export const InsertTextBlock = () => {
   };
 
   return (
-    <Button onClick={handleClick} title='Insert Map' className='text-sm display-flex flex-align-center padding-1'>
+    <Button
+      onClick={handleClick}
+      title='Insert Map'
+      className='text-sm display-flex flex-align-center padding-1'
+    >
       text section
     </Button>
   );
@@ -76,7 +100,7 @@ export const InsertLineGraph = () => {
       insertJsx({
         name: 'Chart',
         kind: 'text',
-        props: [],
+        props: { ...DEFAULT_CHART_PROPS },
       });
     } catch (error) {
       console.error('Error inserting Map component:', error);
@@ -85,7 +109,11 @@ export const InsertLineGraph = () => {
   };
 
   return (
-    <Button onClick={handleClick} title='Insert Map' className='text-sm display-flex flex-align-center padding-1'>
+    <Button
+      onClick={handleClick}
+      title='Insert Map'
+      className='text-sm display-flex flex-align-center padding-1'
+    >
       <Icon.Insights className='margin-right-05 width-3 height-3' />
       line graph
     </Button>
