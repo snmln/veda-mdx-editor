@@ -16,6 +16,14 @@ interface MapProps {
   compareDateTime: string;
   compareLabel: string;
 }
+interface ChartProps {
+  dataPath: string;
+  dateFormat: string;
+  idKey: string;
+  xKey: string;
+  yKey: string;
+}
+
 const DEFAULT_MAP_PROPS: MapProps = {
   center: '[-94.5, 41.25]',
   zoom: '8.3',
@@ -121,7 +129,7 @@ export const InsertLineGraph = () => {
       insertJsx({
         name: 'Chart',
         kind: 'text',
-        props: [],
+        props: { ...DEFAULT_CHART_PROPS },
       });
     } catch (error) {
       console.error('Error inserting Map component:', error);

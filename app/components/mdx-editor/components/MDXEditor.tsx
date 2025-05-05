@@ -54,6 +54,11 @@ const MapEditorWrapper = dynamic(() => import('./MapEditor'), {
   ssr: false,
   loading: () => <div className='p-4 text-center'>Loading map editor...</div>,
 });
+const ChartEditorWrapper = dynamic(() => import('./ChartEditor'), {
+  ssr: false,
+  loading: () => <div className='p-4 text-center'>Loading Chart editor...</div>,
+});
+
 
 interface MDXEditorWrapperProps {
   markdown: string;
@@ -201,7 +206,7 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       { name: 'yKey', type: 'string' },
     ],
     hasChildren: false,
-    Editor: GenericJsxEditor,
+    Editor: ChartEditorWrapper,
   },
 ];
 
