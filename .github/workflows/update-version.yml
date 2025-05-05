@@ -39,10 +39,11 @@ jobs:
       run: |
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+    - run: yarn
     - name: Update veda-ui version
       shell: bash
       run: |
-        npm install @teamimpact/veda-ui@${{ github.event.client_payload.VERSION_NUMBER }}
+        yarn install @teamimpact/veda-ui@${{ github.event.client_payload.VERSION_NUMBER }}
     - name: Create Pull Request
       id: making-pr
       uses: peter-evans/create-pull-request@v7
