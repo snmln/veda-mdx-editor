@@ -18,7 +18,6 @@ const Chart = dynamic(() => import('@lib').then((mod) => mod.Chart), {
   ),
 });
 
-
 const nightmockDatasets = [
   {
     metadata: {
@@ -79,3 +78,71 @@ export function ClientChartBlock(props) {
 }
 
 export default ClientChartBlock;
+
+// Default Chart props
+export const DEFAULT_CHART_PROPS = {
+  dataPath: '/charts/story/hurricane-maria-ida-chart1.csv',
+  dateFormat: '%m/%Y',
+  idKey: 'Zip',
+  xKey: 'Month',
+  yKey: 'Number of Tarps',
+  yAxisLabel: 'y axis test',
+  xAxisLabel: 'x axis test',
+  highlightStart: '08/21',
+  highlightEnd: '09/21',
+  highlightLabel: 'Fire Ignition',
+  // uniqueKeys: '',
+  availableDomain: ['6/21', '09/22'],
+  brushRange: ['8/21', '09/21'],
+  altTitle:'test title',
+  altDesc:'test description',
+  colors: ['#0074D9', '#FF851B'],
+  colorScheme:'test',
+  renderLegend: true,
+  renderBrush: true
+};
+
+export const ChartWrapper = (props) => {
+  try {
+    // Handle center prop safely
+
+    return (
+      <ClientChartBlock
+        dataPath={props.dataPath || DEFAULT_CHART_PROPS.dataPath}
+        dateFormat={props.dateFormat || DEFAULT_CHART_PROPS.dateFormat}
+        idKey={props.idKey || DEFAULT_CHART_PROPS.idKey}
+        xKey={props.xKey || DEFAULT_CHART_PROPS.xKey}
+        yKey={props.yKey || DEFAULT_CHART_PROPS.yKey}
+        altTitle={props.altTitle || DEFAULT_CHART_PROPS.altTitle}
+        altDesc={props.altTitle || DEFAULT_CHART_PROPS.altDesc}
+        colors={props.colors || DEFAULT_CHART_PROPS.colors}
+        colorScheme={props.colorScheme || DEFAULT_CHART_PROPS.colorScheme}
+        renderLegend={props.renderLegendn || DEFAULT_CHART_PROPS.renderLegend}
+        renderBrush={props.renderBrushn || DEFAULT_CHART_PROPS.renderBrush}
+        xAxisLabel={props.xAxisLabel || DEFAULT_CHART_PROPS.xAxisLabel}
+        yAxisLabel={props.yAxisLabel || DEFAULT_CHART_PROPS.yAxisLabel}
+        highlightStart={
+          props.highlightStart || DEFAULT_CHART_PROPS.highlightStart
+        }
+        highlightEnd={props.highlightEnd || DEFAULT_CHART_PROPS.highlightEnd}
+        highlightLabel={
+          props.highlightLabel || DEFAULT_CHART_PROPS.highlightLabel
+        }
+        // uniqueKeyseyUnit={
+        //   props.uniqueKeyseyUnit || DEFAULT_CHART_PROPS.uniqueKeyseyUnit
+        // }
+        availableDomain={
+          props.availableDomain || DEFAULT_CHART_PROPS.availableDomain
+        }
+        brushRange={props.brushRange || DEFAULT_CHART_PROPS.brushRange}
+      />
+    );
+  } catch (error) {
+    console.error('Error rendering chart:', error);
+    return (
+      <div className='h-[400px] flex items-center justify-center bg-red-50 border border-red-300 rounded'>
+        <div className='text-red-500'>Error rendering chart component</div>
+      </div>
+    );
+  }
+};

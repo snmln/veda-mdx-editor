@@ -4,7 +4,7 @@ import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { customComponents } from './components';
-
+import { ChartWrapper } from './ChartPreview';
 // Correctly import the default export from mdx-preview-map with error handling
 const ClientMapBlock = dynamic(() => import('./MapPreview'), {
   ssr: false,
@@ -33,15 +33,6 @@ const DEFAULT_MAP_PROPS = {
   dateTime: '2024-05-31',
   compareDateTime: '2023-05-31',
   compareLabel: 'May 2024 VS May 2023',
-};
-
-// Default Chart props
-const DEFAULT_CHART_PROPS = {
-  dataPath: '/charts/story/hurricane-maria-ida-chart1.csv',
-  dateFormat: '%m/%Y',
-  idKey: 'Zip',
-  xKey: 'Month',
-  yKey: 'Number of Tarps',
 };
 
 const MapWrapper = (props) => {
@@ -151,7 +142,9 @@ const components = {
   },
 
   Map: MapWrapper,
-  // Chart: ChartWrapper,
+  Block: (props) => <div type='full' {...props}></div>,
+  Prose: (props) => <div {...props}></div>,
+  Chart: ChartWrapper,
 };
 
 export function SimpleMDXPreview({ source }: MDXPreviewProps) {

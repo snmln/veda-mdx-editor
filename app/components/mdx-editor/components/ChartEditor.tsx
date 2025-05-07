@@ -6,16 +6,16 @@ import dynamic from 'next/dynamic';
 import { LexicalNode } from 'lexical';
 import { TextInput, Label, Button, DatePicker } from '@trussworks/react-uswds';
 import { ChartContextProvider, useChartContext } from '../utils/ChartContext';
-
-interface FieldProps {
+import { getCSVHeaders } from '../utils/ChartDataDigest';
+import { DEFAULT_CHART_PROPS } from './ChartPreview';
+import { MapField } from '../utils/CreateInterface';
+interface UniqueKeyUnit {
   label: string;
   value: string;
-  hint?: string;
-  onChange: (value: string) => void;
-  isRequired?: boolean;
-  isDate?: boolean;
-  numeric?: boolean;
+  active: boolean;
+  color?: string;
 }
+
 interface ChartProps {
   dataPath: string;
   dateFormat: string;
@@ -23,7 +23,23 @@ interface ChartProps {
   xKey: string;
   yKey: string;
   node?: LexicalNode & { setProps?: (props: Partial<ChartProps>) => void };
+  altTitle: string;
+  altDesc: string;
+  colors?: string[];
+  colorScheme?: string;
+  renderLegend?: boolean;
+  renderBrush?: boolean;
+  xAxisLabel?: string;
+  yAxisLabel?: string;
+  highlightStart?: string;
+  highlightEnd?: string;
+  highlightLabel?: string;
+  uniqueKeys: UniqueKeyUnit[];
+  availableDomain?: [Date, Date];
+  brushRange?: [Date, Date];
+  onBrushRangeChange?: (range: [Date, Date]) => void;
 }
+
 // Create a placeholder node type that satisfies the LexicalNode interface
 const createPlaceholderNode = (): LexicalNode & {
   setProps?: (props: Partial<ChartProps>) => void;
@@ -39,47 +55,50 @@ const createPlaceholderNode = (): LexicalNode & {
     setProps?: (props: Partial<ChartProps>) => void;
   };
 };
-const checkRequired = (isRequired, value) => {
-  return isRequired && !value ? { validationStatus: 'error' } : '';
-};
 
-const MapField: React.FC<FieldProps> = ({
-  label,
-  hint,
-  value,
-  onChange,
-  isRequired,
-  isDate,
-  numeric,
-}) => (
-  <div>
-    <Label
-      htmlFor='input-type-text'
-      className='margin-top-2
-'
-    >
-      {label}
-    </Label>
-    <span className='usa-hint'>{hint}</span>
-    {isDate && isDate != undefined ? (
-      <DatePicker
-        defaultValue={value}
-        onChange={(e) => onChange(e)}
-        {...checkRequired(isRequired, value)}
-      />
-    ) : (
-      <TextInput
-        id='input-type-text'
-        name='input-type-text'
-        type={numeric ? 'number' : 'text'}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className='width-15'
-        {...checkRequired(isRequired, value)}
-      />
-    )}
-  </div>
-);
+const interfaceList = [
+  { fieldName: 'Data Path', propName: 'dataPath', isRequired: true },
+  { fieldName: 'Data Format', propName: 'dateFormat', isRequired: true },
+  { fieldName: 'IdKey', propName: 'idKey', isRequired: true },
+  { fieldName: 'xKey', propName: 'xKey', isRequired: true },
+  { fieldName: 'yKey', propName: 'yKey', isRequired: true },
+  { fieldName: 'Alternative title', propName: 'altTitle' },
+  { fieldName: 'Alternative Description', propName: 'altDesc' },
+  { fieldName: 'Colors', propName: 'colors', required: true },
+  { fieldName: 'Colors Scheme', propName: 'colorScheme' },
+
+  { fieldName: 'X Axis Label', propName: 'xAxisLabel' },
+  { fieldName: 'Y Axis Label', propName: 'yAxisLabel' },
+  {
+    fieldName: 'Highlight Start',
+    propName: 'highlightStart',
+    type: 'Date',
+  },
+  {
+    fieldName: 'Highlight End',
+    propName: 'highlightEnd',
+
+    type: 'Date',
+
+  },
+  { fieldName: 'Highlight Label', propName: 'highlightLabel' },
+  // {fieldName: "Colors", propName:'colors', required: true uniqueKeys: UniqueKeyUnit[];},
+  {
+    fieldName: 'Available Domain',
+    propName: 'availableDomain',
+  },
+  { fieldName: 'Brush Range', propName: 'brushRange' },
+  {
+    fieldName: 'Render Legend',
+    propName: 'renderLegend',
+    type: 'Checkbox',
+  },
+  {
+    fieldName: 'Render Brush',
+    propName: 'renderBrush',
+    type: 'Checkbox',
+  },
+];
 
 // Import the actual map component for live preview
 const ClientChartBlock = dynamic(
@@ -99,14 +118,20 @@ const ChartEditorWithPreview: React.FC<ChartProps> = (props) => {
   const contextValue = useChartContext();
   const [isEditing, setIsEditing] = useState(true);
   const [dataPath, setdataPath] = useState(
-    props.dataPath || '/charts/story/hurricane-maria-ida-chart1.csv',
+    props.dataPath || DEFAULT_CHART_PROPS.dataPath,
   );
-  const [dateFormat, setdateFormat] = useState(props.dateFormat || '%m/%Y');
-  const [idKey, setidKey] = useState(props.idKey || 'Zip');
-  const [xKey, setxKey] = useState(props.xKey || 'Month');
-  const [yKey, setyKey] = useState(props.yKey || 'Number of Tarps');
-
+  const [dateFormat, setdateFormat] = useState(
+    props.dateFormat || DEFAULT_CHART_PROPS.dateFormat,
+  );
+  const [idKey, setidKey] = useState(props.idKey || DEFAULT_CHART_PROPS.idKey);
+  const [xKey, setxKey] = useState(props.xKey || DEFAULT_CHART_PROPS.xKey);
+  const [yKey, setyKey] = useState(props.yKey || DEFAULT_CHART_PROPS.yKey);
+  const [isFocused, setIsFocused] = useState(false);
+  const [tempInputValue, setTempInputValue] = useState([]);
+  // getCSVHeaders('/charts/story/hurricane-maria-ida-chart1.csv');
   // Safe update function
+
+  const [chartProps, setChartProps] = useState({ ...DEFAULT_CHART_PROPS });
   const updateProps = () => {
     try {
       if (contextValue?.parentEditor && contextValue?.lexicalNode) {
@@ -136,8 +161,11 @@ const ChartEditorWithPreview: React.FC<ChartProps> = (props) => {
 
   // Update lexical node when any property changes
   useEffect(() => {
-    updateProps();
-  }, [dataPath, dateFormat, idKey, xKey, yKey]);
+    if (!isFocused) {
+      updateProps();
+    }
+    // dataPath, dateFormat, idKey, xKey, yKey
+  }, [isFocused]);
 
   return (
     <div className=' border-05 border-primary rounded-lg overflow-hidden shadow-sm bg-white'>
@@ -151,20 +179,15 @@ const ChartEditorWithPreview: React.FC<ChartProps> = (props) => {
                 Chart Properties
               </h3>
               <div className='grid-row flex-align-end grid-gap-2'>
-                <MapField
-                  label='*Data Path'
-                  value={dataPath}
-                  onChange={setdataPath}
-                  isRequired={true}
-                />
-                <MapField
-                  label='*Date Format'
-                  value={dateFormat}
-                  onChange={setdateFormat}
-                />
-                <MapField label='*IdKey' value={idKey} onChange={setidKey} />
-                <MapField label='*xKey' value={xKey} onChange={setxKey} />
-                <MapField label='*yKey' value={yKey} onChange={setyKey} />
+                {interfaceList.map((input) => {
+                  const { propName, fieldName, type } = input;
+
+                  return MapField({
+                    label: fieldName,
+                    value: chartProps[propName],
+                    type: type,
+                  });
+                })}
               </div>
             </div>
           )}
@@ -180,14 +203,7 @@ const ChartEditorWithPreview: React.FC<ChartProps> = (props) => {
         </div>
 
         <div className='relative'>
-          <ClientChartBlock
-            dataPath={dataPath}
-            dateFormat={dateFormat}
-            idKey={idKey}
-            xKey={xKey}
-            yKey={yKey}
-          />
-          {/* <div>CHART TEST</div> */}
+          <ClientChartBlock {...chartProps} />
         </div>
       </div>
     </div>
