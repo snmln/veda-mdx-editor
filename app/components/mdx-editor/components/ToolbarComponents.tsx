@@ -128,8 +128,8 @@ export const InsertLineGraph = () => {
     try {
       insertJsx({
         name: 'Chart',
-        kind: 'text',
-        props: { ...DEFAULT_CHART_PROPS },
+        kind: 'flow',
+        props: {},
       });
     } catch (error) {
       console.error('Error inserting Map component:', error);

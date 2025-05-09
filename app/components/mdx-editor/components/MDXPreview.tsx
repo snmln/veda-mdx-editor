@@ -4,8 +4,10 @@ import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { customComponents } from './components';
-import { ChartWrapper } from './ChartPreview';
+import {ChartWrapper} from './ChartPreview'
+
 // Correctly import the default export from mdx-preview-map with error handling
+
 const ClientMapBlock = dynamic(() => import('./MapPreview'), {
   ssr: false,
   loading: () => (
@@ -144,7 +146,7 @@ const components = {
   Map: MapWrapper,
   Block: (props) => <div type='full' {...props}></div>,
   Prose: (props) => <div {...props}></div>,
-  Chart: ChartWrapper,
+  Chart: (props) => <>{ChartWrapper(props)}</>,
 };
 
 export function SimpleMDXPreview({ source }: MDXPreviewProps) {
