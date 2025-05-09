@@ -13,15 +13,9 @@ import {
   DatePicker,
   Icon,
 } from '@trussworks/react-uswds';
+import { MapProps } from './types';
 
-interface MapProps {
-  center: string;
-  zoom: string;
-  datasetId: string;
-  layerId: string;
-  dateTime: string;
-  compareDateTime: string;
-  compareLabel: string;
+interface EditorMapProps extends MapProps {
   node?: LexicalNode & { setProps?: (props: Partial<MapProps>) => void };
 }
 
@@ -37,7 +31,7 @@ interface MapFieldProps {
 
 // Create a placeholder node type that satisfies the LexicalNode interface
 const createPlaceholderNode = (): LexicalNode & {
-  setProps?: (props: Partial<MapProps>) => void;
+  setProps?: (props: Partial<EditorMapProps>) => void;
 } => {
   return {
     __type: 'placeholder',
@@ -47,7 +41,7 @@ const createPlaceholderNode = (): LexicalNode & {
     __next: null,
     setProps: () => console.warn('setProps called on a placeholder node'),
   } as unknown as LexicalNode & {
-    setProps?: (props: Partial<MapProps>) => void;
+    setProps?: (props: Partial<EditorMapProps>) => void;
   };
 };
 const checkRequired = (isRequired, value) => {
@@ -106,7 +100,7 @@ const ClientMapBlock = dynamic(
 );
 
 // Map editor component that includes both preview and editable properties
-const MapEditorWithPreview: React.FC<MapProps> = (props) => {
+const MapEditorWithPreview: React.FC<EditorMapProps> = (props) => {
   const contextValue = useMapContext();
   const [isEditing, setIsEditing] = useState(true);
   const [center, setCenter] = useState(props.center || '[-94.5, 41.25]');
@@ -136,7 +130,7 @@ const MapEditorWithPreview: React.FC<MapProps> = (props) => {
         contextValue.parentEditor.update(() => {
           try {
             const node = contextValue.lexicalNode as LexicalNode & {
-              setProps?: (props: Partial<MapProps>) => void;
+              setProps?: (props: Partial<EditorMapProps>) => void;
             };
             if (node?.setProps) {
               node.setProps({
@@ -253,7 +247,7 @@ const MapEditorWithPreview: React.FC<MapProps> = (props) => {
 };
 
 // This wrapper is used when the component is used in the editor
-const MapEditorWrapper: React.FC<MapProps> = (props) => {
+const MapEditorWrapper: React.FC<EditorMapProps> = (props) => {
   try {
     const [editor] = useLexicalComposerContext();
 

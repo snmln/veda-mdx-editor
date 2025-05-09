@@ -4,21 +4,15 @@ import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { customComponents } from './components';
-import { ChartWrapper } from './ChartPreview';
+import {ChartWrapper} from './ChartPreview'
+
 // Correctly import the default export from mdx-preview-map with error handling
+
 const ClientMapBlock = dynamic(() => import('./MapPreview'), {
   ssr: false,
   loading: () => (
     <div className='h-[250px] flex items-center justify-center bg-blue-50 border rounded'>
       <div className='text-blue-500'>Loading map preview...</div>
-    </div>
-  ),
-});
-const ClientChartBlock = dynamic(() => import('./ChartPreview'), {
-  ssr: false,
-  loading: () => (
-    <div className='h-[250px] flex items-center justify-center bg-blue-50 border rounded'>
-      <div className='text-blue-500'>Loading Chart preview...</div>
     </div>
   ),
 });
@@ -101,16 +95,15 @@ const components = {
   blockquote: (props) => (
     <blockquote className='border-l-4 border-gray-300 pl-4 italic' {...props} />
   ),
-  Map: MapWrapper,
+  Map: (props) => MapWrapper(props),
   Block: (props) => <div type='full' {...props}></div>,
   Prose: (props) => <div {...props}></div>,
-  Chart: ChartWrapper,
+  Chart: (props) => <>{ChartWrapper(props)}</>,
 };
 
 export function SimpleMDXPreview({ source }: MDXPreviewProps) {
   // Use an empty string as a default if source is undefined
   const safeSource = source || '';
-
   return (
     <Suspense fallback={<div className='p-4'>Loading MDX preview...</div>}>
       <MDXRemote source={safeSource} components={components} />

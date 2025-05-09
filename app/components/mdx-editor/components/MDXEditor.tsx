@@ -49,12 +49,10 @@ const ChartEditorWrapper = dynamic(() => import('./ChartEditor'), {
   loading: () => <div className='p-4 text-center'>Loading Chart editor...</div>,
 });
 
-
 interface MDXEditorWrapperProps {
   markdown: string;
   onChange: (content: string) => void;
 }
-
 const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
     name: 'Map',
@@ -98,6 +96,15 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       { name: 'idKey', type: 'string' },
       { name: 'xKey', type: 'string' },
       { name: 'yKey', type: 'string' },
+      { name: 'yAxisLabel', type: 'string' },
+      { name: 'xAxisLabel', type: 'string' },
+      { name: 'highlightStart', type: 'string' },
+      { name: 'highlightEnd', type: 'string' },
+      { name: 'highlightLabel', type: 'string' },
+      { name: 'availableDomain', type: 'string' },
+      { name: 'altTitle', type: 'string' },
+      { name: 'colorScheme', type: 'string' },
+      { name: 'altDesc', type: 'string' },
     ],
     hasChildren: false,
     Editor: ChartEditorWrapper,
@@ -108,6 +115,7 @@ export function MDXEditorEnhanced({
   markdown,
   onChange,
 }: MDXEditorWrapperProps) {
+  console.log('MDXEditorEnhanced', markdown);
   return (
     <div className='h-[600px] border rounded-lg overflow-hidden'>
       <MDXEditor

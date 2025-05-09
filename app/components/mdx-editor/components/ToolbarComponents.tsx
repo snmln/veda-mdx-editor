@@ -2,23 +2,8 @@ import React from 'react';
 
 import { Button, usePublisher, insertJsx$ } from '@mdxeditor/editor';
 import { Icon } from '@trussworks/react-uswds';
-
-interface MapProps {
-  center: string;
-  zoom: string;
-  datasetId: string;
-  layerId: string;
-  dateTime: string;
-  compareDateTime: string;
-  compareLabel: string;
-}
-interface ChartProps {
-  dataPath: string;
-  dateFormat: string;
-  idKey: string;
-  xKey: string;
-  yKey: string;
-}
+import { DEFAULT_CHART_PROPS } from './ChartPreview';
+import { MapProps, ChartProps } from './types';
 
 const DEFAULT_MAP_PROPS: MapProps = {
   center: '[-94.5, 41.25]',
@@ -30,13 +15,7 @@ const DEFAULT_MAP_PROPS: MapProps = {
   compareLabel: 'May 2024 VS May 2023',
 };
 
-const DEFAULT_CHART_PROPS: ChartProps = {
-  dataPath: '/charts/story/hurricane-maria-ida-chart1.csv',
-  dateFormat: '%m/%Y',
-  idKey: 'Zip',
-  xKey: 'Month',
-  yKey: 'Number of Tarps',
-};
+
 export const InsertMapButton = () => {
   const insertJsx = usePublisher(insertJsx$);
 
@@ -99,8 +78,8 @@ export const InsertLineGraph = () => {
     try {
       insertJsx({
         name: 'Chart',
-        kind: 'text',
-        props: { ...DEFAULT_CHART_PROPS },
+        kind: 'flow',
+        props: {},
       });
     } catch (error) {
       console.error('Error inserting Map component:', error);

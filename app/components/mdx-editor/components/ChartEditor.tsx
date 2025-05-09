@@ -9,40 +9,15 @@ import { ChartContextProvider, useChartContext } from '../utils/ChartContext';
 import { getCSVHeaders } from '../utils/ChartDataDigest';
 import { DEFAULT_CHART_PROPS } from './ChartPreview';
 import { MapField } from '../utils/CreateInterface';
-interface UniqueKeyUnit {
-  label: string;
-  value: string;
-  active: boolean;
-  color?: string;
-}
+import { ChartProps } from './types';
 
-interface ChartProps {
-  dataPath: string;
-  dateFormat: string;
-  idKey: string;
-  xKey: string;
-  yKey: string;
+export interface EditorChartProps extends ChartProps {
   node?: LexicalNode & { setProps?: (props: Partial<ChartProps>) => void };
-  altTitle: string;
-  altDesc: string;
-  colors?: string[];
-  colorScheme?: string;
-  renderLegend?: boolean;
-  renderBrush?: boolean;
-  xAxisLabel?: string;
-  yAxisLabel?: string;
-  highlightStart?: string;
-  highlightEnd?: string;
-  highlightLabel?: string;
-  uniqueKeys: UniqueKeyUnit[];
-  availableDomain?: [Date, Date];
-  brushRange?: [Date, Date];
-  onBrushRangeChange?: (range: [Date, Date]) => void;
 }
 
 // Create a placeholder node type that satisfies the LexicalNode interface
 const createPlaceholderNode = (): LexicalNode & {
-  setProps?: (props: Partial<ChartProps>) => void;
+  setProps?: (props: Partial<EditorChartProps>) => void;
 } => {
   return {
     __type: 'placeholder',
@@ -52,51 +27,34 @@ const createPlaceholderNode = (): LexicalNode & {
     __next: null,
     setProps: () => console.warn('setProps called on a placeholder node'),
   } as unknown as LexicalNode & {
-    setProps?: (props: Partial<ChartProps>) => void;
+    setProps?: (props: Partial<EditorChartProps>) => void;
   };
 };
 
 const interfaceList = [
   { fieldName: 'Data Path', propName: 'dataPath', isRequired: true },
-  { fieldName: 'Data Format', propName: 'dateFormat', isRequired: true },
+  { fieldName: 'Date Format', propName: 'dateFormat', isRequired: true },
   { fieldName: 'IdKey', propName: 'idKey', isRequired: true },
   { fieldName: 'xKey', propName: 'xKey', isRequired: true },
   { fieldName: 'yKey', propName: 'yKey', isRequired: true },
   { fieldName: 'Alternative title', propName: 'altTitle' },
   { fieldName: 'Alternative Description', propName: 'altDesc' },
-  { fieldName: 'Colors', propName: 'colors', required: true },
-  { fieldName: 'Colors Scheme', propName: 'colorScheme' },
-
+  { fieldName: 'Colors', propName: 'colors' },
+  { fieldName: 'Colors Scheme', propName: 'colorScheme', type: 'select' },
   { fieldName: 'X Axis Label', propName: 'xAxisLabel' },
   { fieldName: 'Y Axis Label', propName: 'yAxisLabel' },
   {
     fieldName: 'Highlight Start',
     propName: 'highlightStart',
-    type: 'Date',
   },
   {
     fieldName: 'Highlight End',
     propName: 'highlightEnd',
-
-    type: 'Date',
-
   },
   { fieldName: 'Highlight Label', propName: 'highlightLabel' },
-  // {fieldName: "Colors", propName:'colors', required: true uniqueKeys: UniqueKeyUnit[];},
   {
     fieldName: 'Available Domain',
     propName: 'availableDomain',
-  },
-  { fieldName: 'Brush Range', propName: 'brushRange' },
-  {
-    fieldName: 'Render Legend',
-    propName: 'renderLegend',
-    type: 'Checkbox',
-  },
-  {
-    fieldName: 'Render Brush',
-    propName: 'renderBrush',
-    type: 'Checkbox',
   },
 ];
 
@@ -114,39 +72,32 @@ const ClientChartBlock = dynamic(
 );
 
 // Map editor component that includes both preview and editable properties
-const ChartEditorWithPreview: React.FC<ChartProps> = (props) => {
+const ChartEditorWithPreview: React.FC<EditorChartProps> = (props) => {
   const contextValue = useChartContext();
   const [isEditing, setIsEditing] = useState(true);
-  const [dataPath, setdataPath] = useState(
-    props.dataPath || DEFAULT_CHART_PROPS.dataPath,
-  );
-  const [dateFormat, setdateFormat] = useState(
-    props.dateFormat || DEFAULT_CHART_PROPS.dateFormat,
-  );
-  const [idKey, setidKey] = useState(props.idKey || DEFAULT_CHART_PROPS.idKey);
-  const [xKey, setxKey] = useState(props.xKey || DEFAULT_CHART_PROPS.xKey);
-  const [yKey, setyKey] = useState(props.yKey || DEFAULT_CHART_PROPS.yKey);
-  const [isFocused, setIsFocused] = useState(false);
-  const [tempInputValue, setTempInputValue] = useState([]);
   // getCSVHeaders('/charts/story/hurricane-maria-ida-chart1.csv');
-  // Safe update function
 
-  const [chartProps, setChartProps] = useState({ ...DEFAULT_CHART_PROPS });
+  const initialChartProps = () => {
+    const { dataPath, dateFormat, idKey, xKey, yKey } = props;
+    if (dataPath && dateFormat && idKey && xKey && yKey) {
+      return { ...props };
+    }
+    return { ...DEFAULT_CHART_PROPS };
+  };
+  const [chartProps, setChartProps] = useState(initialChartProps());
+<GenericJsxEditor mdastNode={undefined} descriptor={undefined} />;
+
   const updateProps = () => {
     try {
       if (contextValue?.parentEditor && contextValue?.lexicalNode) {
         contextValue.parentEditor.update(() => {
           try {
             const node = contextValue.lexicalNode as LexicalNode & {
-              setProps?: (props: Partial<ChartProps>) => void;
+              setProps?: (props: Partial<EditorChartProps>) => void;
             };
             if (node?.setProps) {
               node.setProps({
-                dataPath,
-                dateFormat,
-                idKey,
-                xKey,
-                yKey,
+                ...chartProps,
               });
             }
           } catch (error) {
@@ -161,11 +112,9 @@ const ChartEditorWithPreview: React.FC<ChartProps> = (props) => {
 
   // Update lexical node when any property changes
   useEffect(() => {
-    if (!isFocused) {
-      updateProps();
-    }
+    updateProps();
     // dataPath, dateFormat, idKey, xKey, yKey
-  }, [isFocused]);
+  }, [chartProps]);
 
   return (
     <div className=' border-05 border-primary rounded-lg overflow-hidden shadow-sm bg-white'>
@@ -185,7 +134,10 @@ const ChartEditorWithPreview: React.FC<ChartProps> = (props) => {
                   return MapField({
                     label: fieldName,
                     value: chartProps[propName],
+                    onChange: setChartProps,
                     type: type,
+                    chartProps: chartProps,
+                    propName: propName,
                   });
                 })}
               </div>
@@ -211,7 +163,7 @@ const ChartEditorWithPreview: React.FC<ChartProps> = (props) => {
 };
 
 // This wrapper is used when the component is used in the editor
-const ChartEditorWrapper: React.FC<ChartProps> = (props) => {
+const ChartEditorWrapper: React.FC<EditorChartProps> = (props) => {
   try {
     const [editor] = useLexicalComposerContext();
 
