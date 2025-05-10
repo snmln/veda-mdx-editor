@@ -1,17 +1,16 @@
 import React from 'react';
 
-import { Button, usePublisher, insertJsx$ } from '@mdxeditor/editor';
+import {
+  Button,
+  usePublisher,
+  insertJsx$,
+  useCellValue,
+  viewMode$,
+} from '@mdxeditor/editor';
 import { Icon } from '@trussworks/react-uswds';
+import { DEFAULT_CHART_PROPS } from './ChartPreview';
+import { MapProps, ChartProps } from './types';
 
-interface MapProps {
-  center: string;
-  zoom: string;
-  datasetId: string;
-  layerId: string;
-  dateTime: string;
-  compareDateTime: string;
-  compareLabel: string;
-}
 const DEFAULT_MAP_PROPS: MapProps = {
   center: '[-94.5, 41.25]',
   zoom: '8.3',
@@ -21,6 +20,7 @@ const DEFAULT_MAP_PROPS: MapProps = {
   compareDateTime: '2023-05-31',
   compareLabel: 'May 2024 VS May 2023',
 };
+
 export const InsertMapButton = () => {
   const insertJsx = usePublisher(insertJsx$);
 
@@ -38,8 +38,12 @@ export const InsertMapButton = () => {
   };
 
   return (
-    <Button onClick={handleClick} title='Insert Map' className='text-sm display-flex flex-align-center padding-1'>
-      <Icon.Map className='margin-right-05 width-3 height-3'/>
+    <Button
+      onClick={handleClick}
+      title='Insert Map'
+      className='text-sm display-flex flex-align-center padding-1'
+    >
+      <Icon.Map className='margin-right-05 width-3 height-3' />
       Add Map
     </Button>
   );
@@ -62,13 +66,17 @@ export const InsertTextBlock = () => {
   };
 
   return (
-    <Button onClick={handleClick} title='Insert Map' className='text-sm display-flex flex-align-center padding-1'>
+    <Button
+      onClick={handleClick}
+      title='Insert Map'
+      className='text-sm display-flex flex-align-center padding-1'
+    >
       text section
     </Button>
   );
 };
 
-export const InsertLineGraph = () => {
+export const InsertLineGraph = (props) => {
   const insertJsx = usePublisher(insertJsx$);
 
   const handleClick = () => {
@@ -76,7 +84,7 @@ export const InsertLineGraph = () => {
       insertJsx({
         name: 'Chart',
         kind: 'text',
-        props: [],
+        props: { ...DEFAULT_CHART_PROPS }
       });
     } catch (error) {
       console.error('Error inserting Map component:', error);
@@ -85,7 +93,11 @@ export const InsertLineGraph = () => {
   };
 
   return (
-    <Button onClick={handleClick} title='Insert Map' className='text-sm display-flex flex-align-center padding-1'>
+    <Button
+      onClick={handleClick}
+      title='Insert Map'
+      className='text-sm display-flex flex-align-center padding-1'
+    >
       <Icon.Insights className='margin-right-05 width-3 height-3' />
       line graph
     </Button>

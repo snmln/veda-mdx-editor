@@ -4,21 +4,15 @@ import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { customComponents } from './components';
+import { ChartWrapper } from './ChartPreview';
 
 // Correctly import the default export from mdx-preview-map with error handling
+
 const ClientMapBlock = dynamic(() => import('./MapPreview'), {
   ssr: false,
   loading: () => (
     <div className='h-[250px] flex items-center justify-center bg-blue-50 border rounded'>
       <div className='text-blue-500'>Loading map preview...</div>
-    </div>
-  ),
-});
-const ClientChartBlock = dynamic(() => import('./ChartPreview'), {
-  ssr: false,
-  loading: () => (
-    <div className='h-[250px] flex items-center justify-center bg-blue-50 border rounded'>
-      <div className='text-blue-500'>Loading Chart preview...</div>
     </div>
   ),
 });
@@ -32,15 +26,6 @@ const DEFAULT_MAP_PROPS = {
   dateTime: '2024-05-31',
   compareDateTime: '2023-05-31',
   compareLabel: 'May 2024 VS May 2023',
-};
-
-// Default Chart props
-const DEFAULT_CHART_PROPS = {
-  dataPath: '/charts/story/hurricane-maria-ida-chart1.csv',
-  dateFormat: '%m/%Y',
-  idKey: 'Zip',
-  xKey: 'Month',
-  yKey: 'Number of Tarps',
 };
 
 const MapWrapper = (props) => {
@@ -92,30 +77,6 @@ const MapWrapper = (props) => {
   }
 };
 
-const ChartWrapper = (props) => {
-  try {
-    // Handle center prop safely
-
-    return (
-      <ClientChartBlock
-        compareLabel={props.compareLabel || DEFAULT_MAP_PROPS.compareLabel}
-        dataPath={props.dataPath || DEFAULT_CHART_PROPS.dataPath}
-        dateFormat={props.dateFormat || DEFAULT_CHART_PROPS.dateFormat}
-        idKey={props.idKey || DEFAULT_CHART_PROPS.idKey}
-        xKey={props.xKey || DEFAULT_CHART_PROPS.xKey}
-        yKey={props.yKey || DEFAULT_CHART_PROPS.yKey}
-      />
-    );
-  } catch (error) {
-    console.error('Error rendering chart:', error);
-    return (
-      <div className='h-[400px] flex items-center justify-center bg-red-50 border border-red-300 rounded'>
-        <div className='text-red-500'>Error rendering chart component</div>
-      </div>
-    );
-  }
-};
-
 interface MDXPreviewProps {
   source: string;
 }
@@ -134,13 +95,9 @@ const components = {
   blockquote: (props) => (
     <blockquote className='border-l-4 border-gray-300 pl-4 italic' {...props} />
   ),
-  Map: MapWrapper,
+  Map: (props) => MapWrapper(props),
   Block: (props) => <div type='full' {...props}></div>,
-  Prose: (props) => (
-    <div
-      {...props}
-    ></div>
-  ),
+  Prose: (props) => <div {...props}></div>,
   Chart: ChartWrapper,
 };
 
