@@ -7,7 +7,6 @@ import DataProvider from 'app/store/providers/data';
 import VedaUIConfigProvider from 'app/store/providers/veda-ui-config';
 import DevseedUIThemeProvider from 'app/store/providers/theme';
 import { DatasetWithContent } from 'app/types/content';
-import { ChartProps } from './types';
 
 const Chart = dynamic(() => import('@lib').then((mod) => mod.Chart), {
   ssr: false,
@@ -98,6 +97,7 @@ export const DEFAULT_CHART_PROPS = {
   colorScheme: 'Blues',
 };
 export const ChartWrapper = (props) => {
+  // console.log('ChartWrapper props', props);
   const parsedStringToArray = (propsName) => {
     return typeof props[propsName] === 'string'
       ? props[propsName].replace(/[\\[\](){}]/g, '').split(',')

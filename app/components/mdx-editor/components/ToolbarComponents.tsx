@@ -1,5 +1,12 @@
-import React, { useCallback } from 'react';
-import { Button, usePublisher, insertJsx$ } from '@mdxeditor/editor';
+import React from 'react';
+
+import {
+  Button,
+  usePublisher,
+  insertJsx$,
+  useCellValue,
+  viewMode$,
+} from '@mdxeditor/editor';
 import { Icon } from '@trussworks/react-uswds';
 import Dropdown from './dropdown';
 import { NestedLexicalEditor, useMdastNodeUpdater } from '@mdxeditor/editor';
@@ -32,38 +39,6 @@ const DEFAULT_MAP_PROPS: MapProps = {
   dateTime: '2024-05-31',
   compareDateTime: '2023-05-31',
   compareLabel: 'May 2024 VS May 2023',
-};
-
-interface TwoColumnProps {
-  children: React.ReactNode;
-}
-
-export const TwoColumn: React.FC<TwoColumnProps> = ({ children }) => {
-  return <div className='grid grid-cols-2 gap-4'>{children}</div>;
-};
-
-export const LeftColumnEditor: React.FC<any> = ({ mdastNode, descriptor }) => {
-  const updateMdastNode = useMdastNodeUpdater();
-
-  return (
-    <div className='border rounded-md p-2'>
-      <NestedLexicalEditor
-        getContent={(node) => node.children}
-        getUpdatedMdastNode={(node, children) => {
-          updateMdastNode({ ...mdastNode, children });
-        }}
-      />
-    </div>
-  );
-};
-
-export const RightColumnComponent = () => {
-  return (
-    <div className='border rounded-md p-4 bg-gray-100'>
-      <h4 className='text-md font-semibold mb-2'>Custom Component</h4>
-      <MapEditorWrapper {...DEFAULT_MAP_PROPS} />
-    </div>
-  );
 };
 
 export const InsertMapButton = () => {
@@ -121,15 +96,15 @@ export const InsertTextBlock = () => {
   );
 };
 
-export const InsertLineGraph = () => {
+export const InsertLineGraph = (props) => {
   const insertJsx = usePublisher(insertJsx$);
 
   const handleClick = () => {
     try {
       insertJsx({
         name: 'Chart',
-        kind: 'flow',
-        props: {},
+        kind: 'text',
+        props: { ...DEFAULT_CHART_PROPS }
       });
     } catch (error) {
       console.error('Error inserting Map component:', error);
