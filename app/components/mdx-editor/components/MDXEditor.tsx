@@ -109,9 +109,6 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     ],
     hasChildren: false,
     Editor: (props) => {
-      const { mdastNode } = props;
-      console.log('Chart mdastNode JsxComponentDescriptor', mdastNode);
-
       return (
         <>
           <ChartEditorWrapper props />
