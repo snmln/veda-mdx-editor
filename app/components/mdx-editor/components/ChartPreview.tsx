@@ -93,11 +93,10 @@ export const DEFAULT_CHART_PROPS = {
   availableDomain: '[6/2021, 9/2022]',
   altTitle: 'test title',
   altDesc: 'test description',
-  // colors: undefined,
   colorScheme: 'Blues',
 };
 export const ChartWrapper = (props) => {
-  // console.log('ChartWrapper props', props);
+
   const parsedStringToArray = (propsName) => {
     return typeof props[propsName] === 'string'
       ? props[propsName].replace(/[\\[\](){}]/g, '').split(',')
