@@ -1,18 +1,11 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { MapIcon } from '@heroicons/react/24/outline';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { MapContextProvider, useMapContext } from '../utils/MapContext';
 import dynamic from 'next/dynamic';
 import { LexicalNode } from 'lexical';
-import {
-  TextInput,
-  Label,
-  Button,
-  DatePicker,
-  Icon,
-} from '@trussworks/react-uswds';
+import { TextInput, Label, Button, DatePicker } from '@trussworks/react-uswds';
 import { MapProps } from './types';
 
 interface EditorMapProps extends MapProps {
@@ -222,6 +215,7 @@ const MapEditorWithPreview: React.FC<EditorMapProps> = (props) => {
 
           <div className={`${isEditing && 'padding-top-2'}`}>
             <Button
+              type='button'
               className='bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md shadow flex items-center text-xs'
               onClick={() => setIsEditing(!isEditing)}
             >

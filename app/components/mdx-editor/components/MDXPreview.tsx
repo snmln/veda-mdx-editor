@@ -152,7 +152,7 @@ const components = {
 export function SimpleMDXPreview({ source }: MDXPreviewProps) {
   // Use an empty string as a default if source is undefined
   const safeSource = source || '';
-  console.log('source', source)
+
   return (
     <Suspense fallback={<div className='p-4'>Loading MDX preview...</div>}>
       <MDXRemote source={safeSource} components={components} />
