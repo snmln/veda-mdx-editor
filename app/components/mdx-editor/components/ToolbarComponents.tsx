@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react';
-import { Button, usePublisher, insertJsx$ } from '@mdxeditor/editor';
+
+import React from 'react';
+
 import { Icon } from '@trussworks/react-uswds';
 import Dropdown from './dropdown';
 import { NestedLexicalEditor, useMdastNodeUpdater } from '@mdxeditor/editor';
@@ -7,15 +8,19 @@ import { cn } from '@/lib/utils';
 import MapEditorWrapper from './MapEditor';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 
-interface MapProps {
-  center: string;
-  zoom: string;
-  datasetId: string;
-  layerId: string;
-  dateTime: string;
-  compareDateTime: string;
-  compareLabel: string;
-}
+
+import {
+  Button,
+  usePublisher,
+  insertJsx$,
+  useCellValue,
+  viewMode$,
+} from '@mdxeditor/editor';
+import { Icon } from '@trussworks/react-uswds';
+import { DEFAULT_CHART_PROPS } from './ChartPreview';
+import { MapProps, ChartProps } from './types';
+
+
 const DEFAULT_MAP_PROPS: MapProps = {
   center: '[-94.5, 41.25]',
   zoom: '8.3',
@@ -25,6 +30,7 @@ const DEFAULT_MAP_PROPS: MapProps = {
   compareDateTime: '2023-05-31',
   compareLabel: 'May 2024 VS May 2023',
 };
+
 
 interface TwoColumnProps {
   children: React.ReactNode;
@@ -57,6 +63,7 @@ export const RightColumnComponent = () => {
     </div>
   );
 };
+
 
 export const InsertMapButton = () => {
   const insertJsx = usePublisher(insertJsx$);
@@ -113,7 +120,7 @@ export const InsertTextBlock = () => {
   );
 };
 
-export const InsertLineGraph = () => {
+export const InsertLineGraph = (props) => {
   const insertJsx = usePublisher(insertJsx$);
 
   const handleClick = () => {
@@ -121,7 +128,7 @@ export const InsertLineGraph = () => {
       insertJsx({
         name: 'Chart',
         kind: 'text',
-        props: [],
+        props: { ...DEFAULT_CHART_PROPS }
       });
     } catch (error) {
       console.error('Error inserting Map component:', error);
