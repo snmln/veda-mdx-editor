@@ -104,10 +104,20 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       { name: 'availableDomain', type: 'string' },
       { name: 'altTitle', type: 'string' },
       { name: 'colorScheme', type: 'string' },
+      { name: 'colors', type: 'string' },
       { name: 'altDesc', type: 'string' },
     ],
     hasChildren: false,
-    Editor: ChartEditorWrapper,
+    Editor: (props) => {
+      const { mdastNode } = props;
+      console.log('Chart mdastNode JsxComponentDescriptor', mdastNode);
+
+      return (
+        <>
+          <ChartEditorWrapper props />
+        </>
+      );
+    },
   },
 ];
 

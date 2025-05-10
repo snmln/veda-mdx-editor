@@ -4,12 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import dynamic from 'next/dynamic';
 import { LexicalNode } from 'lexical';
-import { TextInput, Label, Button, DatePicker } from '@trussworks/react-uswds';
+import { Button } from '@trussworks/react-uswds';
 import { ChartContextProvider, useChartContext } from '../utils/ChartContext';
-import { getCSVHeaders } from '../utils/ChartDataDigest';
+
 import { DEFAULT_CHART_PROPS } from './ChartPreview';
 import { MapField } from '../utils/CreateInterface';
 import { ChartProps } from './types';
+import { useMdastNodeUpdater } from '@mdxeditor/editor';
 
 export interface EditorChartProps extends ChartProps {
   node?: LexicalNode & { setProps?: (props: Partial<ChartProps>) => void };
@@ -72,10 +73,12 @@ const ClientChartBlock = dynamic(
 );
 
 // Map editor component that includes both preview and editable properties
-const ChartEditorWithPreview: React.FC<EditorChartProps> = (props) => {
+const ChartEditorWithPreview: React.FC<any> = (props) => {
+  const updateMdastNode = useMdastNodeUpdater();
+  const { mdastNode } = props;
+
   const contextValue = useChartContext();
   const [isEditing, setIsEditing] = useState(true);
-  // getCSVHeaders('/charts/story/hurricane-maria-ida-chart1.csv');
 
   const initialChartProps = () => {
     const { dataPath, dateFormat, idKey, xKey, yKey } = props;
@@ -85,7 +88,6 @@ const ChartEditorWithPreview: React.FC<EditorChartProps> = (props) => {
     return { ...DEFAULT_CHART_PROPS };
   };
   const [chartProps, setChartProps] = useState(initialChartProps());
-<GenericJsxEditor mdastNode={undefined} descriptor={undefined} />;
 
   const updateProps = () => {
     try {
@@ -113,7 +115,13 @@ const ChartEditorWithPreview: React.FC<EditorChartProps> = (props) => {
   // Update lexical node when any property changes
   useEffect(() => {
     updateProps();
-    // dataPath, dateFormat, idKey, xKey, yKey
+
+    const alignProps = Object.entries(chartProps).map(([key, value]) => ({
+      type: 'mdxJsxAttribute',
+      name: key,
+      value: value,
+    }));
+    updateMdastNode({ ...mdastNode, attributes: alignProps });
   }, [chartProps]);
 
   return (
@@ -127,6 +135,7 @@ const ChartEditorWithPreview: React.FC<EditorChartProps> = (props) => {
               >
                 Chart Properties
               </h3>
+
               <div className='grid-row flex-align-end grid-gap-2'>
                 {interfaceList.map((input) => {
                   const { propName, fieldName, type } = input;
@@ -163,7 +172,7 @@ const ChartEditorWithPreview: React.FC<EditorChartProps> = (props) => {
 };
 
 // This wrapper is used when the component is used in the editor
-const ChartEditorWrapper: React.FC<EditorChartProps> = (props) => {
+const ChartEditorWrapper: React.FC<any> = (props) => {
   try {
     const [editor] = useLexicalComposerContext();
 

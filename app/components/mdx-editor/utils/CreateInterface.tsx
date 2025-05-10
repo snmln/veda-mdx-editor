@@ -9,7 +9,6 @@ import {
   Checkbox,
   Select,
 } from '@trussworks/react-uswds';
-import { isValidDate } from './ChartDataDigest';
 
 interface FieldProps {
   label: string;
@@ -27,19 +26,6 @@ interface FieldProps {
 }
 const checkRequired = (isRequired, value) => {
   return isRequired && !value ? { validationStatus: 'error' } : '';
-};
-
-const checkDate = (propName, chartProps) => {
-  if (propName === 'highlightEnd' || propName === 'highlightStart') {
-    if (isValidDate(chartProps[propName], chartProps.dateFormat) == false) {
-      console.log(
-        propName,
-        isValidDate(chartProps[propName], chartProps.dateFormat),
-      );
-      return { validationStatus: 'error' };
-    }
-  }
-  return '';
 };
 
 const colorSchemes = [

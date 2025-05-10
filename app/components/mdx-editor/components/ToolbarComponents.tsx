@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { Button, usePublisher, insertJsx$ } from '@mdxeditor/editor';
+import {
+  Button,
+  usePublisher,
+  insertJsx$,
+  useCellValue,
+  viewMode$,
+} from '@mdxeditor/editor';
 import { Icon } from '@trussworks/react-uswds';
 import { DEFAULT_CHART_PROPS } from './ChartPreview';
 import { MapProps, ChartProps } from './types';
@@ -14,7 +20,6 @@ const DEFAULT_MAP_PROPS: MapProps = {
   compareDateTime: '2023-05-31',
   compareLabel: 'May 2024 VS May 2023',
 };
-
 
 export const InsertMapButton = () => {
   const insertJsx = usePublisher(insertJsx$);
@@ -71,15 +76,15 @@ export const InsertTextBlock = () => {
   );
 };
 
-export const InsertLineGraph = () => {
+export const InsertLineGraph = (props) => {
   const insertJsx = usePublisher(insertJsx$);
 
   const handleClick = () => {
     try {
       insertJsx({
         name: 'Chart',
-        kind: 'flow',
-        props: {},
+        kind: 'text',
+        props: { ...DEFAULT_CHART_PROPS }
       });
     } catch (error) {
       console.error('Error inserting Map component:', error);
