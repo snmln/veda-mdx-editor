@@ -61,8 +61,8 @@ const setInput = (
   switch (cleanedType) {
     case 'date':
       return (
+        //SHORE: Need to clean up or delete
         <>
-          {console.log('from date', value)}
           <Label htmlFor='input-type-text' className='margin-top-2'>
             {label}
           </Label>
