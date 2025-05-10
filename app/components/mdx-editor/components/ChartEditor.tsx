@@ -155,6 +155,7 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
 
           <div className={`${isEditing && 'padding-top-2'}`}>
             <Button
+              type='button'
               className='bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md shadow flex items-center text-xs'
               onClick={() => setIsEditing(!isEditing)}
             >
