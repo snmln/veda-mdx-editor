@@ -17,15 +17,6 @@ const ClientMapBlock = dynamic(() => import('./MapPreview'), {
   ),
 });
 
-// const ClientChartBlock = dynamic(() => import('./ChartPreview'), {
-//   ssr: false,
-//   loading: () => (
-//     <div className='h-[250px] flex items-center justify-center bg-blue-50 border rounded'>
-//       <div className='text-blue-500'>Loading Chart preview...</div>
-//     </div>
-//   ),
-// });
-
 // Default map props
 const DEFAULT_MAP_PROPS = {
   center: [-94.5, 41.25],
@@ -86,30 +77,6 @@ const MapWrapper = (props) => {
   }
 };
 
-// const ChartWrapper = (props) => {
-//   try {
-//     // Handle center prop safely
-
-//     return (
-//       <ClientChartBlock
-//         compareLabel={props.compareLabel || DEFAULT_MAP_PROPS.compareLabel}
-//         dataPath={props.dataPath || DEFAULT_CHART_PROPS.dataPath}
-//         dateFormat={props.dateFormat || DEFAULT_CHART_PROPS.dateFormat}
-//         idKey={props.idKey || DEFAULT_CHART_PROPS.idKey}
-//         xKey={props.xKey || DEFAULT_CHART_PROPS.xKey}
-//         yKey={props.yKey || DEFAULT_CHART_PROPS.yKey}
-//       />
-//     );
-//   } catch (error) {
-//     console.error('Error rendering chart:', error);
-//     return (
-//       <div className='h-[400px] flex items-center justify-center bg-red-50 border border-red-300 rounded'>
-//         <div className='text-red-500'>Error rendering chart component</div>
-//       </div>
-//     );
-//   }
-// };
-
 interface MDXPreviewProps {
   source: string;
 }
@@ -130,9 +97,7 @@ const components = {
     console.log('TwoColumn props in preview', props);
     return (
       <div className='grid-container maxw-full'>
-        <div className='grid-row'>
-          {props.children} {/* Render the child components */}
-        </div>
+        <div className='grid-row'>{props.children}</div>
       </div>
     );
   },
@@ -144,7 +109,10 @@ const components = {
   },
 
   Map: MapWrapper,
-  Block: (props) => <div type='full' {...props}></div>,
+
+  blockquote: (props) => (
+    <blockquote className='border-l-4 border-gray-300 pl-4 italic' {...props} />
+  ),
   Prose: (props) => <div {...props}></div>,
   Chart: ChartWrapper,
 };

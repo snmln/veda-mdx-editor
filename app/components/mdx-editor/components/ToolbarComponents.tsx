@@ -1,12 +1,5 @@
 import React from 'react';
 
-import {
-  Button,
-  usePublisher,
-  insertJsx$,
-  useCellValue,
-  viewMode$,
-} from '@mdxeditor/editor';
 import { Icon } from '@trussworks/react-uswds';
 import Dropdown from './dropdown';
 import { NestedLexicalEditor, useMdastNodeUpdater } from '@mdxeditor/editor';
@@ -14,22 +7,16 @@ import { cn } from '@/lib/utils';
 import MapEditorWrapper from './MapEditor';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 
-interface MapProps {
-  center: string;
-  zoom: string;
-  datasetId: string;
-  layerId: string;
-  dateTime: string;
-  compareDateTime: string;
-  compareLabel: string;
-}
-interface ChartProps {
-  dataPath: string;
-  dateFormat: string;
-  idKey: string;
-  xKey: string;
-  yKey: string;
-}
+import {
+  Button,
+  usePublisher,
+  insertJsx$,
+  useCellValue,
+  viewMode$,
+} from '@mdxeditor/editor';
+
+import { DEFAULT_CHART_PROPS } from './ChartPreview';
+import { MapProps, ChartProps } from './types';
 
 const DEFAULT_MAP_PROPS: MapProps = {
   center: '[-94.5, 41.25]',
@@ -39,6 +26,38 @@ const DEFAULT_MAP_PROPS: MapProps = {
   dateTime: '2024-05-31',
   compareDateTime: '2023-05-31',
   compareLabel: 'May 2024 VS May 2023',
+};
+
+interface TwoColumnProps {
+  children: React.ReactNode;
+}
+
+export const TwoColumn: React.FC<TwoColumnProps> = ({ children }) => {
+  return <div className='grid grid-cols-2 gap-4'>{children}</div>;
+};
+
+export const LeftColumnEditor: React.FC<any> = ({ mdastNode, descriptor }) => {
+  const updateMdastNode = useMdastNodeUpdater();
+
+  return (
+    <div className='border rounded-md p-2'>
+      <NestedLexicalEditor
+        getContent={(node) => node.children}
+        getUpdatedMdastNode={(node, children) => {
+          updateMdastNode({ ...mdastNode, children });
+        }}
+      />
+    </div>
+  );
+};
+
+export const RightColumnComponent = () => {
+  return (
+    <div className='border rounded-md p-4 bg-gray-100'>
+      <h4 className='text-md font-semibold mb-2'>Custom Component</h4>
+      <MapEditorWrapper {...DEFAULT_MAP_PROPS} />
+    </div>
+  );
 };
 
 export const InsertMapButton = () => {
@@ -104,7 +123,7 @@ export const InsertLineGraph = (props) => {
       insertJsx({
         name: 'Chart',
         kind: 'text',
-        props: { ...DEFAULT_CHART_PROPS }
+        props: { ...DEFAULT_CHART_PROPS },
       });
     } catch (error) {
       console.error('Error inserting Map component:', error);
@@ -124,84 +143,6 @@ export const InsertLineGraph = (props) => {
   );
 };
 
-export const InsertTwoColumn = () => {
-  const insertJsx = usePublisher(insertJsx$);
-
-  const handleClick = () => {
-    try {
-      insertJsx({
-        name: 'Chart',
-        kind: 'text',
-        props: [],
-      });
-    } catch (error) {
-      console.error('Error inserting Map component:', error);
-      alert('Could not insert chart component. See console for details.');
-    }
-  };
-
-  return (
-    <Button
-      onClick={handleClick}
-      title='Insert Map'
-      className='text-sm display-flex flex-align-center padding-1'
-    >
-      {/* <svg
-        width='28'
-        height='18'
-        viewBox='0 0 28 18'
-        fill='none'
-        xmlns='http://www.w3.org/2000/svg'
-        className='margin-right-05 width-3 height-3'
-      >
-        <path d='M0 0H13V18H0V0Z' fill='black' />
-        <path d='M27.7391 14V17.5H16V14H27.7391Z' fill='black' />
-        <path d='M27.7391 0V3.5H16V0H27.7391Z' fill='black' />
-        <path d='M27.7391 7.5V11H16V7.5H27.7391Z' fill='black' />
-      </svg>
-      Add 2 Column
-      <Icon.ArrowDropDown /> */}
-      <Dropdown
-        options={[
-          { value: 'option1', label: 'Option 1' },
-          { value: 'option2', label: 'Option 2' },
-          { value: 'option3', label: 'Option 3' },
-        ]}
-        onSelect={(value: string) => {
-          console.log('Selected value:', value);
-        }}
-      />
-    </Button>
-  );
-};
-
-export const MapText = () => {
-  const insertJsx = usePublisher(insertJsx$);
-
-  const handleClick = () => {
-    try {
-      insertJsx({
-        name: 'Block',
-        kind: 'flow',
-        props: {},
-      });
-    } catch (error) {
-      console.error('Error inserting Map component:', error);
-      alert('Could not insert chart component. See console for details.');
-    }
-  };
-
-  return (
-    <Button
-      onClick={handleClick}
-      title='Insert Map'
-      className='text-sm display-flex flex-align-center padding-1'
-    >
-      map and text
-    </Button>
-  );
-};
-
 export const InsertTwoColumnButton = () => {
   const insertJsx = usePublisher(insertJsx$);
 
@@ -212,8 +153,8 @@ export const InsertTwoColumnButton = () => {
         kind: 'flow',
         props: {},
         children: [
-          { name: 'LeftColumn', kind: 'BlockContent' },
-          { name: 'RightColumn', kind: 'flow' },
+          { name: 'LeftColumn', kind: 'text' },
+          { name: 'RightColumn', kind: 'text' },
         ],
       });
     } catch (error) {
