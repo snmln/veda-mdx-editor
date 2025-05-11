@@ -17,7 +17,6 @@ const ClientMapBlock = dynamic(() => import('./MapPreview'), {
   ),
 });
 
-
 // Default map props
 const DEFAULT_MAP_PROPS = {
   center: [-94.5, 41.25],
@@ -78,7 +77,6 @@ const MapWrapper = (props) => {
   }
 };
 
-
 interface MDXPreviewProps {
   source: string;
 }
@@ -94,15 +92,12 @@ const components = {
   ul: (props) => <ul className='list-disc ml-5 mb-4' {...props} />,
   ol: (props) => <ol className='list-decimal ml-5 mb-4' {...props} />,
   li: (props) => <li className='mb-1' {...props} />,
-
   Block: (props) => <div {...props} />,
   TwoColumn: (props) => {
     console.log('TwoColumn props in preview', props);
     return (
       <div className='grid-container maxw-full'>
-        <div className='grid-row'>
-          {props.children} {/* Render the child components */}
-        </div>
+        <div className='grid-row'>{props.children}</div>
       </div>
     );
   },
@@ -114,13 +109,10 @@ const components = {
   },
 
   Map: MapWrapper,
-  // Chart: ChartWrapper,
 
   blockquote: (props) => (
     <blockquote className='border-l-4 border-gray-300 pl-4 italic' {...props} />
   ),
-  Map: (props) => MapWrapper(props),
-  Block: (props) => <div type='full' {...props}></div>,
   Prose: (props) => <div {...props}></div>,
   Chart: ChartWrapper,
 };

@@ -41,14 +41,9 @@ import { InsertScrollytellingButton } from '../plugins/scrollytelling/InsertScro
 import {
   InsertMapButton,
   InsertLineGraph,
-  InsertTextBlock,
-  InsertTwoColumn,
-  MapText,
-  TwoColumn,
-  LeftColumnEditor,
-  RightColumnComponent,
   InsertTwoColumnButton,
 } from './ToolbarComponents';
+import { TwoColumnWrapper } from './TwoColumnEditor';
 // Import our map editor with live preview component
 const MapEditorWrapper = dynamic(() => import('./MapEditor'), {
   ssr: false,
@@ -88,7 +83,7 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
         const checkForColumns = (children) =>
           children.name === 'LeftColumn' || children.name === 'RightColumn';
 
-        if (!mdastNode.children.some(checkForColumns)) {
+        if (mdastNode.children.some(checkForColumns)) {
           const currentIndex = mdastNode.children.findIndex(
             (obj) => obj.name === 'LeftColumn',
           );
@@ -106,22 +101,37 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       };
       setInitialChildren();
 
-
-
       const columnFields = (column) => {
         return (
           <NestedLexicalEditor
             getContent={(node) => node.children}
             getUpdatedMdastNode={(mdastNode, children: any) => {
-              const newLeft = {
+              const newColumn = {
                 type: 'mdxJsxFlowElement',
                 name: column,
                 children: children || [],
               };
+              console.log('newColumn', newColumn);
+
+              const newMdsatNodeChildren = () => {
+                const index = mdastNode.children.findIndex(
+                  (obj) => obj && obj['name'] === column,
+                );
+
+                if (index !== -1) {
+                  mdastNode.children[index] = {
+                    ...array[index],
+                    ...updateObject,
+                  };
+                }
+                return mdastNode;
+              };
 
               const existingChildren =
                 mdastNode.children?.filter((c: any) => c.name !== column) || [];
-              const newChildren = [newLeft, ...existingChildren];
+              const newChildren = [newColumn, ...existingChildren];
+              console.log('mdastNode', mdastNode);
+
               updateMdastNode({ ...mdastNode, children: newChildren });
             }}
           />
@@ -171,27 +181,7 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     hasChildren: false,
     Editor: MapEditorWrapper,
   },
-  {
-    name: 'Block',
-    kind: 'flow',
-    source: './external',
-    props: [{ name: 'type', type: 'string' }],
-    hasChildren: true,
-    Editor: GenericJsxEditor,
 
-    // Editor: () => {
-    //   return (
-    //     <div className='border-05 border-primary'>
-    //       <NestedLexicalEditor
-    //         getContent={(node) => node.children}
-    //         getUpdatedMdastNode={(mdastNode, children: any) => {
-    //           return { ...mdastNode, children };
-    //         }}
-    //       />
-    //     </div>
-    //   );
-    // },
-  },
   {
     name: 'Chart',
     kind: 'text',
@@ -270,8 +260,7 @@ export function MDXEditorEnhanced({
                 </div>
                 <div className='grid-row padding-y-1'>
                   <InsertMapButton />
-                  {/* <InsertTwoColumn /> */}
-                  <MapText />
+                  <InsertLineGraph />
                   <InsertTwoColumnButton />
                 </div>
               </div>
