@@ -94,7 +94,6 @@ const components = {
   li: (props) => <li className='mb-1' {...props} />,
   Block: (props) => <div {...props} />,
   TwoColumn: (props) => {
-    console.log('TwoColumn props in preview', props);
     return (
       <div className='grid-container maxw-full'>
         <div className='grid-row'>{props.children}</div>

@@ -105,14 +105,14 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
         return (
           <NestedLexicalEditor
             getContent={(node) => node.children}
+            block={true}
             getUpdatedMdastNode={(mdastNode, children: any) => {
+              console.log('children', children);
               const newColumn = {
                 type: 'mdxJsxFlowElement',
                 name: column,
                 children: children || [],
               };
-              console.log('newColumn', newColumn);
-
               const newMdsatNodeChildren = () => {
                 const index = mdastNode.children.findIndex(
                   (obj) => obj && obj['name'] === column,
@@ -121,7 +121,7 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
                 if (index !== -1) {
                   mdastNode.children[index] = {
                     ...array[index],
-                    ...updateObject,
+                    ...newColumn,
                   };
                 }
                 return mdastNode;
@@ -129,10 +129,13 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
 
               const existingChildren =
                 mdastNode.children?.filter((c: any) => c.name !== column) || [];
-              const newChildren = [newColumn, ...existingChildren];
-              console.log('mdastNode', mdastNode);
+              console.log('existingChildren', existingChildren);
 
-              updateMdastNode({ ...mdastNode, children: newChildren });
+              const newChildren = [newColumn, ...existingChildren];
+              updateMdastNode({
+                children: newChildren,
+              });
+              console.log('columnFields mdastNode', mdastNode);
             }}
           />
         );
@@ -218,7 +221,6 @@ export function MDXEditorEnhanced({
   markdown,
   onChange,
 }: MDXEditorWrapperProps) {
-  console.log('MDXEditorEnhanced', markdown);
   return (
     <div className='h-[600px] border rounded-lg overflow-hidden'>
       <MDXEditor

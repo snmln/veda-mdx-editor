@@ -153,8 +153,8 @@ export const InsertTwoColumnButton = () => {
         kind: 'flow',
         props: {},
         children: [
-          { name: 'LeftColumn', kind: 'text' },
-          { name: 'RightColumn', kind: 'text' },
+          { name: 'LeftColumn', kind: 'DefinitionContent' },
+          { name: 'RightColumn', kind: 'DefinitionContent' },
         ],
       });
     } catch (error) {
