@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   headingsPlugin,
   listsPlugin,
@@ -37,7 +37,7 @@ import dynamic from 'next/dynamic';
 import { BlockNode, Marker } from './components';
 
 import { scrollytellingButtonPlugin } from '../plugins/scrollytelling/scrollytellingButtonPlugin';
-
+import { TwoColumnEditorWrapper } from './TwoColumnEditor';
 import {
   InsertMapButton,
   InsertLineGraph,
@@ -67,105 +67,20 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     hasChildren: true,
     props: [{ name: 'children', type: 'object' }],
     Editor: (props) => {
-      const { mdastNode } = props;
-      const updateMdastNode = useMdastNodeUpdater();
-      const setInitialChildren = () => {
-        const checkForColumns = (children) =>
-          children.name === 'LeftColumn' || children.name === 'RightColumn';
-
-        if (mdastNode.children.some(checkForColumns)) {
-          const currentIndex = mdastNode.children.findIndex(
-            (obj) => obj.name === 'LeftColumn',
-          );
-          if (currentIndex != 0) {
-            const [foundElement] = mdastNode.children.splice(currentIndex, 1);
-            return mdastNode.children.unshift(foundElement);
-          }
-          return mdastNode;
-        } else {
-          return mdastNode.children.push(
-            { type: 'mdxJsxFlowElement', name: 'LeftColumn', children: [] },
-            { type: 'mdxJsxFlowElement', name: 'RightColumn', children: [] },
-          );
-        }
-      };
-
-      const [columnContent, setColumnContent] = useState(setInitialChildren());
-
-      useEffect(() => {
-        // updateMdastNode({
-        //   children: newChildren,
-        // });
-        console.log('columnContent', columnContent);
-      }, [columnContent]);
-      //CHORE: COLUMS IS NOT UPDATING UNLESS YOU EDIT ANOTHER
-      const columnFields = (column) => {
-        return (
-          <NestedLexicalEditor
-            getContent={(node) => node.children}
-            block={true}
-            getUpdatedMdastNode={(currentMdastNode, children: any) => {
-              // More robust node update approach
-              try {
-                // Create a new column node
-                const newColumnNode = {
-                  type: 'mdxJsxFlowElement',
-                  name: column,
-                  children: children,
-                };
-
-                // Filter out existing nodes with the same column name
-                const filteredChildren =
-                  currentMdastNode.children?.filter(
-                    (c: any) => c.name !== column,
-                  ) || [];
-
-                // Create new children array with the updated column
-                const updatedChildren = [...filteredChildren, newColumnNode];
-                const getColumnIndex = currentMdastNode.children.findIndex(
-                  (obj) => obj.name == column,
-                );
-                currentMdastNode.children[getColumnIndex] = newColumnNode;
-                // Update the entire MDAST node
-                updateMdastNode({ ...currentMdastNode });
-
-                // Return the updated node
-                return {
-                  ...currentMdastNode,
-                  children: updatedChildren,
-                };
-              } catch (error) {
-                console.error('Error updating MDAST node:', error);
-                return currentMdastNode;
-              }
-            }}
-          />
-        );
-      };
-      return (
-        <div className='grid-container maxw-full'>
-          <div className='grid-row'>
-            <div className='grid-col border rounded-md p-2'>
-              {columnFields('LeftColumn')}
-            </div>
-            <div className='grid-col border rounded-md p-2'>
-              {columnFields('RightColumn')}
-            </div>
-          </div>
-        </div>
-      );
+      console.log('editor props', props);
+      return <TwoColumnEditorWrapper props={{ ...props }} />;
     },
   },
   {
-    name: 'LeftColumn', // Define LeftColumn
-    kind: 'flow', // Or 'block' depending on desired behavior
+    name: 'LeftColumn', 
+    kind: 'flow',
     source: './components',
     hasChildren: true,
     props: [{ name: 'children', type: 'object' }],
   },
   {
-    name: 'RightColumn', // Define RightColumn
-    kind: 'flow', // Or 'block'
+    name: 'RightColumn', 
+    kind: 'flow', 
     source: './components',
     hasChildren: true,
     props: [{ name: 'children', type: 'object' }],
