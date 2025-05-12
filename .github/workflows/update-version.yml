@@ -43,7 +43,7 @@ jobs:
     - name: Update veda-ui version
       shell: bash
       run: |
-        yarn install @teamimpact/veda-ui@${{ github.event.client_payload.VERSION_NUMBER }}
+        yarn add @teamimpact/veda-ui@${{ github.event.client_payload.VERSION_NUMBER }}
     - name: Create Pull Request
       id: making-pr
       uses: peter-evans/create-pull-request@v7
