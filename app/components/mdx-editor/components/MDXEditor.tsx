@@ -2,7 +2,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   headingsPlugin,
   listsPlugin,
@@ -37,13 +37,14 @@ import dynamic from 'next/dynamic';
 import { BlockNode, Marker } from './components';
 
 import { scrollytellingButtonPlugin } from '../plugins/scrollytelling/scrollytellingButtonPlugin';
-import { InsertScrollytellingButton } from '../plugins/scrollytelling/InsertScrollytellingButton';
+
 import {
   InsertMapButton,
   InsertLineGraph,
   InsertTwoColumnButton,
 } from './ToolbarComponents';
-import { TwoColumnWrapper } from './TwoColumnEditor';
+import './mdxpreview.scss';
+
 // Import our map editor with live preview component
 const MapEditorWrapper = dynamic(() => import('./MapEditor'), {
   ssr: false,
@@ -68,17 +69,6 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     Editor: (props) => {
       const { mdastNode } = props;
       const updateMdastNode = useMdastNodeUpdater();
-
-      const leftChildren = mdastNode.children?.find(
-        (child: any) =>
-          child.type === 'mdxJsxFlowElement' && child.name === 'LeftColumn',
-      );
-      const rightChildren = mdastNode.children?.find(
-        (child: any) =>
-          child.type === 'mdxJsxFlowElement' && child.name === 'RightColumn',
-      );
-      //TO DO: CORRECT left and right positions
-
       const setInitialChildren = () => {
         const checkForColumns = (children) =>
           children.name === 'LeftColumn' || children.name === 'RightColumn';
@@ -99,43 +89,41 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
           );
         }
       };
-      setInitialChildren();
 
+      const [columnContent, setColumnContent] = useState(setInitialChildren());
+
+      useEffect(() => {
+        // updateMdastNode({
+        //   children: newChildren,
+        // });
+        console.log('columnContent', columnContent);
+      }, [columnContent]);
+//CHORE: COLUMS IS NOT UPDATING UNLESS YOU EDIT ANOTHER 
       const columnFields = (column) => {
         return (
           <NestedLexicalEditor
             getContent={(node) => node.children}
             block={true}
             getUpdatedMdastNode={(mdastNode, children: any) => {
-              console.log('children', children);
+              console.log(children);
               const newColumn = {
                 type: 'mdxJsxFlowElement',
                 name: column,
-                children: children || [],
-              };
-              const newMdsatNodeChildren = () => {
-                const index = mdastNode.children.findIndex(
-                  (obj) => obj && obj['name'] === column,
-                );
-
-                if (index !== -1) {
-                  mdastNode.children[index] = {
-                    ...array[index],
-                    ...newColumn,
-                  };
-                }
-                return mdastNode;
+                children: children,
               };
 
-              const existingChildren =
-                mdastNode.children?.filter((c: any) => c.name !== column) || [];
+              const existingChildren = mdastNode.children?.filter(
+                (c: any) => c.name !== column,
+              );
               console.log('existingChildren', existingChildren);
+              const newChildren = {
+                children: [...existingChildren, newColumn],
+              };
+              updateMdastNode({ ...newChildren });
 
-              const newChildren = [newColumn, ...existingChildren];
-              updateMdastNode({
-                children: newChildren,
-              });
-              console.log('columnFields mdastNode', mdastNode);
+              return { ...mdastNode, newChildren };
+
+              // setColumnContent(mdastNode);
             }}
           />
         );
