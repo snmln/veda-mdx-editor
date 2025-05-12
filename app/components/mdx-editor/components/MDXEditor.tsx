@@ -3,7 +3,6 @@
 'use client';
 
 import React from 'react';
-import { MDXEditor } from '@mdxeditor/editor';
 import {
   headingsPlugin,
   listsPlugin,
@@ -27,18 +26,25 @@ import {
   usePublisher,
   insertJsx$,
   ListsToggle,
+  MDXEditor,
+  NestedLexicalEditor,
+  CodeMirrorEditor,
+  useMdastNodeUpdater,
 } from '@mdxeditor/editor';
 import { MapIcon } from '@heroicons/react/24/outline';
 import '@mdxeditor/editor/style.css';
 import dynamic from 'next/dynamic';
+import { BlockNode, Marker } from './components';
 
 import { scrollytellingButtonPlugin } from '../plugins/scrollytelling/scrollytellingButtonPlugin';
-import { InsertScrollytellingButton } from '../plugins/scrollytelling/InsertScrollytellingButton';
+import { TwoColumnEditorWrapper } from './TwoColumnEditor';
 import {
   InsertMapButton,
   InsertLineGraph,
-  InsertTextBlock,
+  InsertTwoColumnButton,
 } from './ToolbarComponents';
+import './mdxpreview.scss';
+
 // Import our map editor with live preview component
 const MapEditorWrapper = dynamic(() => import('./MapEditor'), {
   ssr: false,
@@ -55,6 +61,31 @@ interface MDXEditorWrapperProps {
 }
 const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
+    name: 'TwoColumn',
+    kind: 'flow',
+    source: './components', // Adjust the path
+    hasChildren: true,
+    props: [{ name: 'children', type: 'object' }],
+    Editor: (props) => {
+      console.log('editor props', props);
+      return <TwoColumnEditorWrapper props={{ ...props }} />;
+    },
+  },
+  {
+    name: 'LeftColumn', 
+    kind: 'flow',
+    source: './components',
+    hasChildren: true,
+    props: [{ name: 'children', type: 'object' }],
+  },
+  {
+    name: 'RightColumn', 
+    kind: 'flow', 
+    source: './components',
+    hasChildren: true,
+    props: [{ name: 'children', type: 'object' }],
+  },
+  {
     name: 'Map',
     kind: 'text',
     source: '@teamimpact/veda-ui',
@@ -70,22 +101,7 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     hasChildren: false,
     Editor: MapEditorWrapper,
   },
-  {
-    name: 'Block',
-    kind: 'text',
-    source: './external',
-    props: [{ name: 'type', type: 'string' }],
-    hasChildren: true,
-    Editor: GenericJsxEditor,
-  },
-  {
-    name: 'Prose',
-    kind: 'text',
-    source: './external',
-    props: [{ name: 'type', type: 'string' }],
-    hasChildren: true,
-    Editor: GenericJsxEditor,
-  },
+
   {
     name: 'Chart',
     kind: 'text',
@@ -122,7 +138,6 @@ export function MDXEditorEnhanced({
   markdown,
   onChange,
 }: MDXEditorWrapperProps) {
-  console.log('MDXEditorEnhanced', markdown);
   return (
     <div className='h-[600px] border rounded-lg overflow-hidden'>
       <MDXEditor
@@ -141,6 +156,14 @@ export function MDXEditorEnhanced({
           imagePlugin(),
           jsxPlugin({
             jsxComponentDescriptors,
+            jsxComponentModules: [
+              {
+                components: {
+                  Marker,
+                  BlockNode,
+                },
+              },
+            ],
           }),
           toolbarPlugin({
             toolbarContents: () => (
@@ -157,7 +180,7 @@ export function MDXEditorEnhanced({
                 <div className='grid-row padding-y-1'>
                   <InsertMapButton />
                   <InsertLineGraph />
-                  <InsertTextBlock />
+                  <InsertTwoColumnButton />
                 </div>
               </div>
             ),

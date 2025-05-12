@@ -1,7 +1,13 @@
 // app/editor/page.tsx with source view tab
 'use client';
 
-import React, { useState, useCallback, Suspense, useRef, useEffect } from 'react';
+import React, {
+  useState,
+  useCallback,
+  Suspense,
+  useRef,
+  useEffect,
+} from 'react';
 import dynamic from 'next/dynamic';
 import { customComponents } from '../components/mdx-editor/components/components';
 
@@ -9,28 +15,42 @@ import { customComponents } from '../components/mdx-editor/components/components
 const EDITOR_KEY = 'stable-mdx-editor-instance';
 
 interface EditorStyle {
-    style: {
-        height: string;
-        display: string;
-        alignItems: string;
-        justifyContent: string;
-    };
+  style: {
+    height: string;
+    display: string;
+    alignItems: string;
+    justifyContent: string;
+  };
 }
 
 const MDXEditorEnhanced = dynamic(
-  () => import('../components/mdx-editor/components/MDXEditor').then((mod) => mod.MDXEditorEnhanced),
+  () =>
+    import('../components/mdx-editor/components/MDXEditor').then(
+      (mod) => mod.MDXEditorEnhanced,
+    ),
   {
     ssr: false,
-    loading: () => <div className="h-[600px] flex items-center justify-center">Loading editor...</div>
-  }
+    loading: () => (
+      <div className='h-[600px] flex items-center justify-center'>
+        Loading editor...
+      </div>
+    ),
+  },
 );
 
 const SimpleMDXPreview = dynamic(
-  () => import('../components/mdx-editor/components/MDXPreview').then((mod) => mod.SimpleMDXPreview),
+  () =>
+    import('../components/mdx-editor/components/MDXPreview').then(
+      (mod) => mod.SimpleMDXPreview,
+    ),
   {
     ssr: false,
-    loading: () => <div className="h-[600px] flex items-center justify-center">Loading preview...</div>
-  }
+    loading: () => (
+      <div className='h-[600px] flex items-center justify-center'>
+        Loading preview...
+      </div>
+    ),
+  },
 );
 
 const initialContent = `# Welcome to the MDX Editor
@@ -58,7 +78,6 @@ export default function EditorPage() {
   const handleContentChange = useCallback((content: string) => {
     setMdxContent(content);
     //console.log('MDX Content changed:', content);
-
     console.log('🔎 Updated MDX content:', content);
     //alert(`Updated MDX content:\n${content.substring(0, 200)}...`);
   }, []);
@@ -71,7 +90,7 @@ export default function EditorPage() {
   // This function handles tab switching
   const handleTabChange = (index) => {
     setSelectedTab(index);
-    
+
     // If switching to preview or source, hide editor
     if ((index === 1 || index === 2) && editorContainerRef.current) {
       const container = editorContainerRef.current;
@@ -88,48 +107,60 @@ export default function EditorPage() {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-5xl min-h-screen bg-gray-50">
+    <div className='container mx-auto p-4 max-w-5xl min-h-screen bg-gray-50'>
       {/* Custom Tab Buttons */}
-      <div className="flex space-x-4 mb-4">
-        <button 
+      <div className='flex space-x-4 mb-4'>
+        <button
           onClick={() => handleTabChange(0)}
-          className={`px-4 py-2 rounded-lg font-medium ${selectedTab === 0 
-            ? 'bg-blue-600 text-blue' 
-            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+          className={`px-4 py-2 rounded-lg font-medium ${
+            selectedTab === 0
+              ? 'bg-blue-600 text-blue'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
         >
           Editor
         </button>
-        <button 
+        <button
           onClick={() => handleTabChange(1)}
-          className={`px-4 py-2 rounded-lg font-medium ${selectedTab === 1 
-            ? 'bg-blue-600 text-blue' 
-            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+          className={`px-4 py-2 rounded-lg font-medium ${
+            selectedTab === 1
+              ? 'bg-blue-600 text-blue'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
         >
           Preview
         </button>
-        <button 
+        <button
           onClick={() => handleTabChange(2)}
-          className={`px-4 py-2 rounded-lg font-medium ${selectedTab === 2 
-            ? 'bg-blue-600 text-blue' 
-            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+          className={`px-4 py-2 rounded-lg font-medium ${
+            selectedTab === 2
+              ? 'bg-blue-600 text-blue'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
         >
           Source
         </button>
       </div>
 
       {/* Content Panel */}
-      <div className="border rounded-lg bg-white shadow-lg h-[600px] overflow-hidden relative">
+      <div className='border rounded-lg bg-white shadow-lg h-[600px] overflow-hidden relative'>
         {/* Editor Container - Always mounted but can be visually hidden */}
-        <div 
+        <div
           ref={editorContainerRef}
           className={`h-full w-full ${selectedTab === 0 ? '' : 'sr-only'}`}
-          style={{ 
+          style={{
             visibility: selectedTab === 0 ? 'visible' : 'hidden',
-            position: selectedTab === 0 ? 'static' : 'absolute' 
+            position: selectedTab === 0 ? 'static' : 'absolute',
           }}
         >
           {editorMounted && (
-            <Suspense fallback={<div className="h-full flex items-center justify-center">Loading editor...</div>}>
+            <Suspense
+              fallback={
+                <div className='h-full flex items-center justify-center'>
+                  Loading editor...
+                </div>
+              }
+            >
               <MDXEditorEnhanced
                 key={EDITOR_KEY}
                 markdown={mdxContent}
@@ -138,12 +169,18 @@ export default function EditorPage() {
             </Suspense>
           )}
         </div>
-        
+
         {/* Preview Panel - Only mounted when active */}
         {selectedTab === 1 && (
-          <div className="h-full w-full">
-            <div className="prose max-w-none p-6 h-full overflow-auto">
-              <Suspense fallback={<div className="flex items-center justify-center h-full">Loading MDX preview...</div>}>
+          <div className='h-full w-full'>
+            <div className='prose max-w-none p-6 h-full overflow-auto'>
+              <Suspense
+                fallback={
+                  <div className='flex items-center justify-center h-full'>
+                    Loading MDX preview...
+                  </div>
+                }
+              >
                 <SimpleMDXPreview source={mdxContent} />
               </Suspense>
             </div>
@@ -152,10 +189,12 @@ export default function EditorPage() {
 
         {/* Source View - Only mounted when active */}
         {selectedTab === 2 && (
-          <div className="h-full w-full">
-            <div className="p-4 h-full overflow-auto">
-              <div className="bg-white-50 rounded-lg border border-gray-300 p-4 h-full font-mono text-sm overflow-auto">
-                <pre className="whitespace-pre-wrap break-words">{mdxContent}</pre>
+          <div className='h-full w-full'>
+            <div className='p-4 h-full overflow-auto'>
+              <div className='bg-white-50 rounded-lg border border-gray-300 p-4 h-full font-mono text-sm overflow-auto'>
+                <pre className='whitespace-pre-wrap break-words'>
+                  {mdxContent}
+                </pre>
               </div>
             </div>
           </div>
