@@ -6,7 +6,7 @@ import { NestedLexicalEditor, useMdastNodeUpdater } from '@mdxeditor/editor';
 import { cn } from '@/lib/utils';
 import MapEditorWrapper from './MapEditor';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-
+import TwoColumnIcon from '../assets/TwoColumnIcon';
 import {
   Button,
   usePublisher,
@@ -163,5 +163,15 @@ export const InsertTwoColumnButton = () => {
     }
   };
 
-  return <Button onClick={handleClick}>Insert 2-Column</Button>;
+  return (
+    <Button
+      onClick={handleClick}
+      className='text-sm display-flex flex-align-center padding-1'
+    >
+      <div className='margin-right-05 width-3 height-3 flex-align-center display-flex'>
+        <TwoColumnIcon />
+      </div>
+      Insert 2 Column
+    </Button>
+  );
 };
