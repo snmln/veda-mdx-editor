@@ -98,32 +98,46 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
         // });
         console.log('columnContent', columnContent);
       }, [columnContent]);
-//CHORE: COLUMS IS NOT UPDATING UNLESS YOU EDIT ANOTHER 
+      //CHORE: COLUMS IS NOT UPDATING UNLESS YOU EDIT ANOTHER
       const columnFields = (column) => {
         return (
           <NestedLexicalEditor
             getContent={(node) => node.children}
             block={true}
-            getUpdatedMdastNode={(mdastNode, children: any) => {
-              console.log(children);
-              const newColumn = {
-                type: 'mdxJsxFlowElement',
-                name: column,
-                children: children,
-              };
+            getUpdatedMdastNode={(currentMdastNode, children: any) => {
+              // More robust node update approach
+              try {
+                // Create a new column node
+                const newColumnNode = {
+                  type: 'mdxJsxFlowElement',
+                  name: column,
+                  children: children,
+                };
 
-              const existingChildren = mdastNode.children?.filter(
-                (c: any) => c.name !== column,
-              );
-              console.log('existingChildren', existingChildren);
-              const newChildren = {
-                children: [...existingChildren, newColumn],
-              };
-              updateMdastNode({ ...newChildren });
+                // Filter out existing nodes with the same column name
+                const filteredChildren =
+                  currentMdastNode.children?.filter(
+                    (c: any) => c.name !== column,
+                  ) || [];
 
-              return { ...mdastNode, newChildren };
+                // Create new children array with the updated column
+                const updatedChildren = [...filteredChildren, newColumnNode];
+                const getColumnIndex = currentMdastNode.children.findIndex(
+                  (obj) => obj.name == column,
+                );
+                currentMdastNode.children[getColumnIndex] = newColumnNode;
+                // Update the entire MDAST node
+                updateMdastNode({ ...currentMdastNode });
 
-              // setColumnContent(mdastNode);
+                // Return the updated node
+                return {
+                  ...currentMdastNode,
+                  children: updatedChildren,
+                };
+              } catch (error) {
+                console.error('Error updating MDAST node:', error);
+                return currentMdastNode;
+              }
             }}
           />
         );
