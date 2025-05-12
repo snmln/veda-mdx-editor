@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { customComponents } from './components';
 import { ChartWrapper } from './ChartPreview';
-
+import './mdxpreview.scss';
 // Correctly import the default export from mdx-preview-map with error handling
 
 const ClientMapBlock = dynamic(() => import('./MapPreview'), {
@@ -96,7 +96,7 @@ const components = {
   TwoColumn: (props) => {
     return (
       <div className='grid-container maxw-full'>
-        <div className='grid-row'>{props.children}</div>
+        <div className='grid-row grid-gap-lg'>{props.children}</div>
       </div>
     );
   },
