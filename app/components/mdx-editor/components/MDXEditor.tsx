@@ -67,20 +67,19 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     hasChildren: true,
     props: [{ name: 'children', type: 'object' }],
     Editor: (props) => {
-      console.log('editor props', props);
       return <TwoColumnEditorWrapper props={{ ...props }} />;
     },
   },
   {
-    name: 'LeftColumn', 
+    name: 'LeftColumn',
     kind: 'flow',
     source: './components',
     hasChildren: true,
     props: [{ name: 'children', type: 'object' }],
   },
   {
-    name: 'RightColumn', 
-    kind: 'flow', 
+    name: 'RightColumn',
+    kind: 'flow',
     source: './components',
     hasChildren: true,
     props: [{ name: 'children', type: 'object' }],
@@ -99,7 +98,13 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       { name: 'compareLabel', type: 'string' },
     ],
     hasChildren: false,
-    Editor: MapEditorWrapper,
+    Editor: (props) => {
+      return (
+        <>
+          <MapEditorWrapper props={{ ...props }} />
+        </>
+      );
+    },
   },
 
   {
