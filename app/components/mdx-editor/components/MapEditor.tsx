@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { LexicalNode } from 'lexical';
 import { TextInput, Label, Button, DatePicker } from '@trussworks/react-uswds';
 import { MapProps } from './types';
+import { useMdastNodeUpdater } from '@mdxeditor/editor';
 
 interface EditorMapProps extends MapProps {
   node?: LexicalNode & { setProps?: (props: Partial<MapProps>) => void };
@@ -93,7 +94,8 @@ const ClientMapBlock = dynamic(
 );
 
 // Map editor component that includes both preview and editable properties
-const MapEditorWithPreview: React.FC<EditorMapProps> = (props) => {
+const MapEditorWithPreview: React.FC<any> = ( props ) => {
+
   const contextValue = useMapContext();
   const [isEditing, setIsEditing] = useState(true);
   const [center, setCenter] = useState(props.center || '[-94.5, 41.25]');
@@ -107,6 +109,8 @@ const MapEditorWithPreview: React.FC<EditorMapProps> = (props) => {
   const [compareLabel, setCompareLabel] = useState(
     props.compareLabel || 'May 2024 VS May 2023',
   );
+
+
   // Parse values for the map preview
   const parsedCenter =
     typeof center === 'string'
@@ -115,8 +119,46 @@ const MapEditorWithPreview: React.FC<EditorMapProps> = (props) => {
         : [-94.5, 41.25]
       : center;
   const parsedZoom = typeof zoom === 'string' ? parseFloat(zoom) || 8.3 : zoom;
+  const updateMdastNode = useMdastNodeUpdater();
+  const { mdastNode } = props;
 
-  // Safe update function
+  const stateToNode = [
+    {
+      type: 'mdxJsxAttribute',
+      name: 'center',
+      value: center,
+    },
+    {
+      type: 'mdxJsxAttribute',
+      name: 'zoom',
+      value: zoom,
+    },
+    {
+      type: 'mdxJsxAttribute',
+      name: 'datasetId',
+      value: datasetId,
+    },
+    {
+      type: 'mdxJsxAttribute',
+      name: 'layerId',
+      value: layerId,
+    },
+    {
+      type: 'mdxJsxAttribute',
+      name: 'dateTime',
+      value: dateTime,
+    },
+    {
+      type: 'mdxJsxAttribute',
+      name: 'compareDateTime',
+      value: compareDateTime,
+    },
+    {
+      type: 'mdxJsxAttribute',
+      name: 'compareLabel',
+      value: compareLabel,
+    },
+  ];
   const updateProps = () => {
     try {
       if (contextValue?.parentEditor && contextValue?.lexicalNode) {
@@ -149,6 +191,8 @@ const MapEditorWithPreview: React.FC<EditorMapProps> = (props) => {
   // Update lexical node when any property changes
   useEffect(() => {
     updateProps();
+    updateMdastNode({ ...mdastNode, attributes: stateToNode });
+
   }, [
     center,
     zoom,
@@ -242,6 +286,7 @@ const MapEditorWithPreview: React.FC<EditorMapProps> = (props) => {
 
 // This wrapper is used when the component is used in the editor
 const MapEditorWrapper: React.FC<EditorMapProps> = (props) => {
+
   try {
     const [editor] = useLexicalComposerContext();
 

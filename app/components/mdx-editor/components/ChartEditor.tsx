@@ -8,7 +8,7 @@ import { Button } from '@trussworks/react-uswds';
 import { ChartContextProvider, useChartContext } from '../utils/ChartContext';
 
 import { DEFAULT_CHART_PROPS } from './ChartPreview';
-import { MapField } from '../utils/CreateInterface';
+import { InputField } from '../utils/CreateInterface';
 import { ChartProps } from './types';
 import { useMdastNodeUpdater } from '@mdxeditor/editor';
 
@@ -140,7 +140,7 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
                 {interfaceList.map((input) => {
                   const { propName, fieldName, type } = input;
 
-                  return MapField({
+                  return InputField({
                     label: fieldName,
                     value: chartProps[propName],
                     onChange: setChartProps,
