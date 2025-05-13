@@ -18,7 +18,7 @@ import {
 import { DEFAULT_CHART_PROPS } from './ChartPreview';
 import { MapProps, ChartProps } from './types';
 
-const DEFAULT_MAP_PROPS: MapProps = {
+export const DEFAULT_MAP_PROPS: MapProps = {
   center: '[-94.5, 41.25]',
   zoom: '8.3',
   datasetId: 'no2',
@@ -51,16 +51,7 @@ export const LeftColumnEditor: React.FC<any> = ({ mdastNode, descriptor }) => {
   );
 };
 
-export const RightColumnComponent = () => {
-  return (
-    <div className='border rounded-md p-4 bg-gray-100'>
-      <h4 className='text-md font-semibold mb-2'>Custom Component</h4>
-      <MapEditorWrapper {...DEFAULT_MAP_PROPS} />
-    </div>
-  );
-};
-
-export const InsertMapButton = () => {
+export const InsertMapButton = (props) => {
   const insertJsx = usePublisher(insertJsx$);
 
   const handleClick = () => {
@@ -84,33 +75,6 @@ export const InsertMapButton = () => {
     >
       <Icon.Map className='margin-right-05 width-3 height-3' />
       Add Map
-    </Button>
-  );
-};
-
-export const InsertTextBlock = () => {
-  const insertJsx = usePublisher(insertJsx$);
-
-  const handleClick = () => {
-    try {
-      insertJsx({
-        name: 'Prose',
-        kind: 'text',
-        props: [],
-      });
-    } catch (error) {
-      console.error('Error inserting Map component:', error);
-      alert('Could not insert Map component. See console for details.');
-    }
-  };
-
-  return (
-    <Button
-      onClick={handleClick}
-      title='Insert Map'
-      className='text-sm display-flex flex-align-center padding-1'
-    >
-      text section
     </Button>
   );
 };

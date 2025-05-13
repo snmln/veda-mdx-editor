@@ -135,7 +135,7 @@ const setInput = (
       );
   }
 };
-export const MapField: React.FC<FieldProps> = (props) => {
+export const InputField: React.FC<FieldProps> = (props) => {
   const {
     label,
     hint,

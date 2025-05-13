@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { customComponents } from './components';
 import { ChartWrapper } from './ChartPreview';
+import { DEFAULT_MAP_PROPS } from './ToolbarComponents';
 import './mdxpreview.scss';
 // Correctly import the default export from mdx-preview-map with error handling
 
@@ -16,17 +17,6 @@ const ClientMapBlock = dynamic(() => import('./MapPreview'), {
     </div>
   ),
 });
-
-// Default map props
-const DEFAULT_MAP_PROPS = {
-  center: [-94.5, 41.25],
-  zoom: 8.3,
-  datasetId: 'no2',
-  layerId: 'no2-monthly-diff',
-  dateTime: '2024-05-31',
-  compareDateTime: '2023-05-31',
-  compareLabel: 'May 2024 VS May 2023',
-};
 
 const MapWrapper = (props) => {
   try {
@@ -58,13 +48,11 @@ const MapWrapper = (props) => {
       <ClientMapBlock
         center={center}
         zoom={zoom}
-        datasetId={props.datasetId || DEFAULT_MAP_PROPS.datasetId}
-        layerId={props.layerId || DEFAULT_MAP_PROPS.layerId}
-        dateTime={props.dateTime || DEFAULT_MAP_PROPS.dateTime}
-        compareDateTime={
-          props.compareDateTime || DEFAULT_MAP_PROPS.compareDateTime
-        }
-        compareLabel={props.compareLabel || DEFAULT_MAP_PROPS.compareLabel}
+        datasetId={props.datasetId}
+        layerId={props.layerId}
+        dateTime={props.dateTime}
+        compareDateTime={props.compareDateTime}
+        compareLabel={props.compareLabel}
       />
     );
   } catch (error) {
@@ -108,12 +96,13 @@ const components = {
   },
 
   Map: MapWrapper,
-
+  Chart: ChartWrapper,
   blockquote: (props) => (
     <blockquote className='border-l-4 border-gray-300 pl-4 italic' {...props} />
   ),
-  Prose: (props) => <div {...props}></div>,
-  Chart: ChartWrapper,
+  Prose: (props) => {
+    return <div {...props}></div>;
+  },
 };
 
 export function SimpleMDXPreview({ source }: MDXPreviewProps) {
