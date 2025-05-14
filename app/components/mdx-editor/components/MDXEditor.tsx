@@ -31,6 +31,8 @@ import {
   CodeMirrorEditor,
   useMdastNodeUpdater,
 } from '@mdxeditor/editor';
+
+import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { MapIcon } from '@heroicons/react/24/outline';
 import '@mdxeditor/editor/style.css';
 import dynamic from 'next/dynamic';
@@ -43,7 +45,7 @@ import {
   InsertLineGraph,
   InsertTwoColumnButton,
 } from './ToolbarComponents';
-import './mdxpreview.scss';
+// import './mdxpreview.scss';
 
 // Import our map editor with live preview component
 const MapEditorWrapper = dynamic(() => import('./MapEditor'), {
@@ -59,6 +61,13 @@ interface MDXEditorWrapperProps {
   markdown: string;
   onChange: (content: string) => void;
 }
+const initialConfig = {
+  namespace: 'MyEditor', // Unique namespace for this editor instance
+  onError: (error) => {
+    console.error('Lexical editor error:', error);
+  },
+  // ... other Lexical configuration options if needed
+};
 const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
     name: 'TwoColumn',
@@ -101,7 +110,9 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     Editor: (props) => {
       return (
         <>
-          <MapEditorWrapper props={{ ...props }} />
+          <LexicalComposer initialConfig={initialConfig}>
+            <MapEditorWrapper props={{ ...props }} />
+          </LexicalComposer>
         </>
       );
     },
@@ -132,7 +143,9 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     Editor: (props) => {
       return (
         <>
-          <ChartEditorWrapper props />
+          <LexicalComposer initialConfig={initialConfig}>
+            <ChartEditorWrapper props />
+          </LexicalComposer>
         </>
       );
     },
@@ -161,14 +174,6 @@ export function MDXEditorEnhanced({
           imagePlugin(),
           jsxPlugin({
             jsxComponentDescriptors,
-            jsxComponentModules: [
-              {
-                components: {
-                  Marker,
-                  BlockNode,
-                },
-              },
-            ],
           }),
           toolbarPlugin({
             toolbarContents: () => (
