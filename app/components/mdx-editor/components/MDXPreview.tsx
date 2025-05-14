@@ -6,7 +6,14 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { customComponents } from './components';
 import { ChartWrapper } from './ChartPreview';
 import { DEFAULT_MAP_PROPS } from './ToolbarComponents';
-import './mdxpreview.scss';
+// import '../../../styles/index.scss';
+// import '@teamimpact/veda-ui/lib/main.css';
+import { PageMainContent } from '@lib';
+import DevseedUIThemeProvider from 'app/store/providers/theme';
+import VedaUIConfigProvider from 'app/store/providers/veda-ui-config';
+import DataProvider from 'app/store/providers/data';
+import { mockDatasets } from './MapPreview';
+import Providers from 'app/(datasets)/providers';
 // Correctly import the default export from mdx-preview-map with error handling
 
 const ClientMapBlock = dynamic(() => import('./MapPreview'), {
@@ -69,13 +76,47 @@ interface MDXPreviewProps {
   source: string;
 }
 
+function slugify(str) {
+  return str
+    .toString()
+    .toLowerCase()
+    .trim() // Remove whitespace from both ends of a string
+    .replace(/\s+/g, '-') // Replace spaces with -
+    .replace(/&/g, '-and-') // Replace & with 'and'
+    .replace(/[^\w\-]+/g, '') // Remove all non-word characters except for -
+    .replace(/\-\-+/g, '-'); // Replace multiple - with single -
+}
+function createHeading(level) {
+  const Heading = ({ children }: { children: JSX.Element }) => {
+    const slug = slugify(children);
+    return React.createElement(
+      `h${level}`,
+      { id: slug },
+      [
+        React.createElement('a', {
+          href: `#${slug}`,
+          key: `link-${slug}`,
+          className: 'anchor',
+        }),
+      ],
+      children,
+    );
+  };
+
+  Heading.displayName = `Heading${level}`;
+
+  return Heading;
+}
 // Define all components used in MDX
 const components = {
   ...customComponents,
   // Basic markdown components
-  h1: (props) => <h1 className='text-2xl font-bold mt-6 mb-4' {...props} />,
-  h2: (props) => <h2 className='text-xl font-bold mt-5 mb-3' {...props} />,
-  h3: (props) => <h3 className='text-lg font-bold mt-4 mb-2' {...props} />,
+  h1: createHeading(1),
+  h2: createHeading(2),
+  h3: createHeading(3),
+  h4: createHeading(4),
+  h5: createHeading(5),
+  h6: createHeading(6),
   p: (props) => <p className='mb-4' {...props} />,
   ul: (props) => <ul className='list-disc ml-5 mb-4' {...props} />,
   ol: (props) => <ol className='list-decimal ml-5 mb-4' {...props} />,
@@ -107,11 +148,21 @@ const components = {
 
 export function SimpleMDXPreview({ source }: MDXPreviewProps) {
   // Use an empty string as a default if source is undefined
+  // const datasets = getDatasetsMetadata();
   const safeSource = source || '';
 
   return (
-    <Suspense fallback={<div className='p-4'>Loading MDX preview...</div>}>
-      <MDXRemote source={safeSource} components={components} />
-    </Suspense>
+    <section>
+      <article className='prose'>
+        <Providers datasets={mockDatasets}>
+          <h1>THIS IS A TEST</h1>
+          <Suspense
+            fallback={<div className='p-4'>Loading MDX preview...</div>}
+          >
+            <MDXRemote source={safeSource} components={components} />
+          </Suspense>
+        </Providers>
+      </article>
+    </section>
   );
 }
