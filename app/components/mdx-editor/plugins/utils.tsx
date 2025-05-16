@@ -1,5 +1,9 @@
 import { ElementNode } from 'lexical';
-
+//BREAD CRUMBS:
+// Need to reserialize the components into <block<prose> structure
+// You can do so either through string manipulation, but want to keept hat in the back pocket for the time being
+// 
+// Should go through the lexical node functionality and create groups based off how that is handled. 
 export class BlockNode extends ElementNode {
   static getType() {
     return 'block';
