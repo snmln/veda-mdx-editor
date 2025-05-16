@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { MapContextProvider, useMapContext } from '../utils/MapContext';
@@ -94,8 +93,7 @@ const ClientMapBlock = dynamic(
 );
 
 // Map editor component that includes both preview and editable properties
-const MapEditorWithPreview: React.FC<any> = ( props ) => {
-
+const MapEditorWithPreview: React.FC<any> = (props) => {
   const contextValue = useMapContext();
   const [isEditing, setIsEditing] = useState(true);
   const [center, setCenter] = useState(props.center || '[-94.5, 41.25]');
@@ -109,7 +107,6 @@ const MapEditorWithPreview: React.FC<any> = ( props ) => {
   const [compareLabel, setCompareLabel] = useState(
     props.compareLabel || 'May 2024 VS May 2023',
   );
-
 
   // Parse values for the map preview
   const parsedCenter =
@@ -192,7 +189,6 @@ const MapEditorWithPreview: React.FC<any> = ( props ) => {
   useEffect(() => {
     updateProps();
     updateMdastNode({ ...mdastNode, attributes: stateToNode });
-
   }, [
     center,
     zoom,
@@ -286,6 +282,7 @@ const MapEditorWithPreview: React.FC<any> = ( props ) => {
 
 // This wrapper is used when the component is used in the editor
 const MapEditorWrapper: React.FC<EditorMapProps> = (props) => {
+  const [editor] = useLexicalComposerContext();
 
   try {
     const [editor] = useLexicalComposerContext();

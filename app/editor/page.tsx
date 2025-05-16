@@ -9,7 +9,10 @@ import React, {
   useEffect,
 } from 'react';
 import dynamic from 'next/dynamic';
-import { customComponents } from '../components/mdx-editor/components/components';
+import Providers from 'app/(datasets)/providers';
+import { mockDatasets } from '../components/mdx-editor/components/MapPreview';
+import { LegacyGlobalStyles } from '@lib';
+import { LexicalComposer } from '@lexical/react/LexicalComposer';
 
 // Use a stable key to preserve the editor state
 const EDITOR_KEY = 'stable-mdx-editor-instance';
@@ -65,26 +68,33 @@ This is a live editor where you can write and preview MDX content.
 -   Insert custom Map components
 
 Try editing this content!
-
- 
 `;
 
 export default function EditorPage() {
   const [mdxContent, setMdxContent] = useState(initialContent);
+  const [reserializedMdxContent, setReserializedMdxContent] = useState('');
+
   const [selectedTab, setSelectedTab] = useState(0);
   const [editorMounted, setEditorMounted] = useState(false);
   const editorContainerRef = useRef(null);
+  const reserializeMdxContent = () => {
+    const placeholdermdx = mdxContent;
+    // setReserializedMdxContent(
+    //   `<Block><Prose>${placeholdermdx}</Block></Prose>`,
+    // );
+  };
 
   const handleContentChange = useCallback((content: string) => {
     setMdxContent(content);
-    //console.log('MDX Content changed:', content);
-    console.log('🔎 Updated MDX content:', content);
+
+    // console.log('🔎 Updated MDX content:', content);
     //alert(`Updated MDX content:\n${content.substring(0, 200)}...`);
   }, []);
 
   // Set editor as mounted once it's loaded
   useEffect(() => {
     setEditorMounted(true);
+    reserializeMdxContent();
   }, []);
 
   // This function handles tab switching
@@ -109,97 +119,110 @@ export default function EditorPage() {
   return (
     <div className='container mx-auto p-4 max-w-5xl min-h-screen bg-gray-50'>
       {/* Custom Tab Buttons */}
-      <div className='flex space-x-4 mb-4'>
-        <button
-          onClick={() => handleTabChange(0)}
-          className={`px-4 py-2 rounded-lg font-medium ${
-            selectedTab === 0
-              ? 'bg-blue-600 text-blue'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
-        >
-          Editor
-        </button>
-        <button
-          onClick={() => handleTabChange(1)}
-          className={`px-4 py-2 rounded-lg font-medium ${
-            selectedTab === 1
-              ? 'bg-blue-600 text-blue'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
-        >
-          Preview
-        </button>
-        <button
-          onClick={() => handleTabChange(2)}
-          className={`px-4 py-2 rounded-lg font-medium ${
-            selectedTab === 2
-              ? 'bg-blue-600 text-blue'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
-        >
-          Source
-        </button>
-      </div>
-
-      {/* Content Panel */}
-      <div className='border rounded-lg bg-white shadow-lg h-[600px] overflow-hidden relative'>
-        {/* Editor Container - Always mounted but can be visually hidden */}
-        <div
-          ref={editorContainerRef}
-          className={`h-full w-full ${selectedTab === 0 ? '' : 'sr-only'}`}
-          style={{
-            visibility: selectedTab === 0 ? 'visible' : 'hidden',
-            position: selectedTab === 0 ? 'static' : 'absolute',
-          }}
-        >
-          {editorMounted && (
-            <Suspense
-              fallback={
-                <div className='h-full flex items-center justify-center'>
-                  Loading editor...
-                </div>
-              }
-            >
-              <MDXEditorEnhanced
-                key={EDITOR_KEY}
-                markdown={mdxContent}
-                onChange={handleContentChange}
-              />
-            </Suspense>
-          )}
+      <Providers datasets={mockDatasets}>
+        <LegacyGlobalStyles />
+        <div className='flex space-x-4 mb-4'>
+          <button
+            onClick={() => handleTabChange(0)}
+            className={`px-4 py-2 rounded-lg font-medium ${
+              selectedTab === 0
+                ? 'bg-blue-600 text-blue'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            Editor
+          </button>
+          <button
+            onClick={() => handleTabChange(1)}
+            className={`px-4 py-2 rounded-lg font-medium ${
+              selectedTab === 1
+                ? 'bg-blue-600 text-blue'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            Preview
+          </button>
+          <button
+            onClick={() => handleTabChange(2)}
+            className={`px-4 py-2 rounded-lg font-medium ${
+              selectedTab === 2
+                ? 'bg-blue-600 text-blue'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            Source
+          </button>
         </div>
 
-        {/* Preview Panel - Only mounted when active */}
-        {selectedTab === 1 && (
-          <div className='h-full w-full'>
-            <div className='prose max-w-none p-6 h-full overflow-auto'>
+        {/* Content Panel */}
+        <div className='border rounded-lg bg-white shadow-lg h-[600px] overflow-hidden relative'>
+          {/* Editor Container - Always mounted but can be visually hidden */}
+          <div
+            ref={editorContainerRef}
+            className={`h-full w-full ${selectedTab === 0 ? '' : 'sr-only'}`}
+            style={{
+              visibility: selectedTab === 0 ? 'visible' : 'hidden',
+              position: selectedTab === 0 ? 'static' : 'absolute',
+            }}
+          >
+            {editorMounted && (
               <Suspense
                 fallback={
-                  <div className='flex items-center justify-center h-full'>
-                    Loading MDX preview...
+                  <div className='h-full flex items-center justify-center'>
+                    Loading editor...
                   </div>
                 }
               >
-                <SimpleMDXPreview source={mdxContent} />
+                <LexicalComposer initialConfig={initialConfig}>
+                  <MDXEditorEnhanced
+                    key={EDITOR_KEY}
+                    markdown={mdxContent}
+                    onChange={handleContentChange}
+                    editorMounted={editorMounted}
+                  />
+                </LexicalComposer>
               </Suspense>
-            </div>
+            )}
           </div>
-        )}
 
-        {/* Source View - Only mounted when active */}
-        {selectedTab === 2 && (
-          <div className='h-full w-full'>
-            <div className='p-4 h-full overflow-auto'>
-              <div className='bg-white-50 rounded-lg border border-gray-300 p-4 h-full font-mono text-sm overflow-auto'>
-                <pre className='whitespace-pre-wrap break-words'>
-                  {mdxContent}
-                </pre>
+          {/* Preview Panel - Only mounted when active */}
+          {selectedTab === 1 && (
+            <div className='h-full w-full'>
+              <div className='prose max-w-none p-6 h-full overflow-auto'>
+                <Suspense
+                  fallback={
+                    <div className='flex items-center justify-center h-full'>
+                      Loading MDX preview...
+                    </div>
+                  }
+                >
+                  <SimpleMDXPreview source={mdxContent} />
+                </Suspense>
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+
+          {/* Source View - Only mounted when active */}
+          {selectedTab === 2 && (
+            <div className='h-full w-full'>
+              <div className='p-4 h-full overflow-auto'>
+                <div className='bg-white-50 rounded-lg border border-gray-300 p-4 h-full font-mono text-sm overflow-auto'>
+                  <pre className='whitespace-pre-wrap break-words'>
+                    {mdxContent}
+                  </pre>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </Providers>
     </div>
   );
 }
+const initialConfig = {
+  namespace: 'MyEditor', // Unique namespace for this editor instance
+  onError: (error) => {
+    console.error('Lexical editor error:', error);
+  },
+  // ... other Lexical configuration options if needed
+};

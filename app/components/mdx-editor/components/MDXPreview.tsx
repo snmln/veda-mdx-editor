@@ -6,12 +6,18 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { customComponents } from './components';
 import { ChartWrapper } from './ChartPreview';
 import { DEFAULT_MAP_PROPS } from './ToolbarComponents';
-// import '../../../styles/index.scss';
-// import '@teamimpact/veda-ui/lib/main.css';
-import { PageMainContent } from '@lib';
-import DevseedUIThemeProvider from 'app/store/providers/theme';
-import VedaUIConfigProvider from 'app/store/providers/veda-ui-config';
-import DataProvider from 'app/store/providers/data';
+import { highlight } from 'sugar-high';
+import Link from 'next/link';
+
+import {
+  Block,
+  Prose,
+  Caption,
+  Chapter,
+  Figure,
+  Image,
+  LegacyGlobalStyles,
+} from '@lib';
 import { mockDatasets } from './MapPreview';
 import Providers from 'app/(datasets)/providers';
 // Correctly import the default export from mdx-preview-map with error handling
@@ -71,6 +77,32 @@ const MapWrapper = (props) => {
     );
   }
 };
+function Table({ data }: { data: any }) {
+  const headers = data.headers.map((header, index) => (
+    <th key={index}>{header}</th>
+  ));
+  const rows = data.rows.map((row, index) => (
+    <tr key={index}>
+      {row.map((cell, cellIndex) => (
+        <td key={cellIndex}>{cell}</td>
+      ))}
+    </tr>
+  ));
+
+  return (
+    <table>
+      <thead>
+        <tr>{headers}</tr>
+      </thead>
+      <tbody>{rows}</tbody>
+    </table>
+  );
+}
+
+function Code({ children, ...props }: { children: any }) {
+  const codeHTML = highlight(children);
+  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
+}
 
 interface MDXPreviewProps {
   source: string;
@@ -117,11 +149,15 @@ const components = {
   h4: createHeading(4),
   h5: createHeading(5),
   h6: createHeading(6),
-  p: (props) => <p className='mb-4' {...props} />,
-  ul: (props) => <ul className='list-disc ml-5 mb-4' {...props} />,
-  ol: (props) => <ol className='list-decimal ml-5 mb-4' {...props} />,
-  li: (props) => <li className='mb-1' {...props} />,
-  Block: (props) => <div {...props} />,
+  code: Code,
+  Table,
+  Block: Block,
+  Prose: Prose,
+  Caption: Caption,
+  Figure: Figure,
+  Image: Image,
+  Link: Link,
+  Chapter: Chapter,
   TwoColumn: (props) => {
     return (
       <div className='grid-container maxw-full'>
@@ -138,12 +174,6 @@ const components = {
 
   Map: MapWrapper,
   Chart: ChartWrapper,
-  blockquote: (props) => (
-    <blockquote className='border-l-4 border-gray-300 pl-4 italic' {...props} />
-  ),
-  Prose: (props) => {
-    return <div {...props}></div>;
-  },
 };
 
 export function SimpleMDXPreview({ source }: MDXPreviewProps) {
@@ -155,7 +185,8 @@ export function SimpleMDXPreview({ source }: MDXPreviewProps) {
     <section>
       <article className='prose'>
         <Providers datasets={mockDatasets}>
-          <h1>THIS IS A TEST</h1>
+          <LegacyGlobalStyles />
+
           <Suspense
             fallback={<div className='p-4'>Loading MDX preview...</div>}
           >

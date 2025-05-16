@@ -1,8 +1,6 @@
-// app/components/mdx-editor-enhanced.tsx
-
 'use client';
 
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   headingsPlugin,
   listsPlugin,
@@ -18,19 +16,35 @@ import {
   CreateLink,
   CodeToggle,
   jsxPlugin,
-  GenericJsxEditor,
-  JsxComponentDescriptor,
-  Button,
   InsertImage,
   imagePlugin,
-  usePublisher,
-  insertJsx$,
   ListsToggle,
   MDXEditor,
   NestedLexicalEditor,
   CodeMirrorEditor,
   useMdastNodeUpdater,
+  rootEditor$,
+  addImportVisitor$,
+  realmPlugin,
+  Cell,
+  Signal,
+  useCellValues,
+  markdown$,
 } from '@mdxeditor/editor';
+import {
+  $getRoot,
+  $getSelection,
+  LexicalEditor,
+  $isRangeSelection,
+  $isParagraphNode,
+  $isElementNode,
+  $isTextNode,
+  ElementNode,
+  TextNode,
+  LexicalNode,
+  $createParagraphNode,
+  $createTextNode,
+} from 'lexical';
 
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { MapIcon } from '@heroicons/react/24/outline';
@@ -45,22 +59,18 @@ import {
   InsertLineGraph,
   InsertTwoColumnButton,
 } from './ToolbarComponents';
-// import './mdxpreview.scss';
-
-// Import our map editor with live preview component
-const MapEditorWrapper = dynamic(() => import('./MapEditor'), {
-  ssr: false,
-  loading: () => <div className='p-4 text-center'>Loading map editor...</div>,
-});
-const ChartEditorWrapper = dynamic(() => import('./ChartEditor'), {
-  ssr: false,
-  loading: () => <div className='p-4 text-center'>Loading Chart editor...</div>,
-});
+import { $wrapNodes } from '@lexical/selection';
+import { $createCodeNode } from '@lexical/code';
+import { jsxComponentDescriptors } from './ComponentDescriptors';
+import { nodeGroupingPlugin } from '../plugins/mdxGrouping';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { $createBlockNode, $createProseNode } from '../plugins/utils';
 
 interface MDXEditorWrapperProps {
   markdown: string;
   onChange: (content: string) => void;
 }
+
 const initialConfig = {
   namespace: 'MyEditor', // Unique namespace for this editor instance
   onError: (error) => {
@@ -68,99 +78,77 @@ const initialConfig = {
   },
   // ... other Lexical configuration options if needed
 };
-const jsxComponentDescriptors: JsxComponentDescriptor[] = [
-  {
-    name: 'TwoColumn',
-    kind: 'flow',
-    source: './components', // Adjust the path
-    hasChildren: true,
-    props: [{ name: 'children', type: 'object' }],
-    Editor: (props) => {
-      return <TwoColumnEditorWrapper props={{ ...props }} />;
-    },
-  },
-  {
-    name: 'LeftColumn',
-    kind: 'flow',
-    source: './components',
-    hasChildren: true,
-    props: [{ name: 'children', type: 'object' }],
-  },
-  {
-    name: 'RightColumn',
-    kind: 'flow',
-    source: './components',
-    hasChildren: true,
-    props: [{ name: 'children', type: 'object' }],
-  },
-  {
-    name: 'Map',
-    kind: 'text',
-    source: '@teamimpact/veda-ui',
-    props: [
-      { name: 'center', type: 'string' },
-      { name: 'zoom', type: 'string' },
-      { name: 'datasetId', type: 'string' },
-      { name: 'layerId', type: 'string' },
-      { name: 'dateTime', type: 'string' },
-      { name: 'compareDateTime', type: 'string' },
-      { name: 'compareLabel', type: 'string' },
-    ],
-    hasChildren: false,
-    Editor: (props) => {
-      return (
-        <>
-          <LexicalComposer initialConfig={initialConfig}>
-            <MapEditorWrapper props={{ ...props }} />
-          </LexicalComposer>
-        </>
-      );
-    },
-  },
 
-  {
-    name: 'Chart',
-    kind: 'text',
-    source: '@teamimpact/veda-ui',
-    props: [
-      { name: 'dataPath', type: 'string' },
-      { name: 'dateFormat', type: 'string' },
-      { name: 'idKey', type: 'string' },
-      { name: 'xKey', type: 'string' },
-      { name: 'yKey', type: 'string' },
-      { name: 'yAxisLabel', type: 'string' },
-      { name: 'xAxisLabel', type: 'string' },
-      { name: 'highlightStart', type: 'string' },
-      { name: 'highlightEnd', type: 'string' },
-      { name: 'highlightLabel', type: 'string' },
-      { name: 'availableDomain', type: 'string' },
-      { name: 'altTitle', type: 'string' },
-      { name: 'colorScheme', type: 'string' },
-      { name: 'colors', type: 'string' },
-      { name: 'altDesc', type: 'string' },
-    ],
-    hasChildren: false,
-    Editor: (props) => {
-      return (
-        <>
-          <LexicalComposer initialConfig={initialConfig}>
-            <ChartEditorWrapper props />
-          </LexicalComposer>
-        </>
-      );
-    },
-  },
-];
+export function MDXEditorEnhanced({ markdown, onChange, editorMounted }: any) {
+  const [editor] = useLexicalComposerContext();
+  const groupMdxWithLexical = useCallback(() => {
+    console.log('groupMdxWithLexical was reacehd');
 
-export function MDXEditorEnhanced({
-  markdown,
-  onChange,
-}: MDXEditorWrapperProps) {
+    if (!editor) {
+      return;
+    }
+
+    editor.update(() => {
+      const root = $getRoot();
+
+      const children = root.getChildren();
+      console.log('children', children);
+
+      const newChildren = [];
+      let currentBlockChildren = [];
+      let inBlock = false;
+
+      children.forEach((node) => {
+        // Check if the node is a heading or paragraph (you'll need to inspect the node's type)
+        const isHeadingOrParagraphNode =
+          node.getType() === 'heading' || node.getType() === 'paragraph';
+        if (isHeadingOrParagraphNode) {
+          currentBlockChildren.push(node);
+          inBlock = true;
+        } else {
+          if (inBlock && currentBlockChildren.length > 0) {
+            const blockNode = $createBlockNode(); // You'll need to create your custom BlockNode
+            const proseNode = $createProseNode(); // You'll need to create your custom ProseNode
+            currentBlockChildren.forEach((child) => proseNode.append(child));
+            blockNode.append(proseNode);
+            newChildren.push(blockNode);
+            currentBlockChildren = [];
+            inBlock = false;
+          }
+          newChildren.push(node);
+        }
+      });
+
+      // Handle any remaining nodes in the last block
+      if (inBlock && currentBlockChildren.length > 0) {
+        const blockNode = $createBlockNode();
+        const proseNode = $createProseNode();
+        currentBlockChildren.forEach((child) => proseNode.append(child));
+        blockNode.append(proseNode);
+        newChildren.push(blockNode);
+      }
+
+      // Clear the root and append the new structure
+      root.clear();
+      newChildren.forEach((node) => root.append(node));
+    });
+  }, [editor]);
+  useEffect(() => {
+    console.log('useeffect called editorMounted', editorMounted, editor);
+    if (editorMounted && editor) {
+      // You might want to trigger this on a specific action (e.g., before saving)
+      // For now, let's trigger it after the initial load
+      groupMdxWithLexical();
+    }
+  }, [editorMounted, editor, groupMdxWithLexical]);
   return (
     <div className='h-[600px] border rounded-lg overflow-hidden'>
       <MDXEditor
         markdown={markdown}
-        onChange={onChange}
+        onChange={(e) => {
+          groupMdxWithLexical();
+          return onChange(e);
+        }}
         contentEditableClassName='prose prose-lg max-w-none min-h-[500px] outline-none px-4 py-2'
         plugins={[
           scrollytellingButtonPlugin(),
@@ -175,6 +163,8 @@ export function MDXEditorEnhanced({
           jsxPlugin({
             jsxComponentDescriptors,
           }),
+          markdownShortcutPlugin(),
+          nodeGroupingPlugin(),
           toolbarPlugin({
             toolbarContents: () => (
               <div className='grid-column'>

@@ -19,7 +19,7 @@ const MapBlock = dynamic(() => import('@lib').then((mod) => mod.MapBlock), {
 });
 
 // Mock dataset based on the NO2 dataset configuration
-const mockDatasets = [
+export const mockDatasets = [
   {
     metadata: {
       id: 'no2',

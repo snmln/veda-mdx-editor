@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { Icon } from '@trussworks/react-uswds';
-import Dropdown from './dropdown';
+
 import { NestedLexicalEditor, useMdastNodeUpdater } from '@mdxeditor/editor';
-import { cn } from '@/lib/utils';
-import MapEditorWrapper from './MapEditor';
+
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import TwoColumnIcon from '../assets/TwoColumnIcon';
 import {
