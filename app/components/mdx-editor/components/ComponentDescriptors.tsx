@@ -1,9 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { JsxComponentDescriptor } from '@mdxeditor/editor';
+import {
+  DirectiveDescriptor,
+  GenericDirectiveEditor,
+  GenericJsxEditor,
+  JsxComponentDescriptor,
+} from '@mdxeditor/editor';
 import { TwoColumnEditorWrapper } from './TwoColumnEditor';
 import MapEditorWrapper from './MapEditor';
 import ChartEditorWrapper from './ChartEditor';
+import { Prose } from '@lib';
 
 export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
@@ -52,7 +58,22 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       );
     },
   },
-
+  {
+    name: 'Block',
+    kind: 'text',
+    source: '@teamimpact/veda-ui',
+    props: [],
+    hasChildren: true,
+    Editor: GenericJsxEditor,
+  },
+  {
+    name: 'Prose',
+    kind: 'text',
+    source: '@teamimpact/veda-ui',
+    props: [],
+    hasChildren: true,
+    Editor: GenericJsxEditor,
+  },
   {
     name: 'Chart',
     kind: 'text',
@@ -84,3 +105,15 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     },
   },
 ];
+
+export const CalloutDirectiveDescriptor: DirectiveDescriptor = {
+  name: 'callout',
+  testNode(node) {
+    return node.name === 'callout';
+  },
+  // set some attribute names to have the editor display a property editor popup.
+  attributes: [],
+  // used by the generic editor to determine whether or not to render a nested editor.
+  hasChildren: true,
+  Editor: GenericDirectiveEditor,
+};

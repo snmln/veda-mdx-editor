@@ -13,7 +13,7 @@ import Providers from 'app/(datasets)/providers';
 import { mockDatasets } from '../components/mdx-editor/components/MapPreview';
 import { LegacyGlobalStyles } from '@lib';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
-
+import { reserializedMdxContent } from '../components/mdx-editor/utils/reserializeMDast';
 // Use a stable key to preserve the editor state
 const EDITOR_KEY = 'stable-mdx-editor-instance';
 
@@ -72,29 +72,21 @@ Try editing this content!
 
 export default function EditorPage() {
   const [mdxContent, setMdxContent] = useState(initialContent);
-  const [reserializedMdxContent, setReserializedMdxContent] = useState('');
-
+  const [reserializedMdxContent, setReserializedMdxContent] =
+    useState(initialContent);
+  console.log('mdxContent', mdxContent);
   const [selectedTab, setSelectedTab] = useState(0);
   const [editorMounted, setEditorMounted] = useState(false);
   const editorContainerRef = useRef(null);
-  const reserializeMdxContent = () => {
-    const placeholdermdx = mdxContent;
-    // setReserializedMdxContent(
-    //   `<Block><Prose>${placeholdermdx}</Block></Prose>`,
-    // );
-  };
-
   const handleContentChange = useCallback((content: string) => {
     setMdxContent(content);
 
     // console.log('🔎 Updated MDX content:', content);
     //alert(`Updated MDX content:\n${content.substring(0, 200)}...`);
   }, []);
-
   // Set editor as mounted once it's loaded
   useEffect(() => {
     setEditorMounted(true);
-    reserializeMdxContent();
   }, []);
 
   // This function handles tab switching
@@ -179,6 +171,7 @@ export default function EditorPage() {
                     markdown={mdxContent}
                     onChange={handleContentChange}
                     editorMounted={editorMounted}
+                    previewMDAST={setReserializedMdxContent}
                   />
                 </LexicalComposer>
               </Suspense>
@@ -196,7 +189,7 @@ export default function EditorPage() {
                     </div>
                   }
                 >
-                  <SimpleMDXPreview source={mdxContent} />
+                  <SimpleMDXPreview source={reserializedMdxContent} />
                 </Suspense>
               </div>
             </div>
@@ -208,7 +201,7 @@ export default function EditorPage() {
               <div className='p-4 h-full overflow-auto'>
                 <div className='bg-white-50 rounded-lg border border-gray-300 p-4 h-full font-mono text-sm overflow-auto'>
                   <pre className='whitespace-pre-wrap break-words'>
-                    {mdxContent}
+                    {reserializedMdxContent}
                   </pre>
                 </div>
               </div>

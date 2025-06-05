@@ -75,8 +75,9 @@ const ClientChartBlock = dynamic(
 // Map editor component that includes both preview and editable properties
 const ChartEditorWithPreview: React.FC<any> = (props) => {
   const updateMdastNode = useMdastNodeUpdater();
-  const { mdastNode } = props;
 
+  const { mdastNode } = props;
+  
   const contextValue = useChartContext();
   const [isEditing, setIsEditing] = useState(true);
 
