@@ -200,83 +200,89 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
   ]);
 
   return (
-    <div className=' border-05 border-primary rounded-lg overflow-hidden shadow-sm bg-white'>
-      <div className='flex flex-col'>
-        <div className='padding-2 grid-container w-full maxw-full margin-2 bg-gray-10 radius-lg'>
-          {isEditing && (
-            <div>
-              <h3
-                className={`font-medium ${isEditing ? 'text-blue-700' : 'text-gray-500'} text-sm`}
-              >
-                Map Properties
-              </h3>
-              <div className='grid-row flex-align-end grid-gap-2'>
-                <MapField
-                  label='*Dataset ID'
-                  value={datasetId}
-                  onChange={setDatasetId}
-                  isRequired={true}
-                />
-                <MapField
-                  label='*Layer ID'
-                  value={layerId}
-                  onChange={setLayerId}
-                />
-                <MapField label='*Center' value={center} onChange={setCenter} />
-                <MapField
-                  label='*Zoom'
-                  value={zoom}
-                  onChange={setZoom}
-                  numeric={true}
-                />
-                <MapField
-                  label='*Date Time'
-                  value={dateTime}
-                  onChange={setDateTime}
-                  isDate={true}
-                />
-              </div>{' '}
-              <h4>Map Comparison</h4>
-              <div className='grid-row flex-align-end grid-gap-2'>
-                <MapField
-                  label='Compare Label'
-                  value={compareLabel}
-                  onChange={setCompareLabel}
-                />
-                <MapField
-                  label='Compare Date'
-                  value={compareDateTime}
-                  onChange={setCompareDateTime}
-                  isDate={true}
-                />
+    <>
+      <div className=' border-05 border-primary rounded-lg overflow-hidden shadow-sm bg-white'>
+        <div className='flex flex-col'>
+          <div className='padding-2 grid-container w-full maxw-full margin-2 bg-gray-10 radius-lg'>
+            {isEditing && (
+              <div>
+                <h3
+                  className={`font-medium ${isEditing ? 'text-blue-700' : 'text-gray-500'} text-sm`}
+                >
+                  Map Properties
+                </h3>
+                <div className='grid-row flex-align-end grid-gap-2'>
+                  <MapField
+                    label='*Dataset ID'
+                    value={datasetId}
+                    onChange={setDatasetId}
+                    isRequired={true}
+                  />
+                  <MapField
+                    label='*Layer ID'
+                    value={layerId}
+                    onChange={setLayerId}
+                  />
+                  <MapField
+                    label='*Center'
+                    value={center}
+                    onChange={setCenter}
+                  />
+                  <MapField
+                    label='*Zoom'
+                    value={zoom}
+                    onChange={setZoom}
+                    numeric={true}
+                  />
+                  <MapField
+                    label='*Date Time'
+                    value={dateTime}
+                    onChange={setDateTime}
+                    isDate={true}
+                  />
+                </div>{' '}
+                <h4>Map Comparison</h4>
+                <div className='grid-row flex-align-end grid-gap-2'>
+                  <MapField
+                    label='Compare Label'
+                    value={compareLabel}
+                    onChange={setCompareLabel}
+                  />
+                  <MapField
+                    label='Compare Date'
+                    value={compareDateTime}
+                    onChange={setCompareDateTime}
+                    isDate={true}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <div className={`${isEditing && 'padding-top-2'}`}>
-            <Button
-              type='button'
-              className='bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md shadow flex items-center text-xs'
-              onClick={() => setIsEditing(!isEditing)}
-            >
-              {isEditing ? 'Collapse Map Editor' : 'Open Map Editor'}
-            </Button>
+            <div className={`${isEditing && 'padding-top-2'}`}>
+              <Button
+                type='button'
+                className='bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md shadow flex items-center text-xs'
+                onClick={() => setIsEditing(!isEditing)}
+              >
+                {isEditing ? 'Collapse Map Editor' : 'Open Map Editor'}
+              </Button>
+            </div>
+          </div>
+
+          <div className='relative'>
+            <ClientMapBlock
+              center={parsedCenter}
+              zoom={parsedZoom}
+              datasetId={datasetId}
+              layerId={layerId}
+              dateTime={dateTime}
+              compareDateTime={compareDateTime}
+              compareLabel={compareLabel}
+            />
           </div>
         </div>
-
-        <div className='relative'>
-          <ClientMapBlock
-            center={parsedCenter}
-            zoom={parsedZoom}
-            datasetId={datasetId}
-            layerId={layerId}
-            dateTime={dateTime}
-            compareDateTime={compareDateTime}
-            compareLabel={compareLabel}
-          />
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -288,14 +294,17 @@ const MapEditorWrapper: React.FC<EditorMapProps> = (props) => {
     const [editor] = useLexicalComposerContext();
 
     return (
-      <MapContextProvider
-        value={{
-          parentEditor: editor,
-          lexicalNode: props.node || createPlaceholderNode(),
-        }}
-      >
-        <MapEditorWithPreview {...props} />
-      </MapContextProvider>
+      <>
+        <MapContextProvider
+          value={{
+            parentEditor: editor,
+            lexicalNode: props.node || createPlaceholderNode(),
+          }}
+        >
+          {`\n`}
+          <MapEditorWithPreview {...props} />
+        </MapContextProvider>
+      </>
     );
   } catch (error) {
     console.error('Error in MapEditorWrapper:', error);

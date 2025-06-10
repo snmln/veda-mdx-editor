@@ -23,6 +23,30 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     },
   },
   {
+    name: 'Block',
+    kind: 'flow',
+    source: './components', // Adjust the path
+    hasChildren: true,
+    props: [],
+    Editor: GenericJsxEditor,
+  },
+  {
+    name: 'Break',
+    kind: 'flow',
+    source: './components', // Adjust the path
+    hasChildren: false,
+    props: [],
+    Editor: GenericJsxEditor,
+  },
+  {
+    name: 'Prose',
+    kind: 'flow',
+    source: './components', // Adjust the path
+    hasChildren: true,
+    props: [],
+    Editor: GenericJsxEditor,
+  },
+  {
     name: 'LeftColumn',
     kind: 'flow',
     source: './components',
@@ -58,22 +82,7 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       );
     },
   },
-  {
-    name: 'Block',
-    kind: 'text',
-    source: '@teamimpact/veda-ui',
-    props: [],
-    hasChildren: true,
-    Editor: GenericJsxEditor,
-  },
-  {
-    name: 'Prose',
-    kind: 'text',
-    source: '@teamimpact/veda-ui',
-    props: [],
-    hasChildren: true,
-    Editor: GenericJsxEditor,
-  },
+
   {
     name: 'Chart',
     kind: 'text',

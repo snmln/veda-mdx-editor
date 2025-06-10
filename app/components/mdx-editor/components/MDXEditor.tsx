@@ -60,6 +60,8 @@ import {
   InsertMapButton,
   InsertLineGraph,
   InsertTwoColumnButton,
+  InsertBlock,
+  InsertSectionBreak,
 } from './ToolbarComponents';
 import { $wrapNodes } from '@lexical/selection';
 import { $createCodeNode } from '@lexical/code';
@@ -74,6 +76,8 @@ import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkStringify from 'remark-stringify';
 import { visit } from 'unist-util-visit';
+import { fromMarkdown } from 'mdast-util-from-markdown';
+
 interface MDXEditorWrapperProps {
   markdown: string;
   onChange: (content: string) => void;
@@ -153,47 +157,6 @@ export function MDXEditorEnhanced({
   //     groupMdxWithLexical();
   //   }
   // }, [editorMounted, editor, groupMdxWithLexical]);
-  const mockProcessor = {
-    parse: (markdown) => {
-      // Simplified MDAST structure for demo
-      const lines = markdown.split('\n').filter((line) => line.trim());
-      const nodes = [];
-
-      lines.forEach((line) => {
-        if (line.startsWith('#')) {
-          const level = (line.match(/^#+/) || [''])[0].length;
-          nodes.push({
-            type: 'heading',
-            depth: level,
-            children: [{ type: 'text', value: line.replace(/^#+\s*/, '') }],
-          });
-        } else if (line.includes('[') && line.includes('](')) {
-          const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-          const matches = [...line.matchAll(linkRegex)];
-          if (matches.length > 0) {
-            nodes.push({
-              type: 'paragraph',
-              children: matches.map((match) => ({
-                type: 'link',
-                url: match[2],
-                children: [{ type: 'text', value: match[1] }],
-              })),
-            });
-          }
-        } else if (line.trim()) {
-          nodes.push({
-            type: 'paragraph',
-            children: [{ type: 'text', value: line }],
-          });
-        }
-      });
-
-      return {
-        type: 'root',
-        children: nodes,
-      };
-    },
-  };
 
   const mockVisit = (tree, nodeType, callback) => {
     const visit = (node) => {
@@ -235,25 +198,17 @@ export function MDXEditorEnhanced({
 
     try {
       const markdown = editorRef.current.getMarkdown();
-      console.log('Retrieved markdown:', markdown);
 
       if (markdown) {
-        const tree = mockProcessor.parse(markdown);
+        console.log('inside ifg', markdown);
+        const tree = fromMarkdown(markdown);
         setMdast(tree);
-        console.log('reserializedMdxContent EDITOR', reserializedMdxContent(tree));
-        previewMDAST(reserializedMdxContent(tree))
+        // console.log('reserializedMdxContent EDITOR',reserializedMdxContent(tree),);
+        previewMDAST(reserializedMdxContent(tree));
         // Analyze the tree
         const newStats = { headings: 0, links: 0, paragraphs: 0 };
 
-        mockVisit(tree, null, (node) => {
-          if (node.type === 'heading') newStats.headings++;
-          if (node.type === 'link') newStats.links++;
-          if (node.type === 'paragraph') newStats.paragraphs++;
-        });
-
-        setStats(newStats);
         console.log('MDAST:', tree);
-        console.log('Stats:', newStats);
       } else {
         alert('No markdown content found');
       }
@@ -306,6 +261,8 @@ export function MDXEditorEnhanced({
                   <InsertMapButton />
                   <InsertLineGraph />
                   <InsertTwoColumnButton />
+                  <InsertBlock />
+                  <InsertSectionBreak />
                 </div>
               </div>
             ),

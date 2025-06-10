@@ -13,7 +13,7 @@ import Providers from 'app/(datasets)/providers';
 import { mockDatasets } from '../components/mdx-editor/components/MapPreview';
 import { LegacyGlobalStyles } from '@lib';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { reserializedMdxContent } from '../components/mdx-editor/utils/reserializeMDast';
+
 // Use a stable key to preserve the editor state
 const EDITOR_KEY = 'stable-mdx-editor-instance';
 
@@ -74,7 +74,6 @@ export default function EditorPage() {
   const [mdxContent, setMdxContent] = useState(initialContent);
   const [reserializedMdxContent, setReserializedMdxContent] =
     useState(initialContent);
-  console.log('mdxContent', mdxContent);
   const [selectedTab, setSelectedTab] = useState(0);
   const [editorMounted, setEditorMounted] = useState(false);
   const editorContainerRef = useRef(null);
