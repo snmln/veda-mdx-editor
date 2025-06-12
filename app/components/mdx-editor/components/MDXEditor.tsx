@@ -60,7 +60,6 @@ import {
   InsertMapButton,
   InsertLineGraph,
   InsertTwoColumnButton,
-  InsertBlock,
   InsertSectionBreak,
 } from './ToolbarComponents';
 import { $wrapNodes } from '@lexical/selection';
@@ -77,6 +76,8 @@ import remarkParse from 'remark-parse';
 import remarkStringify from 'remark-stringify';
 import { visit } from 'unist-util-visit';
 import { fromMarkdown } from 'mdast-util-from-markdown';
+import { mdxJsx } from 'micromark-extension-mdx-jsx';
+import { mdxJsxFromMarkdown } from 'mdast-util-mdx-jsx';
 
 interface MDXEditorWrapperProps {
   markdown: string;
@@ -97,83 +98,9 @@ export function MDXEditorEnhanced({
   editorMounted,
   previewMDAST,
 }: any) {
-  // const [editor] = useLexicalComposerContext();
-  // const groupMdxWithLexical = useCallback(() => {
-  //   if (!editor) {
-  //     return;
-  //   }
-
-  //   editor.update(() => {
-  //     const root = $getRoot();
-
-  //     const children = root.getChildren();
-  //     console.log('editor', editor);
-
-  //     const newChildren = [];
-  //     let currentBlockChildren = [];
-  //     let inBlock = false;
-
-  //     children.forEach((node) => {
-  //       // Check if the node is a heading or paragraph (you'll need to inspect the node's type)
-  //       const isHeadingOrParagraphNode =
-  //         node.getType() === 'heading' || node.getType() === 'paragraph';
-  //       if (isHeadingOrParagraphNode) {
-  //         console.log('isHeadingOrParagraphNode', node.getType());
-  //         currentBlockChildren.push(node);
-  //         inBlock = true;
-  //       } else {
-  //         if (inBlock && currentBlockChildren.length > 0) {
-  //           const blockNode = $createBlockNode(); // You'll need to create your custom BlockNode
-  //           const proseNode = $createProseNode(); // You'll need to create your custom ProseNode
-  //           currentBlockChildren.forEach((child) => proseNode.append(child));
-  //           blockNode.append(proseNode);
-  //           newChildren.push(blockNode);
-  //           currentBlockChildren = [];
-  //           inBlock = false;
-  //         }
-  //         newChildren.push(node);
-  //       }
-  //     });
-
-  //     // Handle any remaining nodes in the last block
-  //     if (inBlock && currentBlockChildren.length > 0) {
-  //       const blockNode = $createBlockNode();
-  //       const proseNode = $createProseNode();
-  //       currentBlockChildren.forEach((child) => proseNode.append(child));
-  //       blockNode.append(proseNode);
-  //       newChildren.push(blockNode);
-  //     }
-
-  //     // Clear the root and append the new structure
-  //     root.clear();
-  //     newChildren.forEach((node) => root.append(node));
-  //   });
-  // }, [editor]);
-  // useEffect(() => {
-  //   console.log('useeffect called editorMounted', editorMounted, editor);
-  //   if (editorMounted && editor) {
-  //     // You might want to trigger this on a specific action (e.g., before saving)
-  //     // For now, let's trigger it after the initial load
-  //     groupMdxWithLexical();
-  //   }
-  // }, [editorMounted, editor, groupMdxWithLexical]);
-
-  const mockVisit = (tree, nodeType, callback) => {
-    const visit = (node) => {
-      if (!nodeType || node.type === nodeType) {
-        callback(node);
-      }
-      if (node.children) {
-        node.children.forEach(visit);
-      }
-    };
-    visit(tree);
-  };
-
   const editorRef = useRef(null);
   const [mdast, setMdast] = useState(null);
   const [isEditorReady, setIsEditorReady] = useState(false);
-  const [stats, setStats] = useState({ headings: 0, links: 0, paragraphs: 0 });
 
   // Check if editor is ready after mount
   useEffect(() => {
@@ -200,15 +127,23 @@ export function MDXEditorEnhanced({
       const markdown = editorRef.current.getMarkdown();
 
       if (markdown) {
-        console.log('inside ifg', markdown);
-        const tree = fromMarkdown(markdown);
-        setMdast(tree);
-        // console.log('reserializedMdxContent EDITOR',reserializedMdxContent(tree),);
-        previewMDAST(reserializedMdxContent(tree));
-        // Analyze the tree
-        const newStats = { headings: 0, links: 0, paragraphs: 0 };
+        const tree = fromMarkdown(markdown, {
+          extensions: [mdxJsx()],
+          mdastExtensions: [mdxJsxFromMarkdown()],
+        });
+        //mdxJsxFromMarkdown converts all contents of TwoCOlumn to 'code' blocks
+        //Below re parses it and converts back to accepted MDX values.
+        visit(tree, 'mdxJsxFlowElement', (node) => {
+          if (['RightColumn', 'LeftColumn'].includes(node.name)) {
+            const innerMarkdown = node.children[0].value;
+            const parsed = fromMarkdown(innerMarkdown).children;
 
-        console.log('MDAST:', tree);
+            node.children = parsed;
+          }
+        });
+        setMdast(tree);
+
+        previewMDAST(reserializedMdxContent(tree));
       } else {
         alert('No markdown content found');
       }
@@ -261,7 +196,7 @@ export function MDXEditorEnhanced({
                   <InsertMapButton />
                   <InsertLineGraph />
                   <InsertTwoColumnButton />
-                  <InsertBlock />
+
                   <InsertSectionBreak />
                 </div>
               </div>

@@ -6,7 +6,6 @@ export const TwoColumnEditorWrapper = ({ props }) => {
   const { mdastNode } = props;
 
   const updateMdastNode = useMdastNodeUpdater();
-  console.log('TwoColumnEditorWrapper mdastNode', mdastNode);
   const setInitialChildren = () => {
     const checkForColumns = (children) =>
       children.name === 'LeftColumn' || children.name === 'RightColumn';

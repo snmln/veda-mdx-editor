@@ -25,7 +25,7 @@ import Providers from 'app/(datasets)/providers';
 const ClientMapBlock = dynamic(() => import('./MapPreview'), {
   ssr: false,
   loading: () => (
-    <div className='h-[250px] flex items-center justify-center bg-blue-50 border rounded'>
+    <div className=' flex items-center justify-center bg-blue-50 border rounded'>
       <div className='text-blue-500'>Loading map preview...</div>
     </div>
   ),

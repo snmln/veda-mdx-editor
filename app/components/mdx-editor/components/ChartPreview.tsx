@@ -11,7 +11,7 @@ import { DatasetWithContent } from 'app/types/content';
 const Chart = dynamic(() => import('@lib').then((mod) => mod.Chart), {
   ssr: false,
   loading: () => (
-    <div className='h-[250px] flex items-center justify-center'>
+    <div className=' flex items-center justify-center'>
       Loading chart...
     </div>
   ),

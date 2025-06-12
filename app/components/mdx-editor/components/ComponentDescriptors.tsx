@@ -31,6 +31,14 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     Editor: GenericJsxEditor,
   },
   {
+    name: 'Figure',
+    kind: 'flow',
+    source: './components', // Adjust the path
+    hasChildren: true,
+    props: [],
+    Editor: GenericJsxEditor,
+  },
+  {
     name: 'Break',
     kind: 'flow',
     source: './components', // Adjust the path
@@ -43,7 +51,7 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     kind: 'flow',
     source: './components', // Adjust the path
     hasChildren: true,
-    props: [],
+    props: [{ name: 'children', type: 'object' }],
     Editor: GenericJsxEditor,
   },
   {

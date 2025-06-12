@@ -106,50 +106,7 @@ export const InsertLineGraph = (props) => {
   );
 };
 
-export const InsertBlock = (props) => {
-  const insertJsx = usePublisher(insertJsx$);
 
-  const handleClick = () => {
-    try {
-      insertJsx({
-        name: 'Block',
-        kind: 'text',
-        props: {},
-        children: [
-          {
-            type: 'mdxJsxFlowElement',
-            name: 'Prose',
-            props: {},
-            children: [
-              {
-                type: 'paragraph',
-                children: [
-                  {
-                    type: 'text',
-                    value: '',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      });
-    } catch (error) {
-      console.error('Error inserting Map component:', error);
-      alert('Could not insert chart component. See console for details.');
-    }
-  };
-
-  return (
-    <Button
-      onClick={handleClick}
-      title='Insert Map'
-      className='text-sm display-flex flex-align-center padding-1'
-    >
-      Insert Block
-    </Button>
-  );
-};
 export const InsertSectionBreak = (props) => {
   const insertJsx = usePublisher(insertJsx$);
 
