@@ -15,7 +15,11 @@ export const groupByBreakIntoBlocks = (ast) => {
             groups.push(currentGroup);
             currentGroup = [];
           }
-        } else if (child.name === 'Block') {
+        } else if (
+          child.name === 'Block' ||
+          child.name === 'Chart' ||
+          child.name === 'Map'
+        ) {
           groups.push(currentGroup);
           groups.push([child]);
 
