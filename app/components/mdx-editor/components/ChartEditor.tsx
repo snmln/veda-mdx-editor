@@ -44,19 +44,10 @@ const interfaceList = [
   { fieldName: 'Colors Scheme', propName: 'colorScheme', type: 'select' },
   { fieldName: 'X Axis Label', propName: 'xAxisLabel' },
   { fieldName: 'Y Axis Label', propName: 'yAxisLabel' },
-  {
-    fieldName: 'Highlight Start',
-    propName: 'highlightStart',
-  },
-  {
-    fieldName: 'Highlight End',
-    propName: 'highlightEnd',
-  },
+  { fieldName: 'Highlight Start', propName: 'highlightStart' },
+  { fieldName: 'Highlight End', propName: 'highlightEnd' },
   { fieldName: 'Highlight Label', propName: 'highlightLabel' },
-  {
-    fieldName: 'Available Domain',
-    propName: 'availableDomain',
-  },
+  { fieldName: 'Available Domain', propName: 'availableDomain' },
 ];
 
 // Import the actual map component for live preview
@@ -77,7 +68,7 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
   const updateMdastNode = useMdastNodeUpdater();
 
   const { mdastNode } = props;
-  
+
   const contextValue = useChartContext();
   const [isEditing, setIsEditing] = useState(true);
 

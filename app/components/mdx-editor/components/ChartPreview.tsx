@@ -11,9 +11,7 @@ import { DatasetWithContent } from 'app/types/content';
 const Chart = dynamic(() => import('@lib').then((mod) => mod.Chart), {
   ssr: false,
   loading: () => (
-    <div className=' flex items-center justify-center'>
-      Loading chart...
-    </div>
+    <div className=' flex items-center justify-center'>Loading chart...</div>
   ),
 });
 
@@ -62,7 +60,6 @@ const nightmockDatasets = [
 
 export function ClientChartBlock(props) {
   const transformed = transformToVedaData(nightmockDatasets as any);
-
   return (
     <DevseedUIThemeProvider>
       <VedaUIConfigProvider>
@@ -96,17 +93,22 @@ export const DEFAULT_CHART_PROPS = {
   colorScheme: 'Blues',
 };
 export const ChartWrapper = (props) => {
-
   const parsedStringToArray = (propsName) => {
-    return typeof props[propsName] === 'string'
-      ? props[propsName].replace(/[\\[\](){}]/g, '').split(',')
-      : DEFAULT_CHART_PROPS[propsName];
+    if (typeof props[propsName] === 'string') {
+      const stringToArray = props[propsName]
+        .replace(/[\\[\](){}]/g, '')
+        .split(',');
+      const trimmedArray = stringToArray.map((s) => s.trim());
+      return trimmedArray;
+    }
+    return DEFAULT_CHART_PROPS[propsName];
   };
+
   try {
     return (
       <ClientChartBlock
         {...props}
-        colors={parsedStringToArray('availableDomain')}
+        colors={parsedStringToArray('colors')}
         availableDomain={parsedStringToArray('availableDomain')}
       />
     );
