@@ -21,7 +21,31 @@ export const groupByBreakIntoBlocks = (ast) => {
           child.name === 'Map'
         ) {
           groups.push(currentGroup);
-          groups.push([child]);
+
+          const generatedProps = child.attributes.reduce((acc, item) => {
+            acc[item.name] = item.value;
+            return acc;
+          }, {});
+
+          const wrappedComponent = {
+            type: 'mdxJsxFlowElement',
+            name: 'Figure',
+            attributes: [],
+            children: [
+              { ...child },
+              {
+                type: 'mdxJsxFlowElement',
+                name: 'Caption',
+                attributes: [
+                  { name: 'attrAuthor', value: generatedProps.attrAuthor },
+                  { name: 'attrUrl', value: generatedProps.attrUrl },
+                ],
+                children: [{ type: 'text', value: generatedProps.caption }],
+              },
+            ],
+          };
+
+          groups.push([wrappedComponent]);
 
           currentGroup = [];
         }

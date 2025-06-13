@@ -19,6 +19,7 @@ export const parseComponent = (ast) => {
       Array.isArray(parent.children) &&
       typeof index === 'number'
     ) {
+     
       parent.children.splice(index, 1);
       component.push({
         type: 'mdxJsxFlowElement',

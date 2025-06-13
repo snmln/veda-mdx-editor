@@ -48,6 +48,14 @@ const interfaceList = [
   { fieldName: 'Highlight End', propName: 'highlightEnd' },
   { fieldName: 'Highlight Label', propName: 'highlightLabel' },
   { fieldName: 'Available Domain', propName: 'availableDomain' },
+  { fieldName: 'Author Attribution', propName: 'attrAuthor' },
+  { fieldName: 'Attribution Url', propName: 'attrUrl' },
+  {
+    fieldName: 'Caption',
+    propName: 'caption',
+    type: 'area',
+    customClass: 'flex flex-fill',
+  },
 ];
 
 // Import the actual map component for live preview
@@ -128,9 +136,9 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
                 Chart Properties
               </h3>
 
-              <div className='grid-row flex-align-end grid-gap-2'>
+              <div className='grid-row flex-align-start grid-gap-2'>
                 {interfaceList.map((input) => {
-                  const { propName, fieldName, type } = input;
+                  const { propName, fieldName, type, customClass } = input;
 
                   return InputField({
                     label: fieldName,
@@ -139,6 +147,7 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
                     type: type,
                     chartProps: chartProps,
                     propName: propName,
+                    customClass: customClass,
                   });
                 })}
               </div>
@@ -157,7 +166,16 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
         </div>
 
         <div className='relative'>
-          <ClientChartBlock {...chartProps} />
+          <div>
+            <ClientChartBlock {...chartProps} />
+          </div>
+          <div>
+            <figcaption className='text-gray-30 flex padding-top-2'>
+              <span className=''>
+                <p className='display-inline'>{chartProps.caption}</p>
+              </span>
+            </figcaption>
+          </div>
         </div>
       </div>
     </div>
