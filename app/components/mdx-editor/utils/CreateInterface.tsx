@@ -4,6 +4,7 @@ import React from 'react';
 
 import {
   TextInput,
+  Textarea,
   Label,
   DatePicker,
   Checkbox,
@@ -23,6 +24,7 @@ interface FieldProps {
   type?: string;
   chartProps: any;
   propName: string;
+  customClass?: string;
 }
 const checkRequired = (isRequired, value) => {
   return isRequired && !value ? { validationStatus: 'error' } : '';
@@ -112,6 +114,28 @@ const setInput = (
         </>
       );
       break;
+    case 'area':
+      return (
+        <>
+          <Label htmlFor='input-type-text' className='margin-top-2'>
+            {label}
+          </Label>
+          <span className='usa-hint'>{hint}</span>
+          <Textarea
+            id='input-type-text'
+            name='input-type-text'
+            // type={numeric ? 'number' : 'text'}
+            value={value}
+            onChange={(e) => {
+              onChange({ ...chartProps, [propName]: e.target.value });
+            }}
+            className=''
+            {...checkRequired(isRequired, value)}
+            // {...checkDate(propName, chartProps)}
+          />
+        </>
+      );
+      break;
     default:
       return (
         <>
@@ -145,10 +169,11 @@ export const InputField: React.FC<FieldProps> = (props) => {
     type,
     chartProps,
     propName,
+    customClass,
   } = props;
 
   return (
-    <div key={propName}>
+    <div key={propName} className={customClass}>
       {setInput(
         value,
         isRequired,
