@@ -24,4 +24,7 @@ export interface MapProps {
   dateTime: string;
   compareDateTime: string;
   compareLabel: string;
+  attrUrl: string;
+  attrAuthor: string;
+  caption: string;
 }

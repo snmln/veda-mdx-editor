@@ -7,6 +7,8 @@ import { LexicalNode } from 'lexical';
 import { TextInput, Label, Button, DatePicker } from '@trussworks/react-uswds';
 import { MapProps } from './types';
 import { useMdastNodeUpdater } from '@mdxeditor/editor';
+import { DEFAULT_MAP_PROPS } from './ToolbarComponents';
+import { InputField } from '../utils/CreateInterface';
 
 interface EditorMapProps extends MapProps {
   node?: LexicalNode & { setProps?: (props: Partial<MapProps>) => void };
@@ -96,18 +98,40 @@ const ClientMapBlock = dynamic(
 const MapEditorWithPreview: React.FC<any> = (props) => {
   const contextValue = useMapContext();
   const [isEditing, setIsEditing] = useState(true);
-  const [center, setCenter] = useState(props.center || '[-94.5, 41.25]');
-  const [zoom, setZoom] = useState(props.zoom || '8.3');
-  const [datasetId, setDatasetId] = useState(props.datasetId || 'no2');
-  const [layerId, setLayerId] = useState(props.layerId || 'no2-monthly-diff');
-  const [dateTime, setDateTime] = useState(props.dateTime || '2024-05-31');
-  const [compareDateTime, setCompareDateTime] = useState(
-    props.compareDateTime || '2023-05-31',
-  );
-  const [compareLabel, setCompareLabel] = useState(
-    props.compareLabel || 'May 2024 VS May 2023',
-  );
+  const initialMapProps = () => {
+    const generatedProps = props.props.mdastNode.attributes.reduce(
+      (acc, item) => {
+        acc[item.name] = item.value;
+        return acc;
+      },
+      {},
+    );
 
+    if (
+      generatedProps.center &&
+      generatedProps.layerId &&
+      generatedProps.zoom &&
+      generatedProps.datasetId &&
+      generatedProps.dateTime
+    ) {
+      return { ...generatedProps };
+    }
+    return { ...DEFAULT_MAP_PROPS };
+  };
+  const [mapProps, setMapProps] = useState(initialMapProps());
+  const {
+    center,
+    layerId,
+    zoom,
+    datasetId,
+    dateTime,
+    compareDateTime,
+    compareLabel,
+    attrAuthor,
+    attrUrl,
+    caption,
+  } = mapProps;
+  console.log('mapProps', mapProps);
   // Parse values for the map preview
   const parsedCenter =
     typeof center === 'string'
@@ -115,7 +139,9 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
         ? JSON.parse(center)
         : [-94.5, 41.25]
       : center;
+
   const parsedZoom = typeof zoom === 'string' ? parseFloat(zoom) || 8.3 : zoom;
+
   const updateMdastNode = useMdastNodeUpdater();
   const { mdastNode } = props;
 
@@ -155,6 +181,21 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
       name: 'compareLabel',
       value: compareLabel,
     },
+    {
+      type: 'mdxJsxAttribute',
+      name: 'attrUrl',
+      value: attrUrl,
+    },
+    {
+      type: 'mdxJsxAttribute',
+      name: 'attrAuthor',
+      value: attrAuthor,
+    },
+    {
+      type: 'mdxJsxAttribute',
+      name: 'caption',
+      value: caption,
+    },
   ];
   const updateProps = () => {
     try {
@@ -189,15 +230,34 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
   useEffect(() => {
     updateProps();
     updateMdastNode({ ...mdastNode, attributes: stateToNode });
-  }, [
-    center,
-    zoom,
-    datasetId,
-    layerId,
-    dateTime,
-    compareDateTime,
-    compareLabel,
-  ]);
+  }, [mapProps]);
+  const firstInterface = [
+    { fieldName: '*Dataset ID', propName: 'datasetId', isRequired: true },
+    { fieldName: '*Layer ID', propName: 'layerId', isRequired: true },
+    { fieldName: '*Center', propName: 'center', isRequired: true },
+    { fieldName: '*Zoom', propName: 'zoom', isRequired: true },
+    {
+      fieldName: '*Date Time',
+      propName: 'dateTime',
+      isRequired: true,
+      type: 'date',
+    },
+  ];
+  const comparisonInterface = [
+    { fieldName: 'Compare Label', propName: 'compareLabel' },
+    { fieldName: 'Compare Date', propName: 'compareDateTime' },
+  ];
+
+  const captionInterface = [
+    { fieldName: 'Author Attribution', propName: 'attrAuthor' },
+    { fieldName: 'Attribution Url', propName: 'attrUrl' },
+    {
+      fieldName: 'Caption',
+      propName: 'caption',
+      type: 'area',
+      customClass: 'flex flex-fill',
+    },
+  ];
 
   return (
     <>
@@ -212,48 +272,50 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
                   Map Properties
                 </h3>
                 <div className='grid-row flex-align-end grid-gap-2'>
-                  <MapField
-                    label='*Dataset ID'
-                    value={datasetId}
-                    onChange={setDatasetId}
-                    isRequired={true}
-                  />
-                  <MapField
-                    label='*Layer ID'
-                    value={layerId}
-                    onChange={setLayerId}
-                  />
-                  <MapField
-                    label='*Center'
-                    value={center}
-                    onChange={setCenter}
-                  />
-                  <MapField
-                    label='*Zoom'
-                    value={zoom}
-                    onChange={setZoom}
-                    numeric={true}
-                  />
-                  <MapField
-                    label='*Date Time'
-                    value={dateTime}
-                    onChange={setDateTime}
-                    isDate={true}
-                  />
-                </div>{' '}
+                  {firstInterface.map((field) => {
+                    const { propName, fieldName, type, customClass } = field;
+
+                    return InputField({
+                      label: fieldName,
+                      value: mapProps[propName],
+                      onChange: setMapProps,
+                      type: type,
+                      chartProps: mapProps,
+                      propName: propName,
+                      customClass: customClass,
+                    });
+                  })}
+                </div>
                 <h4>Map Comparison</h4>
                 <div className='grid-row flex-align-end grid-gap-2'>
-                  <MapField
-                    label='Compare Label'
-                    value={compareLabel}
-                    onChange={setCompareLabel}
-                  />
-                  <MapField
-                    label='Compare Date'
-                    value={compareDateTime}
-                    onChange={setCompareDateTime}
-                    isDate={true}
-                  />
+                  {comparisonInterface.map((field) => {
+                    const { propName, fieldName, type, customClass } = field;
+
+                    return InputField({
+                      label: fieldName,
+                      value: mapProps[propName],
+                      onChange: setMapProps,
+                      type: type,
+                      chartProps: mapProps,
+                      propName: propName,
+                      customClass: customClass,
+                    });
+                  })}
+                </div>
+                <div className='grid-row flex-align-start grid-gap-2'>
+                  {captionInterface.map((field) => {
+                    const { propName, fieldName, type, customClass } = field;
+
+                    return InputField({
+                      label: fieldName,
+                      value: mapProps[propName],
+                      onChange: setMapProps,
+                      type: type,
+                      chartProps: mapProps,
+                      propName: propName,
+                      customClass: customClass,
+                    });
+                  })}
                 </div>
               </div>
             )}
@@ -271,6 +333,7 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
 
           <div className='relative'>
             <ClientMapBlock
+              {...mapProps}
               center={parsedCenter}
               zoom={parsedZoom}
               datasetId={datasetId}
@@ -280,6 +343,13 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
               compareLabel={compareLabel}
             />
           </div>
+          <div>
+            <figcaption className='text-gray-30 flex padding-top-2'>
+              <span className=''>
+                <p className='display-inline'>{mapProps.caption}</p>
+              </span>
+            </figcaption>
+          </div>
         </div>
       </div>
     </>
@@ -288,8 +358,6 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
 
 // This wrapper is used when the component is used in the editor
 const MapEditorWrapper: React.FC<EditorMapProps> = (props) => {
-  const [editor] = useLexicalComposerContext();
-
   try {
     const [editor] = useLexicalComposerContext();
 
@@ -301,7 +369,6 @@ const MapEditorWrapper: React.FC<EditorMapProps> = (props) => {
             lexicalNode: props.node || createPlaceholderNode(),
           }}
         >
-          {`\n`}
           <MapEditorWithPreview {...props} />
         </MapContextProvider>
       </>

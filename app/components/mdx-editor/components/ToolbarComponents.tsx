@@ -25,6 +25,9 @@ export const DEFAULT_MAP_PROPS: MapProps = {
   dateTime: '2024-05-31',
   compareDateTime: '2023-05-31',
   compareLabel: 'May 2024 VS May 2023',
+  attrUrl: '',
+  attrAuthor: '',
+  caption: '',
 };
 
 interface TwoColumnProps {
@@ -105,7 +108,6 @@ export const InsertLineGraph = (props) => {
     </Button>
   );
 };
-
 
 export const InsertSectionBreak = (props) => {
   const insertJsx = usePublisher(insertJsx$);
