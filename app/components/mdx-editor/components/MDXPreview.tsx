@@ -32,6 +32,7 @@ const ClientMapBlock = dynamic(() => import('./MapPreview'), {
 });
 
 const MapWrapper = (props) => {
+  console.log('mapwrapper', props);
   try {
     // Handle center prop safely
     let center;
@@ -59,6 +60,7 @@ const MapWrapper = (props) => {
 
     return (
       <ClientMapBlock
+        {...props}
         center={center}
         zoom={zoom}
         datasetId={props.datasetId}
@@ -77,6 +79,7 @@ const MapWrapper = (props) => {
     );
   }
 };
+
 function Table({ data }: { data: any }) {
   const headers = data.headers.map((header, index) => (
     <th key={index}>{header}</th>

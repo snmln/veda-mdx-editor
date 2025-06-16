@@ -22,11 +22,12 @@ export const groupByBreakIntoBlocks = (ast) => {
         ) {
           groups.push(currentGroup);
 
+
           const generatedProps = child.attributes.reduce((acc, item) => {
             acc[item.name] = item.value;
             return acc;
           }, {});
-
+          console.log('map found', generatedProps);
           const wrappedComponent = {
             type: 'mdxJsxFlowElement',
             name: 'Figure',
