@@ -1,8 +1,9 @@
 import { toMarkdown } from 'mdast-util-to-markdown';
 import { mdxToMarkdown } from 'mdast-util-mdx';
 import { gfmToMarkdown } from 'mdast-util-gfm';
+import { mdxJsxToMarkdown } from 'mdast-util-mdx-jsx';
 import { extractImports } from './extractImports';
-import { parseComponent } from './parseComponent';
+
 import { groupByBreakIntoBlocks } from './groupElements';
 
 const blockItem = {
@@ -71,18 +72,14 @@ const transformMdast = (node) => {
 
 export const reserializedMdxContent = (MDAST) => {
   const seperatedMDAST = transformMdast(MDAST);
-  parseComponent(seperatedMDAST);
 
   const groupedMDSAT = groupByBreakIntoBlocks(seperatedMDAST);
-
-  //   const iteratedMDAST = extractImports(seperatedMDAST);
-
   extractImports(seperatedMDAST);
 
   const newMDast = { ...seperatedMDAST, children: groupedMDSAT };
   const mdastToMdx = (mdast) => {
     return toMarkdown(mdast, {
-      extensions: [mdxToMarkdown(), gfmToMarkdown()],
+      extensions: [mdxToMarkdown(), gfmToMarkdown(), mdxJsxToMarkdown()],
     });
   };
 

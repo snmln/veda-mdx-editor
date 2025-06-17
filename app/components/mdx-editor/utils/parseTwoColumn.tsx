@@ -1,33 +1,26 @@
+import { wrapComponent } from './wrapComponent';
+
 export const handleTwoColumn = (MDAST) => {
   const newTwoColumn: any = [];
-  for (const child of MDAST.children) {
-    if (child.children.some((e) => e.type === 'html')) {
-      newTwoColumn.push({
-        type: 'mdxJsxFlowElement',
-        name: 'Figure',
-        attributes: [],
-        children: [
-          ...child.children,
-          {
-            type: 'mdxJsxFlowElement',
-            name: 'Caption',
-            attributes: [],
-            children: [],
-          },
-        ],
-      });
+  for (const twoColumnChildren of MDAST.children) {
+    if (
+      twoColumnChildren.children.some(
+        (e) => e.name === 'Chart' || e.name === 'Map',
+      )
+    ) {
+      for (const columnChild of twoColumnChildren.children) {
+        if (columnChild.name === 'Chart' || columnChild.name === 'Map') {
+          newTwoColumn.push(wrapComponent(columnChild));
+        }
+      }
     } else {
       newTwoColumn.push({
         type: 'mdxJsxFlowElement',
         name: 'Prose',
         attributes: [],
-        children: [...child.children],
+        children: [...twoColumnChildren.children],
       });
     }
   }
-  return {
-    type: 'mdxJsxFlowElement',
-    name: 'Block',
-    children: [...newTwoColumn],
-  };
+  return newTwoColumn;
 };

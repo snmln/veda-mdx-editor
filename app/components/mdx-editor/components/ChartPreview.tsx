@@ -64,7 +64,7 @@ export function ClientChartBlock(props) {
     <DevseedUIThemeProvider>
       <VedaUIConfigProvider>
         <DataProvider initialDatasets={nightmockDatasets}>
-          <div className='relative w-full h-[250px] border rounded'>
+          <div className='relative w-full h-[250px]'>
             <Chart {...props} datasets={transformed} />
           </div>
         </DataProvider>

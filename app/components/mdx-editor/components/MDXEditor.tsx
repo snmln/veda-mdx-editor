@@ -107,7 +107,6 @@ export function MDXEditorEnhanced({
     const checkEditor = () => {
       if (editorRef.current) {
         setIsEditorReady(true);
-        console.log('Editor is ready:', editorRef.current);
       } else {
         // Retry after a short delay
         setTimeout(checkEditor, 100);
@@ -136,7 +135,10 @@ export function MDXEditorEnhanced({
         visit(tree, 'mdxJsxFlowElement', (node) => {
           if (['RightColumn', 'LeftColumn'].includes(node.name)) {
             const innerMarkdown = node.children[0].value;
-            const parsed = fromMarkdown(innerMarkdown).children;
+            const parsed = fromMarkdown(innerMarkdown, {
+              extensions: [mdxJsx()],
+              mdastExtensions: [mdxJsxFromMarkdown()],
+            }).children;
 
             node.children = parsed;
           }

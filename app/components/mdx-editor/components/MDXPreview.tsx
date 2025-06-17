@@ -25,14 +25,13 @@ import Providers from 'app/(datasets)/providers';
 const ClientMapBlock = dynamic(() => import('./MapPreview'), {
   ssr: false,
   loading: () => (
-    <div className=' flex items-center justify-center bg-blue-50 border rounded'>
+    <div className=' flex items-center justify-center bg-blue-50'>
       <div className='text-blue-500'>Loading map preview...</div>
     </div>
   ),
 });
 
 const MapWrapper = (props) => {
-  console.log('mapwrapper', props);
   try {
     // Handle center prop safely
     let center;
@@ -112,14 +111,16 @@ interface MDXPreviewProps {
 }
 
 function slugify(str) {
-  return str
-    .toString()
-    .toLowerCase()
-    .trim() // Remove whitespace from both ends of a string
-    .replace(/\s+/g, '-') // Replace spaces with -
-    .replace(/&/g, '-and-') // Replace & with 'and'
-    .replace(/[^\w\-]+/g, '') // Remove all non-word characters except for -
-    .replace(/\-\-+/g, '-'); // Replace multiple - with single -
+  if (str != null || str != undefined) {
+    return str
+      .toString()
+      .toLowerCase()
+      .trim() // Remove whitespace from both ends of a string
+      .replace(/\s+/g, '-') // Replace spaces with -
+      .replace(/&/g, '-and-') // Replace & with 'and'
+      .replace(/[^\w\-]+/g, '') // Remove all non-word characters except for -
+      .replace(/\-\-+/g, '-'); // Replace multiple - with single -
+  }
 }
 function createHeading(level) {
   const Heading = ({ children }: { children: JSX.Element }) => {
