@@ -113,12 +113,12 @@ export const mockDatasets = [
 
 export function ClientMapBlock(props) {
   const transformed = transformToVedaData(mockDatasets as any);
-  console.log('props', props);
+
   return (
     <DevseedUIThemeProvider>
       <VedaUIConfigProvider>
         <DataProvider initialDatasets={mockDatasets}>
-          <div className='relative w-full h-[250px] border rounded'>
+          <div className='relative w-full h-[250px]'>
             <MapBlock {...props} datasets={transformed} />
           </div>
         </DataProvider>

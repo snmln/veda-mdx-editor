@@ -64,7 +64,7 @@ const ClientChartBlock = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className='h-[180px] flex items-center justify-center bg-blue-50 border rounded'>
+      <div className='h-[180px] flex items-center justify-center bg-blue-50 '>
         <div className='text-blue-500'>Loading Chart preview...</div>
       </div>
     ),
@@ -170,7 +170,7 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
             <ClientChartBlock {...chartProps} />
           </div>
           <div>
-            <figcaption className='text-gray-30 flex padding-top-2'>
+            <figcaption className='text-gray-30 flex'>
               <span className=''>
                 <p className='display-inline'>{chartProps.caption}</p>
               </span>

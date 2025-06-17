@@ -87,7 +87,7 @@ const ClientMapBlock = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className='h-[180px] flex items-center justify-center bg-blue-50 border rounded'>
+      <div className='h-[180px] flex items-center justify-center bg-blue-50 '>
         <div className='text-blue-500'>Loading map preview...</div>
       </div>
     ),
@@ -131,7 +131,7 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
     attrUrl,
     caption,
   } = mapProps;
-  console.log('mapProps', mapProps);
+
   // Parse values for the map preview
   const parsedCenter =
     typeof center === 'string'

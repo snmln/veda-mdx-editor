@@ -1,5 +1,15 @@
+import { handleTwoColumn } from './parseTwoColumn';
+import { wrapComponent } from './wrapComponent';
+
 export const groupByBreakIntoBlocks = (ast) => {
   const result: any = [];
+  const proseWrapper = (children) => {
+    return {
+      type: 'mdxJsxFlowElement',
+      name: 'Prose',
+      children: [...children],
+    };
+  };
 
   const groupChildren = (children) => {
     const groups: any = [];
@@ -12,55 +22,33 @@ export const groupByBreakIntoBlocks = (ast) => {
       ) {
         if (child.name === 'Break') {
           if (currentGroup.length > 0) {
-            groups.push(currentGroup);
+            groups.push([proseWrapper(currentGroup)]);
             currentGroup = [];
           }
         } else if (
           child.name === 'Block' ||
           child.name === 'Chart' ||
-          child.name === 'Map'
+          child.name === 'Map' ||
+          child.name === 'TwoColumn'
         ) {
-          groups.push(currentGroup);
+          groups.push([proseWrapper(currentGroup)]);
 
-
-          const generatedProps = child.attributes.reduce((acc, item) => {
-            acc[item.name] = item.value;
-            return acc;
-          }, {});
-          console.log('map found', generatedProps);
-          const wrappedComponent = {
-            type: 'mdxJsxFlowElement',
-            name: 'Figure',
-            attributes: [],
-            children: [
-              { ...child },
-              {
-                type: 'mdxJsxFlowElement',
-                name: 'Caption',
-                attributes: [
-                  { name: 'attrAuthor', value: generatedProps.attrAuthor },
-                  { name: 'attrUrl', value: generatedProps.attrUrl },
-                ],
-                children: [{ type: 'text', value: generatedProps.caption }],
-              },
-            ],
-          };
-
-          groups.push([wrappedComponent]);
-
+          if (child.name === 'Chart' || child.name === 'Map') {
+            groups.push([wrapComponent(child)]);
+          } else if (child.name === 'TwoColumn') {
+            const parsedColumn = handleTwoColumn(child);
+            groups.push(parsedColumn);
+          }
           currentGroup = [];
         }
       } else {
-        // Recurse into children
-        // if (child.children) {
-        //   child.children = groupChildren(child.children);
-        // }
-        // console.log('child', child);
+
         currentGroup.push(child);
       }
     }
+
     if (currentGroup.length > 0) {
-      groups.push(currentGroup);
+      groups.push([...currentGroup]);
     }
     return groups;
   };
@@ -71,13 +59,7 @@ export const groupByBreakIntoBlocks = (ast) => {
       result.push({
         type: 'mdxJsxFlowElement',
         name: 'Block',
-        children: [
-          {
-            type: 'mdxJsxFlowElement',
-            name: 'Prose',
-            children: [...group],
-          },
-        ],
+        children: [...group],
       });
     }
   }
