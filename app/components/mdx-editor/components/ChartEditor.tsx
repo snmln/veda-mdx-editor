@@ -34,20 +34,37 @@ const createPlaceholderNode = (): LexicalNode & {
 
 const interfaceList = [
   { fieldName: 'Data Path', propName: 'dataPath', isRequired: true },
-  { fieldName: 'Date Format', propName: 'dateFormat', isRequired: true },
+  {
+    fieldName: 'Date Format',
+    propName: 'dateFormat',
+    isRequired: true,
+    validateAgainst: 'highlightEnd, highlightStart',
+  },
   { fieldName: 'IdKey', propName: 'idKey', isRequired: true },
   { fieldName: 'xKey', propName: 'xKey', isRequired: true },
   { fieldName: 'yKey', propName: 'yKey', isRequired: true },
   { fieldName: 'Alternative title', propName: 'altTitle' },
   { fieldName: 'Alternative Description', propName: 'altDesc' },
-  { fieldName: 'Colors', propName: 'colors' },
+  { fieldName: 'Colors', propName: 'colors', placeHolder: '#FFFFFF, #000000' },
   { fieldName: 'Colors Scheme', propName: 'colorScheme', type: 'select' },
   { fieldName: 'X Axis Label', propName: 'xAxisLabel' },
   { fieldName: 'Y Axis Label', propName: 'yAxisLabel' },
-  { fieldName: 'Highlight Start', propName: 'highlightStart' },
-  { fieldName: 'Highlight End', propName: 'highlightEnd' },
+  {
+    fieldName: 'Highlight Start',
+    propName: 'highlightStart',
+    validateAgainst: 'dateFormat',
+  },
+  {
+    fieldName: 'Highlight End',
+    propName: 'highlightEnd',
+    validateAgainst: 'dateFormat',
+  },
   { fieldName: 'Highlight Label', propName: 'highlightLabel' },
-  { fieldName: 'Available Domain', propName: 'availableDomain' },
+  {
+    fieldName: 'Available Domain',
+    propName: 'availableDomain',
+    placeHolder: '[6/2021, 9/2022]',
+  },
   { fieldName: 'Author Attribution', propName: 'attrAuthor' },
   { fieldName: 'Attribution Url', propName: 'attrUrl' },
   {
@@ -88,7 +105,15 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
     return { ...DEFAULT_CHART_PROPS };
   };
   const [chartProps, setChartProps] = useState(initialChartProps());
-
+  const [draftDateFormats, setDraftDateFormats] = useState({
+    draftDateFormat: chartProps.dateFormat,
+    draftHighlightEnd: chartProps.highlightEnd,
+    draftHighlightStart: chartProps.highlightStart,
+  });
+  const [dateErrors, setDateErrors] = useState({
+    highlightStart: false,
+    highlightEnd: false,
+  });
   const updateProps = () => {
     try {
       if (contextValue?.parentEditor && contextValue?.lexicalNode) {
@@ -138,16 +163,17 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
 
               <div className='grid-row flex-align-start grid-gap-2'>
                 {interfaceList.map((input) => {
-                  const { propName, fieldName, type, customClass } = input;
+                  const { propName } = input;
 
                   return InputField({
-                    label: fieldName,
+                    ...input,
                     value: chartProps[propName],
                     onChange: setChartProps,
-                    type: type,
-                    chartProps: chartProps,
-                    propName: propName,
-                    customClass: customClass,
+                    chartProps,
+                    draftDateFormats,
+                    setDraftDateFormats,
+                    dateErrors,
+                    setDateErrors,
                   });
                 })}
               </div>
