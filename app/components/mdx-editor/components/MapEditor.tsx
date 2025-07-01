@@ -9,19 +9,9 @@ import { MapProps } from './types';
 import { useMdastNodeUpdater } from '@mdxeditor/editor';
 import { DEFAULT_MAP_PROPS } from './ToolbarComponents';
 import { InputField } from '../utils/CreateInterface';
-
+import { ClientMapBlock } from './MapPreview';
 interface EditorMapProps extends MapProps {
   node?: LexicalNode & { setProps?: (props: Partial<MapProps>) => void };
-}
-
-interface MapFieldProps {
-  label: string;
-  value: string;
-  hint?: string;
-  onChange: (value: string) => void;
-  isRequired?: boolean;
-  isDate?: boolean;
-  numeric?: boolean;
 }
 
 // Create a placeholder node type that satisfies the LexicalNode interface
@@ -39,60 +29,6 @@ const createPlaceholderNode = (): LexicalNode & {
     setProps?: (props: Partial<EditorMapProps>) => void;
   };
 };
-const checkRequired = (isRequired, value) => {
-  return isRequired && !value ? { validationStatus: 'error' } : '';
-};
-
-const MapField: React.FC<MapFieldProps> = ({
-  label,
-  hint,
-  value,
-  onChange,
-  isRequired,
-  isDate,
-  numeric,
-}) => (
-  <div>
-    <Label
-      htmlFor='input-type-text'
-      className='margin-top-2
-'
-    >
-      {label}
-    </Label>
-    <span className='usa-hint'>{hint}</span>
-    {isDate && isDate != undefined ? (
-      <DatePicker
-        defaultValue={value}
-        onChange={(e) => onChange(e)}
-        {...checkRequired(isRequired, value)}
-      />
-    ) : (
-      <TextInput
-        id='input-type-text'
-        name='input-type-text'
-        type={numeric ? 'number' : 'text'}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className='width-15'
-        {...checkRequired(isRequired, value)}
-      />
-    )}
-  </div>
-);
-
-// Import the actual map component for live preview
-const ClientMapBlock = dynamic(
-  () => import('./MapPreview').then((mod) => mod.ClientMapBlock),
-  {
-    ssr: false,
-    loading: () => (
-      <div className='h-[180px] flex items-center justify-center bg-blue-50 '>
-        <div className='text-blue-500'>Loading map preview...</div>
-      </div>
-    ),
-  },
-);
 
 // Map editor component that includes both preview and editable properties
 const MapEditorWithPreview: React.FC<any> = (props) => {
@@ -119,6 +55,17 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
     return { ...DEFAULT_MAP_PROPS };
   };
   const [mapProps, setMapProps] = useState(initialMapProps());
+  const [draftInputs, setDraftInputs] = useState({
+    defaultDateFormat: '%Y-%m-%d',
+    dateTime: mapProps.dateTime,
+    compareDateTime: mapProps.compareDateTime,
+    center: mapProps.center,
+  });
+  const [inputErrors, setInputErrors] = useState({
+    dateTime: false,
+    compareDateTime: false,
+    center: false,
+  });
   const {
     center,
     layerId,
@@ -234,18 +181,27 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
   const firstInterface = [
     { fieldName: '*Dataset ID', propName: 'datasetId', isRequired: true },
     { fieldName: '*Layer ID', propName: 'layerId', isRequired: true },
-    { fieldName: '*Center', propName: 'center', isRequired: true },
+    {
+      fieldName: '*Center',
+      propName: 'center',
+      isRequired: true,
+      validateAgainst: 'centerFormat',
+    },
     { fieldName: '*Zoom', propName: 'zoom', isRequired: true },
     {
       fieldName: '*Date Time',
       propName: 'dateTime',
       isRequired: true,
-      type: 'date',
+      validateAgainst: 'defaultDateFormat',
     },
   ];
   const comparisonInterface = [
     { fieldName: 'Compare Label', propName: 'compareLabel' },
-    { fieldName: 'Compare Date', propName: 'compareDateTime' },
+    {
+      fieldName: 'Compare Date',
+      propName: 'compareDateTime',
+      validateAgainst: 'defaultDateFormat',
+    },
   ];
 
   const captionInterface = [
@@ -276,13 +232,18 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
                     const { propName, fieldName, type, customClass } = field;
 
                     return InputField({
-                      label: fieldName,
+                      ...field,
+                      fieldName,
                       value: mapProps[propName],
                       onChange: setMapProps,
                       type: type,
-                      chartProps: mapProps,
+                      componentProps: mapProps,
                       propName: propName,
                       customClass: customClass,
+                      draftInputs,
+                      inputErrors,
+                      setInputErrors,
+                      setDraftInputs,
                     });
                   })}
                 </div>
@@ -292,13 +253,18 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
                     const { propName, fieldName, type, customClass } = field;
 
                     return InputField({
-                      label: fieldName,
+                      ...field,
+                      fieldName,
                       value: mapProps[propName],
                       onChange: setMapProps,
                       type: type,
-                      chartProps: mapProps,
-                      propName: propName,
+                      componentProps: mapProps,
+                      propName,
                       customClass: customClass,
+                      draftInputs,
+                      setDraftInputs,
+                      inputErrors,
+                      setInputErrors,
                     });
                   })}
                 </div>
@@ -307,11 +273,12 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
                     const { propName, fieldName, type, customClass } = field;
 
                     return InputField({
-                      label: fieldName,
+                      ...field,
+                      fieldName,
                       value: mapProps[propName],
                       onChange: setMapProps,
                       type: type,
-                      chartProps: mapProps,
+                      componentProps: mapProps,
                       propName: propName,
                       customClass: customClass,
                     });
@@ -336,11 +303,6 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
               {...mapProps}
               center={parsedCenter}
               zoom={parsedZoom}
-              datasetId={datasetId}
-              layerId={layerId}
-              dateTime={dateTime}
-              compareDateTime={compareDateTime}
-              compareLabel={compareLabel}
             />
           </div>
           <div>

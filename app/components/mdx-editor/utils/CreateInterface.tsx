@@ -1,18 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
   TextInput,
+  TextInputMask,
   Textarea,
   Label,
   DatePicker,
   Checkbox,
   Select,
 } from '@trussworks/react-uswds';
+import {
+  handleMapDateValidation,
+  handleMapArrayValidation,
+  handleChartDateValidation,
+} from './inputValidation';
 
 interface FieldProps {
-  label: string;
+  fieldName: string;
   value: string;
   hint?: string;
   onChange: (value: string) => void;
@@ -22,9 +28,14 @@ interface FieldProps {
   onBlur?: (value: string) => void;
   onFocus?: (value: string) => void;
   type?: string;
-  chartProps: any;
+  componentProps: any;
   propName: string;
   customClass?: string;
+  placeHolder?: string;
+  draftInputs?: any;
+  inputErrors?: any;
+  setDraftInputs?: (value: any) => void;
+  setInputErrors?: (value: any) => void;
 }
 const checkRequired = (isRequired, value) => {
   return isRequired && !value ? { validationStatus: 'error' } : '';
@@ -48,27 +59,103 @@ const colorSchemes = [
   'CubehelixDefault',
 ];
 
-const setInput = (
-  value,
-  isRequired,
-  type,
-  label,
-  hint,
-  onChange,
-  chartProps,
-  propName,
-) => {
+const setInput = (props) => {
+  const {
+    value,
+    isRequired,
+    type,
+    fieldName,
+    hint,
+    onChange,
+    componentProps,
+    propName,
+    placeHolder,
+    validateAgainst,
+    draftInputs,
+    setDraftInputs,
+    inputErrors,
+    setInputErrors,
+  } = props;
   const cleanedType = type !== undefined && type.toLowerCase();
+
+  const [draft, setDraft] = useState(value);
+
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    console.log('useEffect Called');
+    if (propName === 'dateFormat' && draft != draftInputs.draftDateFormat) {
+      setDraftInputs({ ...draftInputs, draftDateFormat: draft });
+    }
+    if (
+      propName === 'highlightStart' &&
+      draft != draftInputs.draftHighlightStart
+    ) {
+      setDraftInputs({ ...draftInputs, draftHighlightStart: draft });
+    }
+    if (propName === 'highlightEnd' && draft != draftInputs.draftHighlightEnd) {
+      setDraftInputs({ ...draftInputs, draftHighlightEnd: draft });
+    }
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      console.log('validateAgainst', validateAgainst);
+      if (validateAgainst) {
+        if (
+          propName === 'dateFormat' ||
+          propName === 'highlightStart' ||
+          propName === 'highlightEnd'
+        ) {
+          handleChartDateValidation(
+            propName,
+            draftInputs,
+            setInputErrors,
+            inputErrors,
+            draft,
+            onChange,
+            componentProps,
+          );
+        } else if (validateAgainst === 'defaultDateFormat') {
+          handleMapDateValidation(
+            propName,
+            draftInputs,
+            inputErrors,
+            setInputErrors,
+            draft,
+            onChange,
+            componentProps,
+          );
+        } else if (validateAgainst === 'centerFormat') {
+          handleMapArrayValidation(
+            propName,
+            draftInputs,
+            inputErrors,
+            setInputErrors,
+            draft,
+            onChange,
+            componentProps,
+          );
+        } else {
+          onChange({ ...componentProps, [propName]: draft });
+        }
+      }
+    }, 400);
+
+    return () => clearTimeout(timeoutRef.current);
+  }, [draft, draftInputs]);
+
+  //Format date and submitted dates need to work or else the chart will throw an error.
 
   switch (cleanedType) {
     case 'date':
       return (
-        //SHORE: Need to clean up or delete
+        //CHORE: Need to clean up or delete
         <>
           <Label htmlFor='input-type-text' className='margin-top-2'>
-            {label}
+            {fieldName}
           </Label>
+
           <span className='usa-hint'>{hint}</span>
+
           <DatePicker
             defaultValue={value}
             onChange={(e) => console.log('DatePicker', e)}
@@ -80,11 +167,11 @@ const setInput = (
     case 'checkbox':
       return (
         <Checkbox
-          id={label}
+          id={fieldName}
           name='checkbox'
-          label={label}
+          label={fieldName}
           onChange={(e) =>
-            onChange({ ...chartProps, [propName]: e.target.value })
+            onChange({ ...componentProps, [propName]: e.target.value })
           }
         />
       );
@@ -93,14 +180,14 @@ const setInput = (
       return (
         <>
           <Label htmlFor='input-type-text' className='margin-top-2'>
-            {label}
+            {fieldName}
           </Label>
           <span className='usa-hint'>{hint}</span>
           <Select
-            id={label}
-            name={label}
+            id={fieldName}
+            name={fieldName}
             onChange={(e) =>
-              onChange({ ...chartProps, [propName]: e.target.value })
+              onChange({ ...componentProps, [propName]: e.target.value })
             }
           >
             {colorSchemes.map((scheme) => {
@@ -118,20 +205,18 @@ const setInput = (
       return (
         <>
           <Label htmlFor='input-type-text' className='margin-top-2'>
-            {label}
+            {fieldName}
           </Label>
           <span className='usa-hint'>{hint}</span>
           <Textarea
             id='input-type-text'
             name='input-type-text'
-            // type={numeric ? 'number' : 'text'}
             value={value}
             onChange={(e) => {
-              onChange({ ...chartProps, [propName]: e.target.value });
+              onChange({ ...componentProps, [propName]: e.target.value });
             }}
             className=''
             {...checkRequired(isRequired, value)}
-            // {...checkDate(propName, chartProps)}
           />
         </>
       );
@@ -140,50 +225,40 @@ const setInput = (
       return (
         <>
           <Label htmlFor='input-type-text' className='margin-top-2'>
-            {label}
+            {fieldName}
           </Label>
+
           <span className='usa-hint'>{hint}</span>
           <TextInput
             id='input-type-text'
             name='input-type-text'
-            // type={numeric ? 'number' : 'text'}
-            value={value}
+            type='text'
+            value={validateAgainst ? draft : value}
             onChange={(e) => {
-              onChange({ ...chartProps, [propName]: e.target.value });
+              if (validateAgainst) {
+                console.log('inside setDraft');
+                setDraft(e.target.value);
+              } else {
+                console.log('inside on change');
+                onChange({ ...componentProps, [propName]: e.target.value });
+              }
             }}
-            className=''
+            placeholder={placeHolder}
             {...checkRequired(isRequired, value)}
-            // {...checkDate(propName, chartProps)}
+            validationStatus={
+              validateAgainst && (inputErrors[propName] ? 'error' : undefined)
+            }
           />
         </>
       );
   }
 };
 export const InputField: React.FC<FieldProps> = (props) => {
-  const {
-    label,
-    hint,
-    value,
-    onChange,
-    isRequired,
-    type,
-    chartProps,
-    propName,
-    customClass,
-  } = props;
+  const { propName, customClass } = props;
 
   return (
     <div key={propName} className={customClass}>
-      {setInput(
-        value,
-        isRequired,
-        type,
-        label,
-        hint,
-        onChange,
-        chartProps,
-        propName,
-      )}
+      {setInput(props)}
     </div>
   );
 };
