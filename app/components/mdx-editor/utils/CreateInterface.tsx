@@ -12,9 +12,8 @@ import {
   Select,
 } from '@trussworks/react-uswds';
 import {
-  createMask,
-  dateFormatValidation,
-  dateStringToregex,
+  handleMapDateValidation,
+  handleMapArrayValidation,
   handleChartDateValidation,
 } from './inputValidation';
 
@@ -29,10 +28,14 @@ interface FieldProps {
   onBlur?: (value: string) => void;
   onFocus?: (value: string) => void;
   type?: string;
-  chartProps: any;
+  componentProps: any;
   propName: string;
   customClass?: string;
   placeHolder?: string;
+  draftInputs?: any;
+  inputErrors?: any;
+  setDraftInputs?: (value: any) => void;
+  setInputErrors?: (value: any) => void;
 }
 const checkRequired = (isRequired, value) => {
   return isRequired && !value ? { validationStatus: 'error' } : '';
@@ -64,14 +67,14 @@ const setInput = (props) => {
     fieldName,
     hint,
     onChange,
-    chartProps,
+    componentProps,
     propName,
     placeHolder,
     validateAgainst,
-    draftDateFormats,
-    setDraftDateFormats,
-    dateErrors,
-    setDateErrors,
+    draftInputs,
+    setDraftInputs,
+    inputErrors,
+    setInputErrors,
   } = props;
   const cleanedType = type !== undefined && type.toLowerCase();
 
@@ -80,26 +83,22 @@ const setInput = (props) => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (
-      propName === 'dateFormat' &&
-      draft != draftDateFormats.draftDateFormat
-    ) {
-      setDraftDateFormats({ ...draftDateFormats, draftDateFormat: draft });
+    console.log('useEffect Called');
+    if (propName === 'dateFormat' && draft != draftInputs.draftDateFormat) {
+      setDraftInputs({ ...draftInputs, draftDateFormat: draft });
     }
     if (
       propName === 'highlightStart' &&
-      draft != draftDateFormats.draftHighlightStart
+      draft != draftInputs.draftHighlightStart
     ) {
-      setDraftDateFormats({ ...draftDateFormats, draftHighlightStart: draft });
+      setDraftInputs({ ...draftInputs, draftHighlightStart: draft });
     }
-    if (
-      propName === 'highlightEnd' &&
-      draft != draftDateFormats.draftHighlightEnd
-    ) {
-      setDraftDateFormats({ ...draftDateFormats, draftHighlightEnd: draft });
+    if (propName === 'highlightEnd' && draft != draftInputs.draftHighlightEnd) {
+      setDraftInputs({ ...draftInputs, draftHighlightEnd: draft });
     }
     clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
+      console.log('validateAgainst', validateAgainst);
       if (validateAgainst) {
         if (
           propName === 'dateFormat' ||
@@ -108,21 +107,41 @@ const setInput = (props) => {
         ) {
           handleChartDateValidation(
             propName,
-            draftDateFormats,
-            setDateErrors,
-            dateErrors,
+            draftInputs,
+            setInputErrors,
+            inputErrors,
             draft,
             onChange,
-            chartProps,
+            componentProps,
+          );
+        } else if (validateAgainst === 'defaultDateFormat') {
+          handleMapDateValidation(
+            propName,
+            draftInputs,
+            inputErrors,
+            setInputErrors,
+            draft,
+            onChange,
+            componentProps,
+          );
+        } else if (validateAgainst === 'centerFormat') {
+          handleMapArrayValidation(
+            propName,
+            draftInputs,
+            inputErrors,
+            setInputErrors,
+            draft,
+            onChange,
+            componentProps,
           );
         } else {
-          onChange({ ...chartProps, [propName]: draft });
+          onChange({ ...componentProps, [propName]: draft });
         }
       }
     }, 400);
 
     return () => clearTimeout(timeoutRef.current);
-  }, [draft, draftDateFormats]);
+  }, [draft, draftInputs]);
 
   //Format date and submitted dates need to work or else the chart will throw an error.
 
@@ -152,7 +171,7 @@ const setInput = (props) => {
           name='checkbox'
           label={fieldName}
           onChange={(e) =>
-            onChange({ ...chartProps, [propName]: e.target.value })
+            onChange({ ...componentProps, [propName]: e.target.value })
           }
         />
       );
@@ -168,7 +187,7 @@ const setInput = (props) => {
             id={fieldName}
             name={fieldName}
             onChange={(e) =>
-              onChange({ ...chartProps, [propName]: e.target.value })
+              onChange({ ...componentProps, [propName]: e.target.value })
             }
           >
             {colorSchemes.map((scheme) => {
@@ -194,7 +213,7 @@ const setInput = (props) => {
             name='input-type-text'
             value={value}
             onChange={(e) => {
-              onChange({ ...chartProps, [propName]: e.target.value });
+              onChange({ ...componentProps, [propName]: e.target.value });
             }}
             className=''
             {...checkRequired(isRequired, value)}
@@ -214,11 +233,21 @@ const setInput = (props) => {
             id='input-type-text'
             name='input-type-text'
             type='text'
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
+            value={validateAgainst ? draft : value}
+            onChange={(e) => {
+              if (validateAgainst) {
+                console.log('inside setDraft');
+                setDraft(e.target.value);
+              } else {
+                console.log('inside on change');
+                onChange({ ...componentProps, [propName]: e.target.value });
+              }
+            }}
             placeholder={placeHolder}
             {...checkRequired(isRequired, value)}
-            validationStatus={dateErrors[propName] ? 'error' : undefined}
+            validationStatus={
+              validateAgainst && (inputErrors[propName] ? 'error' : undefined)
+            }
           />
         </>
       );

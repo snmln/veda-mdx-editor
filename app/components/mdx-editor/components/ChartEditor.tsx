@@ -105,12 +105,12 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
     return { ...DEFAULT_CHART_PROPS };
   };
   const [chartProps, setChartProps] = useState(initialChartProps());
-  const [draftDateFormats, setDraftDateFormats] = useState({
+  const [draftInputs, setDraftInputs] = useState({
     draftDateFormat: chartProps.dateFormat,
     draftHighlightEnd: chartProps.highlightEnd,
     draftHighlightStart: chartProps.highlightStart,
   });
-  const [dateErrors, setDateErrors] = useState({
+  const [inputErrors, setInputErrors] = useState({
     highlightStart: false,
     highlightEnd: false,
   });
@@ -169,11 +169,11 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
                     ...input,
                     value: chartProps[propName],
                     onChange: setChartProps,
-                    chartProps,
-                    draftDateFormats,
-                    setDraftDateFormats,
-                    dateErrors,
-                    setDateErrors,
+                    componentProps: chartProps,
+                    draftInputs,
+                    setDraftInputs,
+                    inputErrors,
+                    setInputErrors,
                   });
                 })}
               </div>

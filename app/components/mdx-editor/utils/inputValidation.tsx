@@ -28,34 +28,6 @@ export const dateStringToregex = (format) => {
   return new RegExp(`^${pattern}$`);
 };
 
-export const createMask = (format) => {
-  const placeholders = {
-    '%d': '__',
-    '%m': '__',
-    '%y': '__',
-    '%Y': '____',
-    '%H': '__',
-    '%M': '__',
-    '%S': '__',
-  };
-
-  const escapeNonWord = (ch) => (/\w/.test(ch) ? ch : ` ${ch} `); // pad delimiters with spaces
-
-  let mask = '';
-
-  for (let i = 0; i < format.length; i++) {
-    if (format[i] === '%' && i < format.length - 1) {
-      const directive = format.slice(i, i + 2); // e.g. "%m"
-      mask += placeholders[directive] ?? '__'; // unknown → two underscores
-      i++; // skip directive's second char
-    } else {
-      mask += escapeNonWord(format[i]);
-    }
-  }
-
-  return mask.replace(/\s{2,}/g, ' '); // collapse double spaces, if any
-};
-
 export const dateFormatValidation = (format, input) => {
   const regexToTest = dateStringToregex(format);
 
@@ -65,67 +37,112 @@ export const dateFormatValidation = (format, input) => {
 
 export const handleChartDateValidation = (
   propName,
-  draftDateFormats,
-  setDateErrors,
-  dateErrors,
+  draftInputs,
+  setInputErrors,
+  inputErrors,
   draft,
   onChange,
   chartProps,
 ) => {
-
   if (propName === 'highlightStart' || propName === 'highlightEnd') {
-    if (dateFormatValidation(draftDateFormats.draftDateFormat, draft) === false) {
-      console.log('inside falsey check');
-      setDateErrors({
+    if (dateFormatValidation(draftInputs.draftDateFormat, draft) === false) {
+      setInputErrors({
         highlightStart: dateFormatValidation(
-          draftDateFormats.draftDateFormat,
-          draftDateFormats.draftHighlightStart,
+          draftInputs.draftDateFormat,
+          draftInputs.draftHighlightStart,
         ),
         highlightEnd: dateFormatValidation(
-          draftDateFormats.draftDateFormat,
-          draftDateFormats.draftHighlightEnd,
+          draftInputs.draftDateFormat,
+          draftInputs.draftHighlightEnd,
         ),
       });
       if (
-        dateErrors.highlightStart == false &&
-        dateErrors.highlightEnd == false
+        inputErrors.highlightStart == false &&
+        inputErrors.highlightEnd == false
       ) {
-        console.log(' HIGHLIGHT CHECK onchagen called');
         onChange({
           ...chartProps,
-          dateFormat: draftDateFormats.draftDateFormat,
-          highlightStart: draftDateFormats.draftHighlightStart,
-          highlightEnd: draftDateFormats.draftHighlightEnd,
+          dateFormat: draftInputs.draftDateFormat,
+          highlightStart: draftInputs.draftHighlightStart,
+          highlightEnd: draftInputs.draftHighlightEnd,
         });
       }
     } else {
-      console.log('There is an error');
-      setDateErrors({
+      setInputErrors({
         highlightStart: dateFormatValidation(
-          draftDateFormats.draftDateFormat,
-          draftDateFormats.draftHighlightStart,
+          draftInputs.draftDateFormat,
+          draftInputs.draftHighlightStart,
         ),
         highlightEnd: dateFormatValidation(
-          draftDateFormats.draftDateFormat,
-          draftDateFormats.draftHighlightEnd,
+          draftInputs.draftDateFormat,
+          draftInputs.draftHighlightEnd,
         ),
       });
     }
   } else if (propName === 'dateFormat') {
-    setDateErrors({
+    setInputErrors({
       highlightStart: dateFormatValidation(draft, chartProps.highlightStart),
       highlightEnd: dateFormatValidation(draft, chartProps.highlightEnd),
     });
   } else if (
-    dateErrors.highlightStart == false &&
-    dateErrors.highlightEnd == false
+    inputErrors.highlightStart == false &&
+    inputErrors.highlightEnd == false
   ) {
-    console.log('onchagen called');
     onChange({
       ...chartProps,
-      dateFormat: draftDateFormats.draftDateFormat,
-      highlightStart: draftDateFormats.draftHighlightStart,
-      highlightEnd: draftDateFormats.draftHighlightEnd,
+      dateFormat: draftInputs.draftDateFormat,
+      highlightStart: draftInputs.draftHighlightStart,
+      highlightEnd: draftInputs.draftHighlightEnd,
     });
+  }
+};
+export const handleMapDateValidation = (
+  propName,
+  draftInputs,
+  inputErrors,
+  setInputErrors,
+  draft,
+  onChange,
+  componentProps,
+) => {
+  if (
+    dateFormatValidation(draftInputs.defaultDateFormat, draft) === false ||
+    draft === ''
+  ) {
+    setInputErrors({ ...inputErrors, [propName]: false });
+    onChange({ ...componentProps, [propName]: draft });
+  } else {
+    setInputErrors({ ...inputErrors, [propName]: true });
+  }
+};
+
+export const handleMapArrayValidation = (
+  propName,
+  draftInputs,
+  inputErrors,
+  setInputErrors,
+  draft,
+  onChange,
+  componentProps,
+) => {
+  const numberPattern =
+    /^\[[+-]?(0|[1-9][0-9]*)(\.[0-9]+)?(?:,\s*[+-]?(0|[1-9][0-9]*)(\.[0-9]+)?)*\]$/;
+  //This regex checks that the input is wrapped in [...]
+  //Checks for no trailing decimal points ex: -91.
+  //Checks that there is no leading 0 unless followed by a . ex 0.12 or 0 are acceptable
+  const cleanedDraft = draft.replace(/\s/g, '');
+  if (numberPattern.test(cleanedDraft)) {
+    const parsedValues = JSON.parse(cleanedDraft);
+    const checkLong = (long) => (long <= 180 && long >= -180 ? true : false);
+    const checkLat = (lat) => (lat <= 90 && lat >= -90 ? true : false);
+    //validating upper and lower limits of long and lat
+    if (checkLong(parsedValues[0]) && checkLat(parsedValues[1])) {
+      setInputErrors({ ...inputErrors, [propName]: false });
+      onChange({ ...componentProps, [propName]: draft });
+    } else {
+      setInputErrors({ ...inputErrors, [propName]: true });
+    }
+  } else {
+    setInputErrors({ ...inputErrors, [propName]: true });
   }
 };

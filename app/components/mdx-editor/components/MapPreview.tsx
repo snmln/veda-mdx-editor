@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { transformToVedaData } from 'app/content/utils/data';
 import DataProvider from 'app/store/providers/data';
@@ -112,8 +112,8 @@ export const mockDatasets = [
 ] as unknown as DatasetWithContent[];
 
 export function ClientMapBlock(props) {
+  console.log('ClientMapBlock', props);
   const transformed = transformToVedaData(mockDatasets as any);
-
   return (
     <DevseedUIThemeProvider>
       <VedaUIConfigProvider>
