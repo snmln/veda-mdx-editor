@@ -112,7 +112,7 @@ export const mockDatasets = [
 ] as unknown as DatasetWithContent[];
 
 export function ClientMapBlock(props) {
-  console.log('ClientMapBlock', props);
+
   const transformed = transformToVedaData(mockDatasets as any);
   return (
     <DevseedUIThemeProvider>
