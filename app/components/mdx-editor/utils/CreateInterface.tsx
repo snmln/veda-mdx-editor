@@ -83,7 +83,7 @@ const setInput = (props) => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    console.log('useEffect Called');
+
     if (propName === 'dateFormat' && draft != draftInputs.draftDateFormat) {
       setDraftInputs({ ...draftInputs, draftDateFormat: draft });
     }
@@ -98,7 +98,7 @@ const setInput = (props) => {
     }
     clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
-      console.log('validateAgainst', validateAgainst);
+
       if (validateAgainst) {
         if (
           propName === 'dateFormat' ||
@@ -236,10 +236,10 @@ const setInput = (props) => {
             value={validateAgainst ? draft : value}
             onChange={(e) => {
               if (validateAgainst) {
-                console.log('inside setDraft');
+
                 setDraft(e.target.value);
               } else {
-                console.log('inside on change');
+
                 onChange({ ...componentProps, [propName]: e.target.value });
               }
             }}
