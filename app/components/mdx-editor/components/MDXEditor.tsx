@@ -130,14 +130,20 @@ export function MDXEditorEnhanced({
         //mdxJsxFromMarkdown converts all contents of TwoCOlumn to 'code' blocks
         //Below re parses it and converts back to accepted MDX values.
         visit(tree, 'mdxJsxFlowElement', (node) => {
-          if (['RightColumn', 'LeftColumn'].includes(node.name)) {
-            const innerMarkdown = node.children[0].value;
-            const parsed = fromMarkdown(innerMarkdown, {
-              extensions: [mdxJsx()],
-              mdastExtensions: [mdxJsxFromMarkdown()],
-            }).children;
-
-            node.children = parsed;
+          if (
+            ['RightColumn', 'LeftColumn'].includes(node.name) &&
+            node.children.length > 0
+          ) {
+            // The round-trip of getMarkdown() -> fromMarkdown() can cause the rich content of the columns
+            // to be stringified into a single text/code node. We need to re-parse that content.
+            const innerMarkdown = (node.children[0] as any)?.value;
+            // Only re-parse if innerMarkdown is a string. It can be undefined if the child is not a text/code node.
+            if (typeof innerMarkdown === 'string') {
+              node.children = fromMarkdown(innerMarkdown, {
+                extensions: [mdxJsx()],
+                mdastExtensions: [mdxJsxFromMarkdown()],
+              }).children;
+            }
           }
         });
         setMdast(tree);
