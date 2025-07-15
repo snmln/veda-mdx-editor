@@ -19,6 +19,7 @@ import {
   InsertImage,
   imagePlugin,
   ListsToggle,
+  linkPlugin,
   MDXEditor,
   NestedLexicalEditor,
   CodeMirrorEditor,
@@ -31,6 +32,7 @@ import {
   useCellValues,
   markdown$,
   directivesPlugin,
+  linkDialogPlugin,
 } from '@mdxeditor/editor';
 import {
   $getRoot,
@@ -117,13 +119,8 @@ export function MDXEditorEnhanced({
   }, []);
 
   const analyzeMdast = () => {
-    if (!editorRef.current) {
-      alert('Editor ref is null - editor not yet initialized');
-      return;
-    }
-
     try {
-      const markdown = editorRef.current.getMarkdown();
+      const markdown = editorRef.current && editorRef.current.getMarkdown();
 
       if (markdown) {
         const tree = fromMarkdown(markdown, {
@@ -146,8 +143,6 @@ export function MDXEditorEnhanced({
         setMdast(tree);
 
         previewMDAST(reserializedMdxContent(tree));
-      } else {
-        alert('No markdown content found');
       }
     } catch (error) {
       console.error('Error analyzing MDAST:', error);
@@ -175,6 +170,8 @@ export function MDXEditorEnhanced({
           codeBlockPlugin(),
           frontmatterPlugin(),
           imagePlugin(),
+          linkPlugin(),
+          linkDialogPlugin(),
           jsxPlugin({
             jsxComponentDescriptors,
           }),
