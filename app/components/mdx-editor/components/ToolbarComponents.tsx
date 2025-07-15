@@ -145,14 +145,24 @@ export const InsertTwoColumnButton = () => {
         name: 'TwoColumn',
         kind: 'flow',
         props: {},
+        // The children need to be valid MDAST nodes.
+        // An empty paragraph is added to each column to make them editable from the start.
         children: [
-          { name: 'LeftColumn', kind: 'DefinitionContent' },
-          { name: 'RightColumn', kind: 'DefinitionContent' },
+          {
+            type: 'mdxJsxFlowElement',
+            name: 'LeftColumn',
+            children: [{ type: 'paragraph', children: [{ type: 'text', value: '' }] }],
+          },
+          {
+            type: 'mdxJsxFlowElement',
+            name: 'RightColumn',
+            children: [{ type: 'paragraph', children: [{ type: 'text', value: '' }] }],
+          },
         ],
       });
     } catch (error) {
-      console.error('Error inserting Map component:', error);
-      alert('Could not insert chart component. See console for details.');
+      console.error('Error inserting TwoColumn component:', error);
+      alert('Could not insert TwoColumn component. See console for details.');
     }
   };
 

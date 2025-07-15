@@ -58,13 +58,7 @@ export const groupByBreakIntoBlocks = (ast) => {
     for (const group of groups) {
       // Check for prose wrapper inside group If no prose wrapper
       // then wrap group inside prose object before adding to block element
-      console.log(
-        'group test',
-        group,
-        group.some((item) => {
-          return item.name === 'Prose';
-        }),
-      );
+
       if (
         group.some((item) => {
           return item.name === 'Prose';
