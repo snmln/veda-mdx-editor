@@ -56,13 +56,18 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     props: [{ name: 'children', type: 'object' }],
     Editor: GenericJsxEditor,
   },
-   {
+  {
     name: 'EmitInterface',
     kind: 'flow',
     source: './components', // Adjust the path
-    hasChildren: true,
-    props: [{ name: 'children', type: 'object' }],
-     Editor: (props) => {
+    hasChildren: false,
+    props: [
+      { name: 'collectionId', type: 'string' },
+      { name: 'zoomLocation', type: 'object' },
+      { name: 'zoomLevel', type: 'number' },
+      { name: 'config', type: 'object' },
+    ],
+    Editor: (props) => {
       return (
         <>
           <EmitEditorWrapper />
@@ -70,13 +75,13 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       );
     },
   },
-    {
+  {
     name: 'CloudBrowse',
     kind: 'flow',
     source: './components', // Adjust the path
     hasChildren: true,
     props: [{ name: 'children', type: 'object' }],
-     Editor: () => {
+    Editor: () => {
       return (
         <>
           <CloudBrowseEditor />
