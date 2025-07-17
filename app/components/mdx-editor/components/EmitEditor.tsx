@@ -20,6 +20,7 @@ const EmitEditorWrapper = () => {
         defaultZoomLevel: 4,
         defaultStartDate: "2022-08-22",
     };
+    
     return (
         <div style={{
             border: '1px solid #2ECC71', padding: '10px', margin: '5px',
