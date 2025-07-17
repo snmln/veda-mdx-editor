@@ -43,8 +43,9 @@
     "@mdx-js/mdx": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
     "@mdxeditor/editor": "^3.25.0",
+    "@mui/material": "^7.2.0",
     "@realm/react": "^0.11.0",
-    "@teamimpact/veda-ui": "^6.1.1",
+    "@teamimpact/veda-ui": "^6.9.0",
     "@trussworks/react-uswds": "^9.0.0",
     "@types/node": "20.11.17",
     "@types/react": "18.2.55",
@@ -78,7 +79,9 @@
     "remark-gfm": "^4.0.1",
     "sass": "^1.83.0",
     "styled-components": "^5.3.3",
-    "sugar-high": "^0.6.0"
+    "sugar-high": "^0.6.0",
+    "test01-emit": "^1.2.2",
+    "sanjog-browseui-test": "^0.1.3"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
