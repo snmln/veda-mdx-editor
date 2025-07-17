@@ -3,7 +3,6 @@ import { EmitInterface } from 'test01-emit';
 import { BrowserRouter } from 'react-router-dom';
 
 const EmitEditorWrapper = () => {
-    
     const config = {
         mapboxToken: "pk.eyJ1IjoiY292aWQtbmFzYSIsImEiOiJjbGNxaWdqdXEwNjJnM3VuNDFjM243emlsIn0.NLbvgae00NUD5K64CD6ZyA",
         geoApifyKey: "YOUR_FALLBACK_GEOAPIFY_KEY",
