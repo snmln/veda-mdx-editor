@@ -129,7 +129,7 @@ export const mockDatasets = [
           zoomExtent: [0, 20],
           compare: {
             datasetId: 'vulcan-ffco2-yeargrid-v4',
-            layerId: 'vulcan-ffco2-elc-res-yeargrid-v4',
+            layerId: 'vulcan-res-co2',
             mapLabel: ({ dateFns, datetime, compareDatetime }) =>
               `${dateFns.format(datetime, 'LLL yyyy')} VS ${dateFns.format(compareDatetime, 'LLL yyyy')}`,
           },
