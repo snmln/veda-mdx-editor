@@ -10,7 +10,7 @@ import { TwoColumnEditorWrapper } from './TwoColumnEditor';
 import MapEditorWrapper from './MapEditor';
 import ChartEditorWrapper from './ChartEditor';
 import { Prose } from '@lib';
-
+import EmitEditorWrapper from './EmitEditor';
 export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
     name: 'TwoColumn',
@@ -20,6 +20,21 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     props: [{ name: 'children', type: 'object' }],
     Editor: (props) => {
       return <TwoColumnEditorWrapper props={{ ...props }} />;
+    },
+  },
+  {
+    name: 'Emit',
+    kind: 'flow',
+    source: './components', // Adjust the path
+    hasChildren: false,
+    props: [
+      { name: 'collectionId', type: 'string' },
+      { name: 'zoomLocation', type: 'string' },
+      { name: 'zoomLevel', type: 'number' },
+      { name: 'config', type: 'object' },
+    ],
+    Editor: (props) => {
+      return <EmitEditorWrapper props={{ ...props }} />;
     },
   },
   {

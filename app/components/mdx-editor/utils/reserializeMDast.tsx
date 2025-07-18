@@ -29,15 +29,39 @@ const transformMdast = (node) => {
   //   const newChildren: any = [];
   const newChildren: any[] = [];
   for (const child of node.children) {
-    // Unwrap paragraphs that only contain a single JSX flow element.
-    // This is a common pattern to avoid unwanted <p> tags around components.
-    if (
-      child.type === 'paragraph' &&
-      child.children.length === 1 &&
-      child.children[0].type === 'mdxJsxFlowElement'
-    ) {
-      newChildren.push(child.children[0]);
+    if (child.type === 'paragraph' && child.children) {
+      let currentParagraphGroup: any[] = [];
+
+      for (const pChild of child.children) {
+        if (
+          pChild.type === 'mdxJsxFlowElement' ||
+          pChild.type === 'mdxJsxTextElement'
+        ) {
+          // If there are pending text-like nodes, wrap them in a paragraph first.
+          if (currentParagraphGroup.length > 0) {
+            newChildren.push({
+              type: 'paragraph',
+              children: currentParagraphGroup,
+            });
+            currentParagraphGroup = [];
+          }
+          // Elevate the JSX element.
+          newChildren.push(pChild);
+        } else {
+          // Collect text-like nodes.
+          currentParagraphGroup.push(pChild);
+        }
+      }
+
+      // If there are any remaining text-like nodes, wrap them in a paragraph.
+      if (currentParagraphGroup.length > 0) {
+        newChildren.push({
+          type: 'paragraph',
+          children: currentParagraphGroup,
+        });
+      }
     } else {
+      // Not a paragraph or no children, push as-is.
       newChildren.push(child);
     }
   }
@@ -90,6 +114,7 @@ const transformMdast = (node) => {
 };
 
 export const reserializedMdxContent = (MDAST) => {
+  console.log('MDAST', MDAST);
 
   const seperatedMDAST = transformMdast(MDAST);
 

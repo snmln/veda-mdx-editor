@@ -8,7 +8,8 @@ import { ChartWrapper } from './ChartPreview';
 import { DEFAULT_MAP_PROPS } from './ToolbarComponents';
 import { highlight } from 'sugar-high';
 import Link from 'next/link';
-
+import { EmitPreview } from './EmitEditor';
+import { DEFAULT_EMIT_PROPS } from './ToolbarComponents';
 import {
   Block,
   Prose,
@@ -175,9 +176,15 @@ const components = {
   RightColumn: (props) => {
     return <div className='grid-col-6  '>{props.children}</div>;
   },
+  Emit: (props) => {
+    return <EmitPreview />;
+  },
 
   Map: MapWrapper,
   Chart: ChartWrapper,
+  Embed: (props) => {
+    return <EmitPreview />;
+  },
 };
 
 export function SimpleMDXPreview({ source }: MDXPreviewProps) {
@@ -187,7 +194,7 @@ export function SimpleMDXPreview({ source }: MDXPreviewProps) {
 
   return (
     <section>
-      <article className='prose'>
+      <article className=''>
         <Providers datasets={mockDatasets}>
           <LegacyGlobalStyles />
 

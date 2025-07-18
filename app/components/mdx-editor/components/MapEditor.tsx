@@ -175,6 +175,7 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
 
   // Update lexical node when any property changes
   useEffect(() => {
+    console.log('mdastNode', mdastNode);
     updateProps();
     updateMdastNode({ ...mdastNode, attributes: stateToNode });
   }, [mapProps]);

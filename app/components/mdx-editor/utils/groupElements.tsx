@@ -23,23 +23,30 @@ export const groupByBreakIntoBlocks = (ast) => {
         if (child.name === 'Break') {
           if (currentGroup.length > 0) {
             groups.push([proseWrapper(currentGroup)]);
-            currentGroup = [];
           }
+          currentGroup = [];
         } else if (
           child.name === 'Block' ||
           child.name === 'Chart' ||
           child.name === 'Map' ||
-          child.name === 'TwoColumn'
+          child.name === 'TwoColumn' ||
+          child.name === 'Emit'
         ) {
-          groups.push([proseWrapper(currentGroup)]);
+          if (currentGroup.length > 0) {
+            groups.push([proseWrapper(currentGroup)]);
+          }
+          currentGroup = [];
 
-          if (child.name === 'Chart' || child.name === 'Map') {
+          if (child.name === 'Chart' || child.name === 'Map' || child.name === 'Emit') {
             groups.push([wrapComponent(child)]);
           } else if (child.name === 'TwoColumn') {
             const parsedColumn = handleTwoColumn(child);
             groups.push(parsedColumn);
+          } else {
+            groups.push([child]);
           }
-          currentGroup = [];
+        } else {
+          currentGroup.push(child);
         }
       } else {
         currentGroup.push(child);
@@ -84,6 +91,47 @@ export const groupByBreakIntoBlocks = (ast) => {
       }
     }
   }
-
+  console.log('results', result);
   return result;
 };
+
+// else if (child.name === 'Emit') {
+//   const returnMockItem = {
+//     type: 'mdxJsxFlowElement',
+//     name: 'Block',
+//     attributes: [
+//       {
+//         type: 'mdxJsxAttribute',
+//         name: 'type',
+//         value: 'wide',
+//       },
+//     ],
+//     children: [
+//       {
+//         type: 'mdxJsxFlowElement',
+//         name: 'Figure',
+//         children: [
+//           {
+//             type: 'mdxJsxFlowElement',
+//             name: 'Embed',
+//             children: [],
+//             attributes: [
+//               {
+//                 type: 'mdxJsxAttribute',
+//                 name: 'src',
+//                 value:
+//                   'https://earth.gov/ghgcenter/custom-interfaces/urban-dashboard/?dataset=vulcan',
+//               },
+//               {
+//                 type: 'mdxJsxAttribute',
+//                 name: 'height',
+//                 value: '800',
+//               },
+//             ],
+//           },
+//         ],
+//       },
+//     ],
+//   };
+//   result.push(returnMockItem);
+// }

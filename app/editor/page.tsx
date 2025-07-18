@@ -180,7 +180,7 @@ export default function EditorPage() {
           {/* Preview Panel - Only mounted when active */}
           {selectedTab === 1 && (
             <div className='h-full w-full'>
-              <div className='prose max-w-none p-6 h-full overflow-auto'>
+              <div className='prose max-w-none p-6 h-full overflow-auto  '>
                 <Suspense
                   fallback={
                     <div className='flex items-center justify-center h-full'>
