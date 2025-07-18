@@ -255,12 +255,12 @@ export const InsertCustomInterface = (props) => {
 
   return (
     <FormControl sx={{ m: 1, minWidth: 200 }} size='small'>
-      <InputLabel id='insert-component-label'>Insert Custom Interface</InputLabel>
+      <InputLabel id='insert-component-label'>Custom Interface</InputLabel>
       <Select
         labelId='insert-component-label'
         id='insert-component-select'
         value={value}
-        label='Insert Custom Interface'
+        label='Custom Interface'
         onChange={handleChange}
       >
         <MenuItem value={0}>{options[0].label}</MenuItem>
