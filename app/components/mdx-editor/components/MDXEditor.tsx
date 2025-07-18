@@ -21,61 +21,33 @@ import {
   ListsToggle,
   linkPlugin,
   MDXEditor,
-  NestedLexicalEditor,
-  CodeMirrorEditor,
-  useMdastNodeUpdater,
-  rootEditor$,
-  addImportVisitor$,
-  realmPlugin,
-  Cell,
-  Signal,
-  useCellValues,
-  markdown$,
+
   directivesPlugin,
   linkDialogPlugin,
 } from '@mdxeditor/editor';
-import {
-  $getRoot,
-  $getSelection,
-  LexicalEditor,
-  $isRangeSelection,
-  $isParagraphNode,
-  $isElementNode,
-  $isTextNode,
-  ElementNode,
-  TextNode,
-  LexicalNode,
-  $createParagraphNode,
-  $createTextNode,
-} from 'lexical';
+
 import { reserializedMdxContent } from '../utils/reserializeMDast';
 
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { MapIcon } from '@heroicons/react/24/outline';
+
 import '@mdxeditor/editor/style.css';
-import dynamic from 'next/dynamic';
-import { BlockNode, Marker } from './components';
+import '../styles/styles.css';
 
 import { scrollytellingButtonPlugin } from '../plugins/scrollytelling/scrollytellingButtonPlugin';
-import { TwoColumnEditorWrapper } from './TwoColumnEditor';
+
 import {
   InsertMapButton,
   InsertLineGraph,
   InsertTwoColumnButton,
   InsertSectionBreak,
+  InsertCustomInterface,
+  InsertBrowseInterfaceButton,
 } from './ToolbarComponents';
-import { $wrapNodes } from '@lexical/selection';
-import { $createCodeNode } from '@lexical/code';
+
 import {
   jsxComponentDescriptors,
   CalloutDirectiveDescriptor,
 } from './ComponentDescriptors';
-import { nodeGroupingPlugin } from '../plugins/mdxGrouping';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $createBlockNode, $createProseNode } from '../plugins/utils';
-import { unified } from 'unified';
-import remarkParse from 'remark-parse';
-import remarkStringify from 'remark-stringify';
+
 import { visit } from 'unist-util-visit';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { mdxJsx } from 'micromark-extension-mdx-jsx';
@@ -201,8 +173,8 @@ export function MDXEditorEnhanced({
                   <InsertMapButton />
                   <InsertLineGraph />
                   <InsertTwoColumnButton />
-
                   <InsertSectionBreak />
+                  <InsertCustomInterface />
                 </div>
               </div>
             ),

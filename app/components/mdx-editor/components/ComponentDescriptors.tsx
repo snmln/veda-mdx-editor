@@ -9,6 +9,8 @@ import {
 import { TwoColumnEditorWrapper } from './TwoColumnEditor';
 import MapEditorWrapper from './MapEditor';
 import ChartEditorWrapper from './ChartEditor';
+import EmitEditorWrapper from './EmitEditor';
+import CloudBrowseEditor from './CloudBrowseEditor';
 import { Prose } from '@lib';
 
 export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
@@ -53,6 +55,67 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     hasChildren: true,
     props: [{ name: 'children', type: 'object' }],
     Editor: GenericJsxEditor,
+  },
+   {
+    name: 'EmitInterface',
+    kind: 'flow',
+    source: './components', // Adjust the path
+    hasChildren: true,
+    props: [{ name: 'children', type: 'object' }],
+     Editor: (props) => {
+      return (
+        <>
+          <EmitEditorWrapper />
+        </>
+      );
+    },
+  },
+    {
+    name: 'CloudBrowse',
+    kind: 'flow',
+    source: './components', // Adjust the path
+    hasChildren: true,
+    props: [{ name: 'children', type: 'object' }],
+     Editor: () => {
+      return (
+        <>
+          <CloudBrowseEditor />
+        </>
+      );
+    },
+  },
+  {
+    name: 'EmitInterface',
+    kind: 'flow',
+    source: './components', // Adjust the path
+    hasChildren: false,
+    props: [
+      { name: 'collectionId', type: 'string' },
+      { name: 'zoomLocation', type: 'object' },
+      { name: 'zoomLevel', type: 'number' },
+      { name: 'config', type: 'object' },
+    ],
+    Editor: (props) => {
+      return (
+        <>
+          <EmitEditorWrapper />
+        </>
+      );
+    },
+  },
+  {
+    name: 'CloudBrowse',
+    kind: 'flow',
+    source: './components', // Adjust the path
+    hasChildren: true,
+    props: [{ name: 'children', type: 'object' }],
+    Editor: () => {
+      return (
+        <>
+          <CloudBrowseEditor />
+        </>
+      );
+    },
   },
   {
     name: 'LeftColumn',

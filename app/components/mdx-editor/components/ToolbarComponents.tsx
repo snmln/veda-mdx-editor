@@ -16,14 +16,17 @@ import {
 
 import { DEFAULT_CHART_PROPS } from './ChartPreview';
 import { MapProps, ChartProps } from './types';
+import { config } from 'process';
+
+import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 export const DEFAULT_MAP_PROPS: MapProps = {
-  center: '[-94.5, 41.25]',
+  center: '[-112.0546935, 33.6055498]',
   zoom: '8.3',
-  datasetId: 'no2',
-  layerId: 'no2-monthly-diff',
-  dateTime: '2024-05-31',
-  compareDateTime: '2023-05-31',
+  datasetId: 'vulcan-ffco2-elc-res-yeargrid-v4',
+  layerId: 'vulcan-elc-res-co2',
+  dateTime: '2021-01-01',
+  compareDateTime: '2021-01-01',
   compareLabel: 'May 2024 VS May 2023',
   attrUrl: '',
   attrAuthor: '',
@@ -151,12 +154,16 @@ export const InsertTwoColumnButton = () => {
           {
             type: 'mdxJsxFlowElement',
             name: 'LeftColumn',
-            children: [{ type: 'paragraph', children: [{ type: 'text', value: '' }] }],
+            children: [
+              { type: 'paragraph', children: [{ type: 'text', value: '' }] },
+            ],
           },
           {
             type: 'mdxJsxFlowElement',
             name: 'RightColumn',
-            children: [{ type: 'paragraph', children: [{ type: 'text', value: '' }] }],
+            children: [
+              { type: 'paragraph', children: [{ type: 'text', value: '' }] },
+            ],
           },
         ],
       });
@@ -175,6 +182,154 @@ export const InsertTwoColumnButton = () => {
         <TwoColumnIcon />
       </div>
       Insert 2 Column
+    </Button>
+  );
+};
+
+const emitInterfaceConfig = {
+  stacApiUrl:
+    'https://earth.gov/ghgcenter//collections/emit-ch4plume-v1/items',
+  metadataEndpoint:
+    'https://earth.jpl.nasa.gov/emit-mmgis-lb/Missions/EMIT/Layers/coverage/combined_plume_metadata.json',
+  coverageUrl:
+    'https://earth.jpl.nasa.gov/emit-mmgis/Missions/EMIT/Layers/coverage/coverage_pub.json',
+  baseStacApiUrl: 'https://earth.gov/ghgcenter/api/stac',
+  mapboxToken:
+    'pk.eyJ1IjoiY292aWQtbmFzYSIsImEiOiJjbGNxaWdqdXEwNjJnM3VuNDFjM243emlsIn0.NLbvgae00NUD5K64CD6ZyA', // SENSITIVE
+  mapBoxStyle: 'mapbox://styles/covid-nasa',
+  basemapStyle: 'cldu1cb8f00ds01p6gi583w1m',
+  geoApifyKey: 'YOUR_GEOAPIFY_KEY_HERE',
+  latlonEndpoint: 'https://api.geoapify.com/v1/geocode/reverse',
+  rasterApiUrl: 'https://earth.gov/ghgcenter/api/raster',
+  publicUrl: '',
+  defaultZoomLocation: [-98.771556, 32.967243],
+  defaultZoomLevel: 4,
+  defaultCollectionId: 'emit-ch4plume-v1',
+  defaultStartDate: '2022-08-22',
+};
+
+const DEFAULT_EMIT_PROPS = {
+  collectionId: 'emit-ch4plume-v1',
+  zoomLocation: [-98.771556, 32.967243],
+  zoomLevel: 4,
+  config: emitInterfaceConfig,
+
+};
+
+const options = [
+  {
+    label: 'EMIT',
+    actionPayload: {
+      name: 'EmitInterface',
+      kind: 'text',
+      props: { ...DEFAULT_EMIT_PROPS },
+    },
+  },
+  {
+    label: 'Urban Dashboard', 
+    actionPayload: {
+      name: 'EmitInterface',
+      kind: 'text',
+      props: { ...DEFAULT_EMIT_PROPS },
+    },
+  },
+];
+
+export const InsertCustomInterface = (props) => {
+  const insertJsx = usePublisher(insertJsx$);
+
+  const [value, setValue] = React.useState('');
+
+  const handleChange = (event) => {
+    const selectedIndex = event.target.value;
+    if (typeof selectedIndex !== 'number') return;
+    try {
+      const selectedOption = options[selectedIndex];
+      insertJsx(selectedOption.actionPayload);
+    } catch (error) {
+      console.error('Error inserting custom interface:', error);
+      alert('Could not insert custom interface. See console for details.');
+    }
+    setValue('');
+  };
+
+  return (
+    <FormControl sx={{ m: 1, minWidth: 200 }} size='small'>
+      <InputLabel id='insert-component-label'>Custom Interface</InputLabel>
+      <Select
+        labelId='insert-component-label'
+        id='insert-component-select'
+        value={value}
+        label='Custom Interface'
+        onChange={handleChange}
+      >
+        <MenuItem value={0}>{options[0].label}</MenuItem>
+        <MenuItem value={1}>{options[1].label}</MenuItem>
+      </Select>
+    </FormControl>
+  );
+};
+
+// export const InsertCustomInterface = (props) => {
+//   const insertJsx = usePublisher(insertJsx$);
+
+//   const handleClick = () => {
+//     try {
+//       insertJsx({
+//         name: 'EmitInterface',
+//         kind: 'text',
+//         props: { ...DEFAULT_EMIT_PROPS },
+//       });
+//     } catch (error) {
+//       console.error('Error inserting EMIT component:', error);
+//       alert('Could not insert EMIT component. See console for details.');
+//     }
+//   };
+
+//   return (
+//     <Button
+//       onClick={handleClick}
+//       title='Insert EMIT Interface'
+//       className='text-sm display-flex flex-align-center padding-1'
+//     >
+//       <Icon.Map className='margin-right-05 width-3 height-3' />
+//       Custom Interface
+//     </Button>
+//   );
+// };
+
+const CLOUD_BROWSE_PROPS = {
+  cloudWatchUrlBase: 'https://api.cors.lol/?url=https://data.ghg.center',
+  sourceIMGUrl: 'https://api.cors.lol/?url=https://data.ghg.center',
+  version: 'v3.3.3',
+  excluded_prefixes: ['browseui'],
+};
+export const InsertBrowseInterfaceButton = (props) => {
+  const insertJsx = usePublisher(insertJsx$);
+
+  const handleClick = () => {
+    try {
+      insertJsx({
+        name: 'CloudBrowse',
+        kind: 'text',
+        props: { ...CLOUD_BROWSE_PROPS },
+      });
+    } catch (error) {
+      console.error('Error inserting Cloud Browse component:', error);
+      alert(
+        'Could not insert Cloud Browse component. See console for details.',
+      );
+    }
+  };
+
+  return (
+    <Button
+      onClick={handleClick}
+      title='Insert Cloud Browse Interface'
+      className='text-sm display-flex flex-align-center padding-1'
+    >
+      <Icon.Map className='margin-right-05 width-3 height-3' />
+      Add S3 Browse
     </Button>
   );
 };
