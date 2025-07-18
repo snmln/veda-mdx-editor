@@ -19,7 +19,7 @@ import { MapProps, ChartProps } from './types';
 import { config } from 'process';
 
 export const DEFAULT_MAP_PROPS: MapProps = {
-  center: '[-94.5, 41.25]',
+  center: '[-112.0546935, 33.6055498]',
   zoom: '8.3',
   datasetId: 'vulcan-ffco2-elc-res-yeargrid-v4',
   layerId: 'vulcan-elc-res-co2',
