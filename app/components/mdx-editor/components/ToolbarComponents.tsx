@@ -21,10 +21,10 @@ import { config } from 'process';
 export const DEFAULT_MAP_PROPS: MapProps = {
   center: '[-94.5, 41.25]',
   zoom: '8.3',
-  datasetId: 'no2',
-  layerId: 'no2-monthly-diff',
-  dateTime: '2024-05-31',
-  compareDateTime: '2023-05-31',
+  datasetId: 'vulcan-ffco2-elc-res-yeargrid-v4',
+  layerId: 'vulcan-elc-res-co2',
+  dateTime: '2021-01-01',
+  compareDateTime: '2021-01-01',
   compareLabel: 'May 2024 VS May 2023',
   attrUrl: '',
   attrAuthor: '',
@@ -146,14 +146,28 @@ export const InsertTwoColumnButton = () => {
         name: 'TwoColumn',
         kind: 'flow',
         props: {},
+        // The children need to be valid MDAST nodes.
+        // An empty paragraph is added to each column to make them editable from the start.
         children: [
-          { name: 'LeftColumn', kind: 'DefinitionContent' },
-          { name: 'RightColumn', kind: 'DefinitionContent' },
+          {
+            type: 'mdxJsxFlowElement',
+            name: 'LeftColumn',
+            children: [
+              { type: 'paragraph', children: [{ type: 'text', value: '' }] },
+            ],
+          },
+          {
+            type: 'mdxJsxFlowElement',
+            name: 'RightColumn',
+            children: [
+              { type: 'paragraph', children: [{ type: 'text', value: '' }] },
+            ],
+          },
         ],
       });
     } catch (error) {
-      console.error('Error inserting Map component:', error);
-      alert('Could not insert chart component. See console for details.');
+      console.error('Error inserting TwoColumn component:', error);
+      alert('Could not insert TwoColumn component. See console for details.');
     }
   };
 
@@ -171,21 +185,25 @@ export const InsertTwoColumnButton = () => {
 };
 
 const emitInterfaceConfig = {
-  stacApiUrl: "https://earth.gov/ghgcenter/api/stac/collections/emit-ch4plume-v1/items",
-  metadataEndpoint: "https://earth.jpl.nasa.gov/emit-mmgis-lb/Missions/EMIT/Layers/coverage/combined_plume_metadata.json",
-  coverageUrl: "https://earth.jpl.nasa.gov/emit-mmgis/Missions/EMIT/Layers/coverage/coverage_pub.json",
-  baseStacApiUrl: "https://earth.gov/ghgcenter/api/stac",
-  mapboxToken: "pk.eyJ1IjoiY292aWQtbmFzYSIsImEiOiJjbGNxaWdqdXEwNjJnM3VuNDFjM243emlsIn0.NLbvgae00NUD5K64CD6ZyA", // SENSITIVE
-  mapBoxStyle: "mapbox://styles/covid-nasa",
-  basemapStyle: "cldu1cb8f00ds01p6gi583w1m",
-  geoApifyKey: "YOUR_GEOAPIFY_KEY_HERE", 
-  latlonEndpoint: "https://api.geoapify.com/v1/geocode/reverse",
-  rasterApiUrl: "https://earth.gov/ghgcenter/api/raster",
-  publicUrl: "",
+  stacApiUrl:
+    'https://earth.gov/ghgcenter//collections/emit-ch4plume-v1/items',
+  metadataEndpoint:
+    'https://earth.jpl.nasa.gov/emit-mmgis-lb/Missions/EMIT/Layers/coverage/combined_plume_metadata.json',
+  coverageUrl:
+    'https://earth.jpl.nasa.gov/emit-mmgis/Missions/EMIT/Layers/coverage/coverage_pub.json',
+  baseStacApiUrl: 'https://earth.gov/ghgcenter/api/stac',
+  mapboxToken:
+    'pk.eyJ1IjoiY292aWQtbmFzYSIsImEiOiJjbGNxaWdqdXEwNjJnM3VuNDFjM243emlsIn0.NLbvgae00NUD5K64CD6ZyA', // SENSITIVE
+  mapBoxStyle: 'mapbox://styles/covid-nasa',
+  basemapStyle: 'cldu1cb8f00ds01p6gi583w1m',
+  geoApifyKey: 'YOUR_GEOAPIFY_KEY_HERE',
+  latlonEndpoint: 'https://api.geoapify.com/v1/geocode/reverse',
+  rasterApiUrl: 'https://earth.gov/ghgcenter/api/raster',
+  publicUrl: '',
   defaultZoomLocation: [-98.771556, 32.967243],
   defaultZoomLevel: 4,
-  defaultCollectionId: "emit-ch4plume-v1",
-  defaultStartDate: "2022-08-22",
+  defaultCollectionId: 'emit-ch4plume-v1',
+  defaultStartDate: '2022-08-22',
 };
 
 const DEFAULT_EMIT_PROPS = {
@@ -193,7 +211,8 @@ const DEFAULT_EMIT_PROPS = {
   zoomLocation: [-98.771556, 32.967243],
   zoomLevel: 4,
   config: emitInterfaceConfig,
-}
+
+};
 
 export const InsertEmitInterfaceButton = (props) => {
   const insertJsx = usePublisher(insertJsx$);
@@ -218,16 +237,16 @@ export const InsertEmitInterfaceButton = (props) => {
       className='text-sm display-flex flex-align-center padding-1'
     >
       <Icon.Map className='margin-right-05 width-3 height-3' />
-      Add EMIT
+      Custom Interface
     </Button>
   );
 };
 
 const CLOUD_BROWSE_PROPS = {
-    cloudWatchUrlBase: "https://api.cors.lol/?url=https://data.ghg.center",
-    sourceIMGUrl: "https://api.cors.lol/?url=https://data.ghg.center",
-    version: "v3.3.3",
-    excluded_prefixes: ["browseui"]
+  cloudWatchUrlBase: 'https://api.cors.lol/?url=https://data.ghg.center',
+  sourceIMGUrl: 'https://api.cors.lol/?url=https://data.ghg.center',
+  version: 'v3.3.3',
+  excluded_prefixes: ['browseui'],
 };
 export const InsertBrowseInterfaceButton = (props) => {
   const insertJsx = usePublisher(insertJsx$);
@@ -241,7 +260,9 @@ export const InsertBrowseInterfaceButton = (props) => {
       });
     } catch (error) {
       console.error('Error inserting Cloud Browse component:', error);
-      alert('Could not insert Cloud Browse component. See console for details.');
+      alert(
+        'Could not insert Cloud Browse component. See console for details.',
+      );
     }
   };
 
@@ -256,4 +277,3 @@ export const InsertBrowseInterfaceButton = (props) => {
     </Button>
   );
 };
-

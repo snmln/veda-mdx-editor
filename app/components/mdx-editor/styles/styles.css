@@ -1,0 +1,9 @@
+
+.container .border.rounded-lg.bg-white {
+  width: 100%;
+}
+
+.container.mx-auto.p-4.bg-gray-50 {
+  display: flex;
+  flex-direction: column;
+}

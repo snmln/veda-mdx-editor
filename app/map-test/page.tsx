@@ -18,8 +18,8 @@ export default function MapTestPage() {
         <ClientMapBlockNoSSR 
           center={[-94.5, 41.25]}
           zoom={8.3}
-          datasetId="no2"
-          layerId="no2-monthly-diff"
+          datasetId="vulcan-ffco2-elc-res-yeargrid-v4"
+          layerId="vulcan-elc-res-co2"
           dateTime="2024-05-31"
         />
       </div>

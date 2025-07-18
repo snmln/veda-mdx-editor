@@ -42,7 +42,6 @@ export const groupByBreakIntoBlocks = (ast) => {
           currentGroup = [];
         }
       } else {
-
         currentGroup.push(child);
       }
     }
@@ -55,12 +54,34 @@ export const groupByBreakIntoBlocks = (ast) => {
 
   if (ast.type === 'root' && Array.isArray(ast.children)) {
     const groups = groupChildren(ast.children);
+
     for (const group of groups) {
-      result.push({
-        type: 'mdxJsxFlowElement',
-        name: 'Block',
-        children: [...group],
-      });
+      // Check for prose wrapper inside group If no prose wrapper
+      // then wrap group inside prose object before adding to block element
+
+      if (
+        group.some((item) => {
+          return item.name === 'Prose';
+        })
+      ) {
+        result.push({
+          type: 'mdxJsxFlowElement',
+          name: 'Block',
+          children: [...group],
+        });
+      } else {
+        result.push({
+          type: 'mdxJsxFlowElement',
+          name: 'Block',
+          children: [
+            {
+              type: 'mdxJsxFlowElement',
+              name: 'Prose',
+              children: [...group],
+            },
+          ],
+        });
+      }
     }
   }
 
