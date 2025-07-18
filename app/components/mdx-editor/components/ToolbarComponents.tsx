@@ -18,6 +18,8 @@ import { DEFAULT_CHART_PROPS } from './ChartPreview';
 import { MapProps, ChartProps } from './types';
 import { config } from 'process';
 
+import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+
 export const DEFAULT_MAP_PROPS: MapProps = {
   center: '[-112.0546935, 33.6055498]',
   zoom: '8.3',
@@ -214,33 +216,87 @@ const DEFAULT_EMIT_PROPS = {
 
 };
 
-export const InsertEmitInterfaceButton = (props) => {
+const options = [
+  {
+    label: 'EMIT',
+    actionPayload: {
+      name: 'EmitInterface',
+      kind: 'text',
+      props: { ...DEFAULT_EMIT_PROPS },
+    },
+  },
+  {
+    label: 'Urban Dashboard', 
+    actionPayload: {
+      name: 'EmitInterface',
+      kind: 'text',
+      props: { ...DEFAULT_EMIT_PROPS },
+    },
+  },
+];
+
+export const InsertCustomInterface = (props) => {
   const insertJsx = usePublisher(insertJsx$);
 
-  const handleClick = () => {
+  const [value, setValue] = React.useState('');
+
+  const handleChange = (event) => {
+    const selectedIndex = event.target.value;
+    if (typeof selectedIndex !== 'number') return;
     try {
-      insertJsx({
-        name: 'EmitInterface',
-        kind: 'text',
-        props: { ...DEFAULT_EMIT_PROPS },
-      });
+      const selectedOption = options[selectedIndex];
+      insertJsx(selectedOption.actionPayload);
     } catch (error) {
-      console.error('Error inserting EMIT component:', error);
-      alert('Could not insert EMIT component. See console for details.');
+      console.error('Error inserting custom interface:', error);
+      alert('Could not insert custom interface. See console for details.');
     }
+    setValue('');
   };
 
   return (
-    <Button
-      onClick={handleClick}
-      title='Insert EMIT Interface'
-      className='text-sm display-flex flex-align-center padding-1'
-    >
-      <Icon.Map className='margin-right-05 width-3 height-3' />
-      Custom Interface
-    </Button>
+    <FormControl sx={{ m: 1, minWidth: 200 }} size='small'>
+      <InputLabel id='insert-component-label'>Custom Interface</InputLabel>
+      <Select
+        labelId='insert-component-label'
+        id='insert-component-select'
+        value={value}
+        label='Custom Interface'
+        onChange={handleChange}
+      >
+        <MenuItem value={0}>{options[0].label}</MenuItem>
+        <MenuItem value={1}>{options[1].label}</MenuItem>
+      </Select>
+    </FormControl>
   );
 };
+
+// export const InsertCustomInterface = (props) => {
+//   const insertJsx = usePublisher(insertJsx$);
+
+//   const handleClick = () => {
+//     try {
+//       insertJsx({
+//         name: 'EmitInterface',
+//         kind: 'text',
+//         props: { ...DEFAULT_EMIT_PROPS },
+//       });
+//     } catch (error) {
+//       console.error('Error inserting EMIT component:', error);
+//       alert('Could not insert EMIT component. See console for details.');
+//     }
+//   };
+
+//   return (
+//     <Button
+//       onClick={handleClick}
+//       title='Insert EMIT Interface'
+//       className='text-sm display-flex flex-align-center padding-1'
+//     >
+//       <Icon.Map className='margin-right-05 width-3 height-3' />
+//       Custom Interface
+//     </Button>
+//   );
+// };
 
 const CLOUD_BROWSE_PROPS = {
   cloudWatchUrlBase: 'https://api.cors.lol/?url=https://data.ghg.center',
