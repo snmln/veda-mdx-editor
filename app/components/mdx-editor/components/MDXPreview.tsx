@@ -9,6 +9,7 @@ import { DEFAULT_MAP_PROPS } from './ToolbarComponents';
 import { highlight } from 'sugar-high';
 import Link from 'next/link';
 import { EmitPreview } from './EmitEditor';
+import { UrbanDashboardPreview } from './UrbanDashboardEditor'; 
 import { DEFAULT_EMIT_PROPS } from './ToolbarComponents';
 import {
   Block,
@@ -179,7 +180,9 @@ const components = {
   Emit: (props) => {
     return <EmitPreview />;
   },
-
+  UrbanDashboard: (props) =>{
+    return <UrbanDashboardPreview />;
+  },
   Map: MapWrapper,
   Chart: ChartWrapper,
   Embed: (props) => {

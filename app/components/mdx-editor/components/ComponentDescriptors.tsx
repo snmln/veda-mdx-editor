@@ -11,6 +11,8 @@ import MapEditorWrapper from './MapEditor';
 import ChartEditorWrapper from './ChartEditor';
 import { Prose } from '@lib';
 import EmitEditorWrapper from './EmitEditor';
+import UrbanDashboardWrapper from './UrbanDashboardEditor';
+import GoesWrapper from './GoesEditor';
 export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
     name: 'TwoColumn',
@@ -25,7 +27,7 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
     name: 'Emit',
     kind: 'flow',
-    source: './components', // Adjust the path
+    source: 'test01-emit', // Adjust the path
     hasChildren: false,
     props: [
       { name: 'collectionId', type: 'string' },
@@ -36,6 +38,34 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     Editor: (props) => {
       return <EmitEditorWrapper props={{ ...props }} />;
     },
+  },
+  {
+    name: 'UrbanDashboard',
+    kind: 'flow',
+    source: 'test01-urban', // Adjust the path
+    hasChildren: false,
+    props: [
+      { name: 'zoomLocation', type: 'string' },
+      { name: 'zoomLevel', type: 'number' },
+      { name: 'config', type: 'object' },],
+    Editor: (props) => {
+      return <UrbanDashboardWrapper props={{ ...props }} />;
+    }
+  },
+   {
+    name: 'Goes',
+    kind: 'flow',
+    source: 'test01-goes', // Adjust the path
+    hasChildren: false,
+    props: [
+      { name: 'defaultZoomLocation', type: 'string' },
+      { name: 'defaultZoomLevel', type: 'number' },
+      { name: 'config', type: 'object' },
+      { name: 'defaultCollectionId', type: 'string' }
+    ],
+    Editor: (props) => {
+      return <GoesWrapper props={{ ...props }} />;
+    }
   },
   {
     name: 'Block',
@@ -105,7 +135,6 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       );
     },
   },
-
   {
     name: 'Chart',
     kind: 'text',

@@ -35,8 +35,10 @@ export const DEFAULT_MAP_PROPS: MapProps = {
 
 const interfaceOptions = [
   { label: 'EMIT', value: 'Emit' },
-  { label: 'GOES', value: 'Goes' },
   { label: 'Urban Dashboard', value: 'UrbanDashboard' },
+  { label: 'GOES', value: 'Goes' },
+  { label: 'NIST', value: 'Nist' },
+  { label: 'NOAA', value: 'Noaa' },
 ];
 
 interface TwoColumnProps {
@@ -274,7 +276,7 @@ export const InsertInterfaceDropdown = () => {
 
   return (
     <FormControl sx={{ m: 1, minWidth: 200 }} size='small'>
-      <InputLabel id="insert-interface-label">Insert Interface</InputLabel>
+      <InputLabel id="insert-interface-label">Custom Interfaces</InputLabel>
       <Select
         labelId="insert-interface-label"
         id="insert-interface-select"
