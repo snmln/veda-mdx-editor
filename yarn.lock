@@ -22161,10 +22161,10 @@ test01-emit@^1.2.2:
     uuid "^11.0.3"
     web-vitals "^5.0.1"
 
-test01-goes@^1.0.27:
-  version "1.0.27"
-  resolved "https://registry.yarnpkg.com/test01-goes/-/test01-goes-1.0.27.tgz#312231014dcaa8a63432eab8f3dcf90ef03e0f3b"
-  integrity sha512-ELjLZhRlUT59rNluniPgfAqqqpCL3yMBsu6WwoSzrNXoQQfIBVmndXv+wmjzn6zmn2XabcUYXLTdrHwCM8dmFA==
+test01-goes@^1.0.28:
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/test01-goes/-/test01-goes-1.0.28.tgz#573822a20b2174b55e7de155ceb00debd0d1214d"
+  integrity sha512-Gr9VShwgIoNbSDngkkBSCNXQGMGWKiA56rt6PbBejIbYC0bXnxQ1Bkw/1g5nqDXmGDvNF/PTaH2BDwyvpO5J0w==
   dependencies:
     "@date-io/moment" "^3.0.0"
     "@emotion/react" "^11.13.3"

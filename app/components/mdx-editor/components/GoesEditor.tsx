@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { GoesInterface } from 'test01-goes';
-import { BrowserRouter } from 'react-router-dom';
 
 const defaultConfig = {
   stacApiUrl: "https://earth.gov/ghgcenter/api/stac",
@@ -14,13 +13,11 @@ const defaultConfig = {
 
 export const GoesPreview = (props) => {
   return (
-    <BrowserRouter>
       <GoesInterface 
       defaultZoomLevel={4} 
       defaultZoomLocation={[-98.771556, 32.967243]} 
       defaultCollectionId='goes-ch4plume-v1'
       config={defaultConfig} />
-    </BrowserRouter>
   );
 };
 const GoesWrapper = (props) => {

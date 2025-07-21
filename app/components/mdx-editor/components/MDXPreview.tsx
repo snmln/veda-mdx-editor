@@ -9,7 +9,8 @@ import { DEFAULT_MAP_PROPS } from './ToolbarComponents';
 import { highlight } from 'sugar-high';
 import Link from 'next/link';
 import { EmitPreview } from './EmitEditor';
-import { UrbanDashboardPreview } from './UrbanDashboardEditor'; 
+import { UrbanDashboardPreview } from './UrbanDashboardEditor';
+import { GoesPreview } from './GoesEditor'; 
 import { DEFAULT_EMIT_PROPS } from './ToolbarComponents';
 import {
   Block,
@@ -182,6 +183,9 @@ const components = {
   },
   UrbanDashboard: (props) =>{
     return <UrbanDashboardPreview />;
+  },
+  GoesInterface: (props) => {
+    return <GoesPreview />;
   },
   Map: MapWrapper,
   Chart: ChartWrapper,

@@ -36,7 +36,7 @@ export const DEFAULT_MAP_PROPS: MapProps = {
 const interfaceOptions = [
   { label: 'EMIT', value: 'Emit' },
   { label: 'Urban Dashboard', value: 'UrbanDashboard' },
-  { label: 'GOES', value: 'Goes' },
+  { label: 'GOES', value: 'GoesInterface' },
   { label: 'NIST', value: 'Nist' },
   { label: 'NOAA', value: 'Noaa' },
 ];

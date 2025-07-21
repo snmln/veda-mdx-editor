@@ -53,7 +53,7 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     }
   },
    {
-    name: 'Goes',
+    name: 'GoesInterface',
     kind: 'flow',
     source: 'test01-goes', // Adjust the path
     hasChildren: false,
