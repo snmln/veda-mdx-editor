@@ -64,6 +64,7 @@ import {
   InsertTwoColumnButton,
   InsertSectionBreak,
   InsertEmitInterfaceButton,
+  InsertInterfaceDropdown
 } from './ToolbarComponents';
 
 import {
@@ -201,7 +202,7 @@ export function MDXEditorEnhanced({
                   <InsertMapButton />
                   <InsertLineGraph />
                   <InsertTwoColumnButton />
-                  <InsertEmitInterfaceButton />
+                  <InsertInterfaceDropdown />
                   <InsertSectionBreak />
                 </div>
               </div>

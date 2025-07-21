@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Icon } from '@trussworks/react-uswds';
 
@@ -17,6 +17,9 @@ import {
 import { DEFAULT_CHART_PROPS } from './ChartPreview';
 import { MapProps, ChartProps } from './types';
 
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+
+
 export const DEFAULT_MAP_PROPS: MapProps = {
   center: '[-94.5, 41.25]',
   zoom: '8.3',
@@ -29,6 +32,12 @@ export const DEFAULT_MAP_PROPS: MapProps = {
   attrAuthor: '',
   caption: '',
 };
+
+const interfaceOptions = [
+  { label: 'EMIT', value: 'Emit' },
+  { label: 'GOES', value: 'Goes' },
+  { label: 'Urban Dashboard', value: 'UrbanDashboard' },
+];
 
 interface TwoColumnProps {
   children: React.ReactNode;
@@ -238,5 +247,47 @@ export const InsertEmitInterfaceButton = (props) => {
       <Icon.Map className='margin-right-05 width-3 height-3' />
       Add EMIT
     </Button>
+  );
+};
+
+export const InsertInterfaceDropdown = () => {
+  const insertJsx = usePublisher(insertJsx$);
+  const [selected, setSelected] = useState('');
+
+  const handleChange = (event) => {
+    const selectedValue = event.target.value;
+    setSelected('');
+
+    try {
+      insertJsx({
+        name: selectedValue,
+        kind: 'text',
+        props: {
+          // Later you can branch props here based on selectedValue
+        },
+      });
+    } catch (error) {
+      console.error(`Error inserting ${selectedValue} component:`, error);
+      alert(`Could not insert ${selectedValue} component. See console for details.`);
+    }
+  };
+
+  return (
+    <FormControl sx={{ m: 1, minWidth: 200 }} size='small'>
+      <InputLabel id="insert-interface-label">Insert Interface</InputLabel>
+      <Select
+        labelId="insert-interface-label"
+        id="insert-interface-select"
+        value={selected}
+        label="Insert Interface"
+        onChange={handleChange}
+      >
+        {interfaceOptions.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
