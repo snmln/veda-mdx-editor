@@ -22,8 +22,8 @@ const MapBlock = dynamic(() => import('@lib').then((mod) => mod.MapBlock), {
 export const mockDatasets = [
   {
     metadata: {
-      id: 'no2',
-      name: 'Nitrogen Dioxide',
+      id: 'vulcan-ffco2-yeargrid-v4',
+      name: 'Vulcan Fossil Fuel CO₂ Emissions',
       featured: true,
       sourceExclusive: 'Mock',
       description:
@@ -48,18 +48,23 @@ export const mockDatasets = [
       ],
       layers: [
         {
-          id: 'no2-monthly',
-          stacCol: 'no2-monthly',
-          name: 'No2 PT',
+          id: 'vulcan-res-co2',
+          stacCol: 'vulcan-ffco2-yeargrid-v4',
+          name: 'Residential Fossil Fuel CO₂ Emissions',
           type: 'raster',
           description:
             'Levels in 10¹⁵ molecules cm⁻². Darker colors indicate higher nitrogen dioxide (NO₂) levels associated and more activity. Lighter colors indicate lower levels of NO₂ and less activity.',
           zoomExtent: [0, 20],
           compare: {
-            datasetId: 'nighttime-lights',
-            layerId: 'nightlights-hd-monthly',
+            datasetId: 'vulcan-ffco2-elc-res-yeargrid-v4',
+            layerId: 'vulcan-elc-res-co2',
             mapLabel: ({ dateFns, datetime, compareDatetime }) =>
               `${dateFns.format(datetime, 'LLL yyyy')} VS ${dateFns.format(compareDatetime, 'LLL yyyy')}`,
+          },
+          sourceParams: {
+            assets: "res-co2",
+            colormap_name: 'spectral_r',
+            rescale: [0, 1400]
           },
           legend: {
             unit: { label: 'Molecules cm3' },
@@ -82,31 +87,81 @@ export const mockDatasets = [
             unit: '10¹⁵ molecules cm⁻²',
           },
         },
+      ],
+    },
+    slug: 'vulcan-ffco2-yeargrid-v4',
+    content: '',
+  },
+  {
+    metadata: {
+      id: 'vulcan-ffco2-elc-res-yeargrid-v4',
+      name: 'Vulcan Fossil Fuel CO₂ Emissions, Version 4',
+      featured: true,
+      sourceExclusive: 'Mock',
+      description:
+        'Since the outbreak of the novel coronavirus, atmospheric concentrations of nitrogen dioxide have changed by as much as 60% in some regions.',
+      taxonomy: [
         {
-          id: 'no2-monthly-diff',
-          stacCol: 'no2-monthly-diff',
-          name: 'No2 (Diff)',
+          name: 'Topics',
+          values: [
+            { id: 'covid_19', name: 'Covid 19' },
+            { id: 'agriculture', name: 'Agriculture' },
+            { id: 'air_quality', name: 'Air Quality' },
+          ],
+        },
+        {
+          name: 'Sector',
+          values: [{ id: 'electricity', name: 'Electricity' }],
+        },
+        {
+          name: 'Producer',
+          values: [{ id: 'nasa', name: 'NASA' }],
+        },
+      ],
+      layers: [
+        {
+          id: 'vulcan-elc-res-co2',
+          stacCol: 'vulcan-ffco2-elc-res-yeargrid-v4',
+          name: 'Scope 2 Residential Fossil Fuel CO₂ Emissions',
           type: 'raster',
           description:
-            'Levels in 10¹⁵ molecules cm⁻². Shows the difference in NO₂ levels between time periods.',
+            'Levels in 10¹⁵ molecules cm⁻². Darker colors indicate higher nitrogen dioxide (NO₂) levels associated and more activity. Lighter colors indicate lower levels of NO₂ and less activity.',
           zoomExtent: [0, 20],
           compare: {
-            datasetId: 'no2',
-            layerId: 'no2-monthly-diff',
+            datasetId: 'vulcan-ffco2-yeargrid-v4',
+            layerId: 'vulcan-res-co2',
             mapLabel: ({ dateFns, datetime, compareDatetime }) =>
               `${dateFns.format(datetime, 'LLL yyyy')} VS ${dateFns.format(compareDatetime, 'LLL yyyy')}`,
           },
+          sourceParams: {
+            assets: "elc-res-co2",
+            colormap_name: 'spectral_r',
+            rescale: [0, 500]
+          },
           legend: {
-            unit: { label: 'molecules/cm3' },
+            unit: { label: 'Molecules cm3' },
             type: 'gradient',
-            min: '-3934857984753',
-            max: '3348573489573',
-            stops: ['#3A88BD', '#C9E0ED', '#E4EEF3', '#FDDCC9', '#DD7059'],
+            min: 'Less',
+            max: 'More',
+            stops: [
+              '#99c5e0',
+              '#f9eaa9',
+              '#f7765d',
+              '#c13b72',
+              '#461070',
+              '#050308',
+            ],
+          },
+          info: {
+            source: 'NASA',
+            spatialExtent: 'Global',
+            temporalResolution: 'Monthly',
+            unit: '10¹⁵ molecules cm⁻²',
           },
         },
       ],
     },
-    slug: 'no2',
+    slug: 'vulcan-ffco2-elc-res-yeargrid-v4',
     content: '',
   },
 ] as unknown as DatasetWithContent[];
