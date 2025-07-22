@@ -43,7 +43,9 @@ const NistWrapper = (props) => {
       </p>
 
       <div >
+        <div style={{ height: '550px', position: 'relative' }}>
         <NistPreview props={{ ...props }} />
+        </div>
       </div>
     </div>
   );

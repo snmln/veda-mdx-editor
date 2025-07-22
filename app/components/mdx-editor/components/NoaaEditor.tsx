@@ -42,7 +42,7 @@ const NoaaWrapper = (props) => {
         NOAA Interface Preview
       </p>
 
-      <div >
+      <div style={{ height: '550px', position: 'relative' }}>
         <NoaaPreview props={{ ...props }} />
       </div>
     </div>

@@ -8,10 +8,13 @@ import { ChartWrapper } from './ChartPreview';
 import { DEFAULT_MAP_PROPS } from './ToolbarComponents';
 import { highlight } from 'sugar-high';
 import Link from 'next/link';
+
 import { EmitPreview } from './EmitEditor';
 import { UrbanDashboardPreview } from './UrbanDashboardEditor';
 import { GoesPreview } from './GoesEditor'; 
-import { DEFAULT_EMIT_PROPS } from './ToolbarComponents';
+import { NistPreview } from './NistEditor';
+import { NoaaPreview } from './NoaaEditor';
+
 import {
   Block,
   Prose,
@@ -178,19 +181,26 @@ const components = {
   RightColumn: (props) => {
     return <div className='grid-col-6  '>{props.children}</div>;
   },
-  Emit: (props) => {
-    return <EmitPreview />;
+  EmitInterface: (props) => {
+    return <EmitPreview {...props}/>;
   },
   UrbanDashboard: (props) =>{
-    return <UrbanDashboardPreview />;
+    return <UrbanDashboardPreview {...props}/>;
   },
   GoesInterface: (props) => {
-    return <GoesPreview />;
+    return <GoesPreview {...props}/>;
+  },
+  NistInterface: (props) => {
+    return <NistPreview {...props}/>;
+  },
+   NoaaInterface: (props) => {
+    return <NoaaPreview {...props}/>;
   },
   Map: MapWrapper,
   Chart: ChartWrapper,
   Embed: (props) => {
-    return <EmitPreview />;
+    console.log('Embed props:', props);
+    return <EmitPreview {...props}/>;
   },
 };
 

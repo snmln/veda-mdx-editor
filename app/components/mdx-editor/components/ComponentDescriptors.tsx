@@ -27,7 +27,7 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     },
   },
   {
-    name: 'Emit',
+    name: 'EmitInterface',
     kind: 'flow',
     source: 'test01-emit', // Adjust the path
     hasChildren: false,

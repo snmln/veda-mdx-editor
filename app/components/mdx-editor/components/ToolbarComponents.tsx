@@ -34,7 +34,7 @@ export const DEFAULT_MAP_PROPS: MapProps = {
 };
 
 const interfaceOptions = [
-  { label: 'EMIT', value: 'Emit' },
+  { label: 'EMIT', value: 'EmitInterface' },
   { label: 'Urban Dashboard', value: 'UrbanDashboard' },
   { label: 'GOES', value: 'GoesInterface' },
   { label: 'NIST', value: 'NistInterface' },
@@ -193,64 +193,64 @@ export const InsertTwoColumnButton = () => {
     </Button>
   );
 };
- const emitInterfaceConfig = {
-  stacApiUrl:
-    'https://earth.gov/ghgcenter/api/stac/collections/emit-ch4plume-v1/items',
-  metadataEndpoint:
-    'https://earth.jpl.nasa.gov/emit-mmgis-lb/Missions/EMIT/Layers/coverage/combined_plume_metadata.json',
-  coverageUrl:
-    'https://earth.jpl.nasa.gov/emit-mmgis/Missions/EMIT/Layers/coverage/coverage_pub.json',
-  baseStacApiUrl: 'https://earth.gov/ghgcenter/api/stac',
-  mapboxToken:
-    'pk.eyJ1IjoiY292aWQtbmFzYSIsImEiOiJjbGNxaWdqdXEwNjJnM3VuNDFjM243emlsIn0.NLbvgae00NUD5K64CD6ZyA', // SENSITIVE
-  mapBoxStyle: 'mapbox://styles/covid-nasa',
-  basemapStyle: 'cldu1cb8f00ds01p6gi583w1m',
-  geoApifyKey: 'YOUR_GEOAPIFY_KEY_HERE',
-  latlonEndpoint: 'https://api.geoapify.com/v1/geocode/reverse',
-  rasterApiUrl: 'https://earth.gov/ghgcenter/api/raster',
-  publicUrl: '',
-  // defaultZoomLocation: [-98.771556, 32.967243],
-  // defaultZoomLevel: 4,
-  // defaultCollectionId: 'emit-ch4plume-v1',
-  // defaultStartDate: '2022-08-22',
-};
+//  const emitInterfaceConfig = {
+//   stacApiUrl:
+//     'https://earth.gov/ghgcenter/api/stac/collections/emit-ch4plume-v1/items',
+//   metadataEndpoint:
+//     'https://earth.jpl.nasa.gov/emit-mmgis-lb/Missions/EMIT/Layers/coverage/combined_plume_metadata.json',
+//   coverageUrl:
+//     'https://earth.jpl.nasa.gov/emit-mmgis/Missions/EMIT/Layers/coverage/coverage_pub.json',
+//   baseStacApiUrl: 'https://earth.gov/ghgcenter/api/stac',
+//   mapboxToken:
+//     'pk.eyJ1IjoiY292aWQtbmFzYSIsImEiOiJjbGNxaWdqdXEwNjJnM3VuNDFjM243emlsIn0.NLbvgae00NUD5K64CD6ZyA', // SENSITIVE
+//   mapBoxStyle: 'mapbox://styles/covid-nasa',
+//   basemapStyle: 'cldu1cb8f00ds01p6gi583w1m',
+//   geoApifyKey: 'YOUR_GEOAPIFY_KEY_HERE',
+//   latlonEndpoint: 'https://api.geoapify.com/v1/geocode/reverse',
+//   rasterApiUrl: 'https://earth.gov/ghgcenter/api/raster',
+//   publicUrl: '',
+//   // defaultZoomLocation: [-98.771556, 32.967243],
+//   // defaultZoomLevel: 4,
+//   // defaultCollectionId: 'emit-ch4plume-v1',
+//   // defaultStartDate: '2022-08-22',
+// };
 
-export const DEFAULT_EMIT_PROPS = {
-  collectionId: 'emit-ch4plume-v1',
-  zoomLocation: [-98.771556, 32.967243],
-  zoomLevel: 4,
-  config: { ...emitInterfaceConfig },
-};
+// export const DEFAULT_EMIT_PROPS = {
+//   collectionId: 'emit-ch4plume-v1',
+//   zoomLocation: [-98.771556, 32.967243],
+//   zoomLevel: 4,
+//   config: { ...emitInterfaceConfig },
+// };
 
-export const InsertEmitInterfaceButton = (props) => {
-  const insertJsx = usePublisher(insertJsx$);
+// export const InsertEmitInterfaceButton = (props) => {
+//   const insertJsx = usePublisher(insertJsx$);
 
-  const handleClick = () => {
-    try {
-      insertJsx({
-        name: 'Emit',
-        kind: 'text',
-        props: {
-          // ...DEFAULT_EMIT_PROPS
-        },
-      });
-    } catch (error) {
-      console.error('Error inserting EMIT component:', error);
-      alert('Could not insert EMIT component. See console for details.');
-    }
-  };
+//   const handleClick = () => {
+//     try {
+//       insertJsx({
+//         name: 'Emit',
+//         kind: 'text',
+//         props: {
+//           // ...DEFAULT_EMIT_PROPS
+//         },
+//       });
+//     } catch (error) {
+//       console.error('Error inserting EMIT component:', error);
+//       alert('Could not insert EMIT component. See console for details.');
+//     }
+//   };
 
-  return (
-    <Button
-      onClick={handleClick}
-      title='Insert EMIT Interface'
-      className='text-sm display-flex flex-align-center padding-1'
-    >
-      <Icon.Map className='margin-right-05 width-3 height-3' />
-      Add EMIT
-    </Button>
-  );
-};
+//   return (
+//     <Button
+//       onClick={handleClick}
+//       title='Insert EMIT Interface'
+//       className='text-sm display-flex flex-align-center padding-1'
+//     >
+//       <Icon.Map className='margin-right-05 width-3 height-3' />
+//       Add EMIT
+//     </Button>
+//   );
+// };
 
 export const InsertInterfaceDropdown = () => {
   const insertJsx = usePublisher(insertJsx$);
