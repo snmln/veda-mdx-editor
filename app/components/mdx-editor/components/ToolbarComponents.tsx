@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Icon } from '@trussworks/react-uswds';
 
 import { NestedLexicalEditor, useMdastNodeUpdater } from '@mdxeditor/editor';
-
+import { config } from 'process';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import TwoColumnIcon from '../assets/TwoColumnIcon';
 import {
@@ -17,6 +17,9 @@ import {
 import { DEFAULT_CHART_PROPS } from './ChartPreview';
 import { MapProps, ChartProps } from './types';
 
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+
+
 export const DEFAULT_MAP_PROPS: MapProps = {
   center: '[-94.5, 41.25]',
   zoom: '8.3',
@@ -29,6 +32,14 @@ export const DEFAULT_MAP_PROPS: MapProps = {
   attrAuthor: '',
   caption: '',
 };
+
+const interfaceOptions = [
+  { label: 'EMIT', value: 'EmitInterface' },
+  { label: 'Urban Dashboard', value: 'UrbanDashboard' },
+  { label: 'GOES', value: 'GoesInterface' },
+  { label: 'NIST', value: 'NistInterface' },
+  { label: 'NOAA', value: 'NoaaInterface' },
+];
 
 interface TwoColumnProps {
   children: React.ReactNode;
@@ -151,12 +162,16 @@ export const InsertTwoColumnButton = () => {
           {
             type: 'mdxJsxFlowElement',
             name: 'LeftColumn',
-            children: [{ type: 'paragraph', children: [{ type: 'text', value: '' }] }],
+            children: [
+              { type: 'paragraph', children: [{ type: 'text', value: '' }] },
+            ],
           },
           {
             type: 'mdxJsxFlowElement',
             name: 'RightColumn',
-            children: [{ type: 'paragraph', children: [{ type: 'text', value: '' }] }],
+            children: [
+              { type: 'paragraph', children: [{ type: 'text', value: '' }] },
+            ],
           },
         ],
       });
@@ -176,5 +191,105 @@ export const InsertTwoColumnButton = () => {
       </div>
       Insert 2 Column
     </Button>
+  );
+};
+//  const emitInterfaceConfig = {
+//   stacApiUrl:
+//     'https://earth.gov/ghgcenter/api/stac/collections/emit-ch4plume-v1/items',
+//   metadataEndpoint:
+//     'https://earth.jpl.nasa.gov/emit-mmgis-lb/Missions/EMIT/Layers/coverage/combined_plume_metadata.json',
+//   coverageUrl:
+//     'https://earth.jpl.nasa.gov/emit-mmgis/Missions/EMIT/Layers/coverage/coverage_pub.json',
+//   baseStacApiUrl: 'https://earth.gov/ghgcenter/api/stac',
+//   mapboxToken:
+//     'pk.eyJ1IjoiY292aWQtbmFzYSIsImEiOiJjbGNxaWdqdXEwNjJnM3VuNDFjM243emlsIn0.NLbvgae00NUD5K64CD6ZyA', // SENSITIVE
+//   mapBoxStyle: 'mapbox://styles/covid-nasa',
+//   basemapStyle: 'cldu1cb8f00ds01p6gi583w1m',
+//   geoApifyKey: 'YOUR_GEOAPIFY_KEY_HERE',
+//   latlonEndpoint: 'https://api.geoapify.com/v1/geocode/reverse',
+//   rasterApiUrl: 'https://earth.gov/ghgcenter/api/raster',
+//   publicUrl: '',
+//   // defaultZoomLocation: [-98.771556, 32.967243],
+//   // defaultZoomLevel: 4,
+//   // defaultCollectionId: 'emit-ch4plume-v1',
+//   // defaultStartDate: '2022-08-22',
+// };
+
+// export const DEFAULT_EMIT_PROPS = {
+//   collectionId: 'emit-ch4plume-v1',
+//   zoomLocation: [-98.771556, 32.967243],
+//   zoomLevel: 4,
+//   config: { ...emitInterfaceConfig },
+// };
+
+// export const InsertEmitInterfaceButton = (props) => {
+//   const insertJsx = usePublisher(insertJsx$);
+
+//   const handleClick = () => {
+//     try {
+//       insertJsx({
+//         name: 'Emit',
+//         kind: 'text',
+//         props: {
+//           // ...DEFAULT_EMIT_PROPS
+//         },
+//       });
+//     } catch (error) {
+//       console.error('Error inserting EMIT component:', error);
+//       alert('Could not insert EMIT component. See console for details.');
+//     }
+//   };
+
+//   return (
+//     <Button
+//       onClick={handleClick}
+//       title='Insert EMIT Interface'
+//       className='text-sm display-flex flex-align-center padding-1'
+//     >
+//       <Icon.Map className='margin-right-05 width-3 height-3' />
+//       Add EMIT
+//     </Button>
+//   );
+// };
+
+export const InsertInterfaceDropdown = () => {
+  const insertJsx = usePublisher(insertJsx$);
+  const [selected, setSelected] = useState('');
+
+  const handleChange = (event) => {
+    const selectedValue = event.target.value;
+    setSelected('');
+
+    try {
+      insertJsx({
+        name: selectedValue,
+        kind: 'text',
+        props: {
+          // Later you can branch props here based on selectedValue
+        },
+      });
+    } catch (error) {
+      console.error(`Error inserting ${selectedValue} component:`, error);
+      alert(`Could not insert ${selectedValue} component. See console for details.`);
+    }
+  };
+
+  return (
+    <FormControl sx={{ m: 1, minWidth: 200 }} size='small'>
+      <InputLabel id="insert-interface-label">Custom Interfaces</InputLabel>
+      <Select
+        labelId="insert-interface-label"
+        id="insert-interface-select"
+        value={selected}
+        label="Insert Interface"
+        onChange={handleChange}
+      >
+        {interfaceOptions.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
