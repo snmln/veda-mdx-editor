@@ -77,7 +77,7 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     hasChildren: false,
     props: [
       { name: 'defaultZoomLevel', type: 'number' },
-      { name: 'config', type: 'object' },
+      { name: 'config', type: 'expression' },
     ],
     Editor: (props) => {
       return <NistWrapper props={{ ...props }} />;
@@ -91,7 +91,7 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     props: [
       { name: 'defaultZoomLocation', type: 'string' },
       { name: 'defaultZoomLevel', type: 'number' },
-      { name: 'config', type: 'object' },
+      { name: 'config', type: 'expression' },
     ],
     Editor: (props) => {
       return <NoaaWrapper props={{ ...props }} />;

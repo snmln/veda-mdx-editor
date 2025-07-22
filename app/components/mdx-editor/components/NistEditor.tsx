@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import { NistInterface } from 'test01-nist';
+import "../style/styles.css";
+
 const defaultConfig = {
   // API Endpoints
   mapboxToken:
@@ -41,11 +43,9 @@ const NistWrapper = (props) => {
         NIST Interface Preview
       </p>
 
-      <div >
-        <div style={{ height: '550px', position: 'relative' }}>
+        <div style={{ height: '550px', width: '100%' }}>
         <NistPreview props={{ ...props }} />
         </div>
-      </div>
     </div>
   );
 };

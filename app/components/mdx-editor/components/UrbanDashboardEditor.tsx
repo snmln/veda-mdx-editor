@@ -1,5 +1,6 @@
 import React from "react";
 import { UrbanDashboard } from "test01-urban";
+import "../style/styles.css"
 
 export const urbanConfig = {
   mapboxToken:
@@ -43,7 +44,7 @@ const UrbanDashboardWrapper = (props) => {
         Urban Dashboard Preview
       </p>
 
-       <div style={{ height: '550px', position: 'relative' }}>
+       <div style={{ height: '550px', width: '100%'}}>
         <UrbanDashboardPreview props={{ ...props }} />
       </div>
     </div>

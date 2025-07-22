@@ -22219,10 +22219,10 @@ test01-goes@^1.0.28:
     uuid "^11.0.3"
     web-vitals "^2.1.0"
 
-test01-nist@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/test01-nist/-/test01-nist-0.2.2.tgz#99f85c0f4fa5ac70fb2664f1e5e244dcb06fe92c"
-  integrity sha512-XGTwgvP3w7JQ/GAEsvqKxE0zRRRdgdn7gQ8A/Rlbt4DRMzY24jmr+P7yKx+Rp+el2rjw79nvnlwJIy5x6bL67w==
+test01-nist@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/test01-nist/-/test01-nist-0.2.3.tgz#5fe7461bcd052cefa4d76eccbe4e13021c47e0a0"
+  integrity sha512-GFtgAYSVqAZ3MIYRtqda/mOnianKrtRW+Y2mvhame97DNStkVkJebJnvKXQ11n3iPooe6P5WMOwFbSjHVnSCOA==
   dependencies:
     "@emotion/react" "^11.11.4"
     "@emotion/styled" "^11.11.5"

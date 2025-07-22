@@ -193,7 +193,7 @@ const components = {
   NistInterface: (props) => {
     return <NistPreview {...props}/>;
   },
-   NoaaInterface: (props) => {
+  NoaaInterface: (props) => {
     return <NoaaPreview {...props}/>;
   },
   Map: MapWrapper,

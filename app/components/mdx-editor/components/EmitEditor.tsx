@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { EmitInterface } from 'test01-emit';
-import { MemoryRouter } from 'react-router-dom';
 
 export const config = {
   mapboxToken:
@@ -26,7 +25,6 @@ export const config = {
 
 export const EmitPreview = (props) => {
   return (
-    <MemoryRouter>
       <EmitInterface
         defaultCollectionId='emit-ch4plume-v1'
         defaultZoomLocation={[-98.771556, 32.967243]}
@@ -34,7 +32,6 @@ export const EmitPreview = (props) => {
         defaultStartDate={'1/1/2020'}
         config={config}
       />
-    </MemoryRouter>
   );
 };
 const EmitEditorWrapper = (props) => {
