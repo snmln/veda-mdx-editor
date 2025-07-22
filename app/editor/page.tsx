@@ -108,7 +108,11 @@ export default function EditorPage() {
   };
 
   return (
-    <div className='container mx-auto p-4 max-w-5xl min-h-screen bg-gray-50'>
+    <div className='container mx-auto p-4 max-w-5xl min-h-screen bg-white-50'>
+      <div className='display-flex flex-align-center'>
+        <img className='padding-1' src="https://visex.netlify.app/graphics/nasa-veda-logo-pos.svg" style={{height: '40px'}}></img>
+        <span><b>VEDA Content Editor</b></span>
+      </div>
       {/* Custom Tab Buttons */}
       <Providers datasets={mockDatasets}>
         <LegacyGlobalStyles />
