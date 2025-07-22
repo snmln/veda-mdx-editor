@@ -1,0 +1,52 @@
+import React, { Fragment } from 'react';
+import { NistInterface } from 'test01-nist';
+import '../style/styles.css';
+const defaultConfig = {
+  // API Endpoints
+  mapboxToken:
+    "pk.eyJ1IjoiY292aWQtbmFzYSIsImEiOiJjbGNxaWdqdXEwNjJnM3VuNDFjM243emlsIn0.NLbvgae00NUD5K64CD6ZyA",
+  mapboxStyle: "mapbox://styles/covid-nasa",
+  basemapStyle: "cldu1cb8f00ds01p6gi583w1m",
+  featuresApiUrl: "https://earth.gov/ghgcenter/api/features/",
+};
+
+export const NistPreview = (props) => {
+  return (
+      <NistInterface 
+      defaultZoomLevel={4} 
+      config={defaultConfig} />
+  );
+};
+const NistWrapper = (props) => {
+  return (
+    <div
+      style={{
+        border: '1px solid #2ECC71',
+        padding: '10px',
+        margin: '5px',
+        backgroundColor: '#E8F8F5',
+        position: 'relative',
+        overflow: 'hidden',
+        minHeight: '550px',
+      }}
+    >
+      <p
+        style={{
+          margin: '0 0 10px 0',
+          fontWeight: 'bold',
+          fontSize: '0.9em',
+          color: '#1E8449',
+          textAlign: 'center',
+        }}
+      >
+        NIST Interface Preview
+      </p>
+
+      <div >
+        <NistPreview props={{ ...props }} />
+      </div>
+    </div>
+  );
+};
+
+export default NistWrapper;

@@ -37,8 +37,8 @@ const interfaceOptions = [
   { label: 'EMIT', value: 'Emit' },
   { label: 'Urban Dashboard', value: 'UrbanDashboard' },
   { label: 'GOES', value: 'GoesInterface' },
-  { label: 'NIST', value: 'Nist' },
-  { label: 'NOAA', value: 'Noaa' },
+  { label: 'NIST', value: 'NistInterface' },
+  { label: 'NOAA', value: 'NoaaInterface' },
 ];
 
 interface TwoColumnProps {

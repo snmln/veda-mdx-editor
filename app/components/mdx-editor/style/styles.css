@@ -1,3 +1,9 @@
 .map-section{
     min-height: 100%;
 }
+
+.mapbox-container{
+    position : static !important;
+    min-width: 1000px;
+    min-height: 1000px;
+}

@@ -82,9 +82,11 @@
     "sass": "^1.83.0",
     "styled-components": "^5.3.3",
     "sugar-high": "^0.6.0",
-    "test01-emit": "^1.2.2",
+    "test01-emit": "^1.2.4",
     "test01-goes": "^1.0.28",
-    "test01-urban": "^0.1.8"
+    "test01-nist": "^0.2.2",
+    "test01-urban": "^0.1.11",
+    "test01-noaa" : "0.1.6"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
