@@ -32,10 +32,11 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     source: 'test01-emit', // Adjust the path
     hasChildren: false,
     props: [
-      { name: 'collectionId', type: 'string' },
-      { name: 'zoomLocation', type: 'string' },
-      { name: 'zoomLevel', type: 'number' },
-      { name: 'config', type: 'object' },
+      { name: 'defaultCollectionId', type: 'string' },
+      { name: 'defaultZoomLocation', type: 'string' },
+      { name: 'defaultZoomLevel', type: 'number' },
+      { name: 'config', type: 'expression' },
+      { name: 'defaultStartDate', type: 'string' },
     ],
     Editor: (props) => {
       return <EmitEditorWrapper props={{ ...props }} />;
@@ -47,9 +48,9 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     source: 'test01-urban', // Adjust the path
     hasChildren: false,
     props: [
-      { name: 'zoomLocation', type: 'string' },
-      { name: 'zoomLevel', type: 'number' },
-      { name: 'config', type: 'object' },],
+      { name: 'defaultZoomLocation', type: 'string' },
+      { name: 'defaultZoomLevel', type: 'number' },
+      { name: 'config', type: 'expression' },],
     Editor: (props) => {
       return <UrbanDashboardWrapper props={{ ...props }} />;
     }
@@ -62,7 +63,7 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     props: [
       { name: 'defaultZoomLocation', type: 'string' },
       { name: 'defaultZoomLevel', type: 'number' },
-      { name: 'config', type: 'object' },
+      { name: 'config', type: 'expression' },
       { name: 'defaultCollectionId', type: 'string' }
     ],
     Editor: (props) => {
@@ -75,10 +76,8 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     source: 'test01-nist', // Adjust the path
     hasChildren: false,
     props: [
-      { name: 'defaultZoomLocation', type: 'string' },
       { name: 'defaultZoomLevel', type: 'number' },
       { name: 'config', type: 'object' },
-      { name: 'defaultCollectionId', type: 'string' }
     ],
     Editor: (props) => {
       return <NistWrapper props={{ ...props }} />;

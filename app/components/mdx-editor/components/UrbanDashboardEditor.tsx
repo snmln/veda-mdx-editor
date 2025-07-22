@@ -1,7 +1,5 @@
 import React from "react";
 import { UrbanDashboard } from "test01-urban";
-import { BrowserRouter } from "react-router-dom";
-import "../style/styles.css";
 
 export const urbanConfig = {
   mapboxToken:
@@ -15,7 +13,6 @@ export const urbanConfig = {
 export const UrbanDashboardPreview = (props) => {
     
   return (
-    <BrowserRouter>
       <div className="fullSize" style={{ minHeight: '550px', width: '100%' }}>
         <UrbanDashboard
           defaultZoomLocation = {[-98.771556, 32.967243]}
@@ -23,7 +20,6 @@ export const UrbanDashboardPreview = (props) => {
           config={urbanConfig}
         />
       </div>
-    </BrowserRouter>
   );
 };
 

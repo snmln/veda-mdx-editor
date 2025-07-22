@@ -199,7 +199,6 @@ const components = {
   Map: MapWrapper,
   Chart: ChartWrapper,
   Embed: (props) => {
-    console.log('Embed props:', props);
     return <EmitPreview {...props}/>;
   },
 };
@@ -208,7 +207,6 @@ export function SimpleMDXPreview({ source }: MDXPreviewProps) {
   // Use an empty string as a default if source is undefined
   // const datasets = getDatasetsMetadata();
   const safeSource = source || '';
-
   return (
     <section>
       <article className=''>

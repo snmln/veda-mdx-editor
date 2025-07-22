@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { NistInterface } from 'test01-nist';
-import '../style/styles.css';
 const defaultConfig = {
   // API Endpoints
   mapboxToken:
