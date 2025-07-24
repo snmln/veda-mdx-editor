@@ -9,6 +9,8 @@ import { DEFAULT_MAP_PROPS } from './ToolbarComponents';
 import { highlight } from 'sugar-high';
 import Link from 'next/link';
 
+import { allAvailableDatasets } from 'app/content/datasets/alldatasets';
+
 import {
   Block,
   Prose,
@@ -18,7 +20,7 @@ import {
   Image,
   LegacyGlobalStyles,
 } from '@lib';
-import { mockDatasets } from './MapPreview';
+// import { mockDatasets } from './MapPreview';
 import Providers from 'app/(datasets)/providers';
 // Correctly import the default export from mdx-preview-map with error handling
 
@@ -67,6 +69,7 @@ const MapWrapper = (props) => {
         dateTime={props.dateTime}
         compareDateTime={props.compareDateTime}
         compareLabel={props.compareLabel}
+        allAvailableDatasets={allAvailableDatasets}
       />
     );
   } catch (error) {
@@ -188,7 +191,7 @@ export function SimpleMDXPreview({ source }: MDXPreviewProps) {
   return (
     <section>
       <article className='prose'>
-        <Providers datasets={mockDatasets}>
+        <Providers datasets={allAvailableDatasets}>
           <LegacyGlobalStyles />
 
           <Suspense

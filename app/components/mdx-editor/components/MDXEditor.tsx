@@ -201,7 +201,6 @@ export function MDXEditorEnhanced({
                   <InsertMapButton />
                   <InsertLineGraph />
                   <InsertTwoColumnButton />
-
                   <InsertSectionBreak />
                 </div>
               </div>

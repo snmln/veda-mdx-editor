@@ -9,6 +9,8 @@ import {
 import { TwoColumnEditorWrapper } from './TwoColumnEditor';
 import MapEditorWrapper from './MapEditor';
 import ChartEditorWrapper from './ChartEditor';
+import { allAvailableDatasets } from 'app/content/datasets/alldatasets';
+import { availableCsvs } from 'app/content/datasets/allcsv';
 import { Prose } from '@lib';
 
 export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
@@ -82,15 +84,17 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       { name: 'compareLabel', type: 'string' },
     ],
     hasChildren: false,
-    Editor: (props) => {
-      return (
-        <>
-          <MapEditorWrapper props={{ ...props }} />
-        </>
-      );
-    },
+   Editor: (props) => {
+  return (
+    <>
+      <MapEditorWrapper 
+        props={{ ...props }} 
+        allAvailableDatasets={allAvailableDatasets}
+      />
+    </>
+  );
+},
   },
-
   {
     name: 'Chart',
     kind: 'text',
@@ -113,12 +117,16 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
       { name: 'altDesc', type: 'string' },
     ],
     hasChildren: false,
-    Editor: (props) => {
-      return (
-        <>
-          <ChartEditorWrapper props />
-        </>
-      );
+   Editor: (props) => {
+    return (
+    <>
+      <ChartEditorWrapper
+        {...props}
+        allAvailableDatasets={allAvailableDatasets}
+        allAvailableCsvs={availableCsvs} // Add this line
+      />
+    </>
+  );
     },
   },
 ];

@@ -36,6 +36,7 @@ interface FieldProps {
   inputErrors?: any;
   setDraftInputs?: (value: any) => void;
   setInputErrors?: (value: any) => void;
+  options?: string[];
 }
 const checkRequired = (isRequired, value) => {
   return isRequired && !value ? { validationStatus: 'error' } : '';
@@ -75,7 +76,42 @@ const setInput = (props) => {
     setDraftInputs,
     inputErrors,
     setInputErrors,
+    options,
   } = props;
+
+if (options && Array.isArray(options)) {
+    return (
+      <>
+        <Label htmlFor={propName} className='margin-top-2'>
+          {fieldName}
+        </Label>
+        <span className='usa-hint'>{hint}</span>
+        <Select
+          id={propName}
+          name={propName}
+          value={value}
+          onChange={(e) =>
+            onChange({ ...componentProps, [propName]: e.target.value })
+          }
+          {...checkRequired(isRequired, value)}
+        >
+          <option value=''>- Select option -</option>
+          {options.map((option) => {
+            // Check if option is a string or an object with value/label
+            const value = typeof option === 'object' ? option.value : option;
+            const label = typeof option === 'object' ? option.label : option;
+
+            return (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            );
+          })}
+        </Select>
+      </>
+    );
+  }
+
   const cleanedType = type !== undefined && type.toLowerCase();
 
   const [draft, setDraft] = useState(value);

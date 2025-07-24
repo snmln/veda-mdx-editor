@@ -10,8 +10,12 @@ import { useMdastNodeUpdater } from '@mdxeditor/editor';
 import { DEFAULT_MAP_PROPS } from './ToolbarComponents';
 import { InputField } from '../utils/CreateInterface';
 import { ClientMapBlock } from './MapPreview';
+
+import { DatasetWithContent } from 'app/types/content';
+
 interface EditorMapProps extends MapProps {
   node?: LexicalNode & { setProps?: (props: Partial<MapProps>) => void };
+  allAvailableDatasets?: DatasetWithContent[];
 }
 
 // Create a placeholder node type that satisfies the LexicalNode interface
@@ -90,7 +94,7 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
   const parsedZoom = typeof zoom === 'string' ? parseFloat(zoom) || 8.3 : zoom;
 
   const updateMdastNode = useMdastNodeUpdater();
-  const { mdastNode } = props;
+  const { mdastNode, allAvailableDatasets } = props;
 
   const stateToNode = [
     {
@@ -174,10 +178,30 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
   };
 
   // Update lexical node when any property changes
-  useEffect(() => {
+ useEffect(() => {
+  // Defer the updates to avoid flushSync during render
+  setTimeout(() => {
     updateProps();
     updateMdastNode({ ...mdastNode, attributes: stateToNode });
-  }, [mapProps]);
+  }, 0);
+}, [mapProps]);
+
+// When the selected dataset changes, auto-select the first layer
+  useEffect(() => {
+    if (selectedDataset && selectedDataset.metadata.layers.length > 0) {
+      // Only update if the current layerId is not valid for the new dataset
+      const currentLayerIsValid = selectedDataset.metadata.layers.some(
+        (l) => l.id === layerId
+      );
+      if (!currentLayerIsValid) {
+        setMapProps((prev) => ({
+          ...prev,
+          layerId: selectedDataset.metadata.layers[0].id,
+        }));
+      }
+    }
+  }, [datasetId]);
+
   const firstInterface = [
     { fieldName: '*Dataset ID', propName: 'datasetId', isRequired: true },
     { fieldName: '*Layer ID', propName: 'layerId', isRequired: true },
@@ -215,6 +239,22 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
     },
   ];
 
+  // Create dropdown options from the available datasets
+  const datasetOptions = allAvailableDatasets?.map(d => ({
+    value: d.metadata.id,
+    label: d.metadata.name
+  }));
+
+  // Find the currently selected dataset to populate layer options
+  const selectedDataset = allAvailableDatasets?.find(
+    (d) => d.metadata.id === datasetId
+  );
+  
+  const layerOptions = selectedDataset?.metadata.layers.map(l => ({
+    value: l.id,
+    label: l.name
+  }));
+
   return (
     <>
       <div className=' border-05 border-primary rounded-lg overflow-hidden shadow-sm bg-white'>
@@ -229,22 +269,26 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
                 </h3>
                 <div className='grid-row flex-align-end grid-gap-2'>
                   {firstInterface.map((field) => {
-                    const { propName, fieldName, type, customClass } = field;
+                    const { propName } = field;
 
-                    return InputField({
+                    const fieldProps = {
                       ...field,
-                      fieldName,
                       value: mapProps[propName],
                       onChange: setMapProps,
-                      type: type,
                       componentProps: mapProps,
-                      propName: propName,
-                      customClass: customClass,
                       draftInputs,
                       inputErrors,
                       setInputErrors,
-                      setDraftInputs,
-                    });
+                      setDraftInputs
+                    };
+
+                    if (propName === 'datasetId') {
+                      fieldProps.options = datasetOptions; // Use dataset options
+                    } else if (propName === 'layerId') {
+                      fieldProps.options = layerOptions; // Use layer options
+                    }
+
+                    return InputField(fieldProps);
                   })}
                 </div>
                 <h4>Map Comparison</h4>
@@ -264,6 +308,7 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
                       draftInputs,
                       setDraftInputs,
                       inputErrors,
+                      allAvailableDatasets,
                       setInputErrors,
                     });
                   })}
@@ -281,6 +326,7 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
                       componentProps: mapProps,
                       propName: propName,
                       customClass: customClass,
+                      allAvailableDatasets,
                     });
                   })}
                 </div>
@@ -300,9 +346,11 @@ const MapEditorWithPreview: React.FC<any> = (props) => {
 
           <div className='relative'>
             <ClientMapBlock
+              key={`${datasetId}-${layerId}`}
               {...mapProps}
               center={parsedCenter}
               zoom={parsedZoom}
+              allAvailableDatasets={allAvailableDatasets}
             />
           </div>
           <div>
@@ -331,7 +379,10 @@ const MapEditorWrapper: React.FC<EditorMapProps> = (props) => {
             lexicalNode: props.node || createPlaceholderNode(),
           }}
         >
-          <MapEditorWithPreview {...props} />
+          <MapEditorWithPreview 
+            {...props} 
+            allAvailableDatasets={props.allAvailableDatasets}
+          />
         </MapContextProvider>
       </>
     );
@@ -342,15 +393,7 @@ const MapEditorWrapper: React.FC<EditorMapProps> = (props) => {
         <p className='text-yellow-800'>
           Map component could not be loaded properly.
         </p>
-        {/* <ClientMapBlock
-          center={[-94.5, 41.25]}
-          zoom={8.3}
-          datasetId="no2"
-          layerId="no2-monthly-diff"
-          dateTime="2024-05-31"
-          compareDateTime="2023-05-31"
-          compareLabel="May 2024 VS May 2023"
-        /> */}
+        
       </div>
     );
   }

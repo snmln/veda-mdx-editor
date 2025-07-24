@@ -10,7 +10,6 @@ import React, {
 } from 'react';
 import dynamic from 'next/dynamic';
 import Providers from 'app/(datasets)/providers';
-import { mockDatasets } from '../components/mdx-editor/components/MapPreview';
 import { LegacyGlobalStyles } from '@lib';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 
@@ -70,7 +69,7 @@ This is a live editor where you can write and preview MDX content.
 Try editing this content!
 `;
 
-export default function EditorPage() {
+export default function EditorPage({ allAvailableDatasets }) {
   const [mdxContent, setMdxContent] = useState(initialContent);
   const [reserializedMdxContent, setReserializedMdxContent] =
     useState(initialContent);
@@ -110,7 +109,7 @@ export default function EditorPage() {
   return (
     <div className='container mx-auto p-4 max-w-5xl min-h-screen bg-gray-50'>
       {/* Custom Tab Buttons */}
-      <Providers datasets={mockDatasets}>
+      <Providers datasets={allAvailableDatasets}>
         <LegacyGlobalStyles />
         <div className='flex space-x-4 mb-4'>
           <button

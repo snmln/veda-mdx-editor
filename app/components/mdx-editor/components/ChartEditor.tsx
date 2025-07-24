@@ -90,6 +90,7 @@ const ClientChartBlock = dynamic(
 
 // Map editor component that includes both preview and editable properties
 const ChartEditorWithPreview: React.FC<any> = (props) => {
+  const { allAvailableDatasets, allAvailableCsvs } = props; // Add allAvailableCsvs
   const updateMdastNode = useMdastNodeUpdater();
 
   const { mdastNode } = props;
@@ -162,10 +163,10 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
               </h3>
 
               <div className='grid-row flex-align-start grid-gap-2'>
-                {interfaceList.map((input) => {
-                  const { propName } = input;
+               {interfaceList.map((input) => {
+                const { propName } = input;
 
-                  return InputField({
+                return InputField({
                     ...input,
                     value: chartProps[propName],
                     onChange: setChartProps,
@@ -193,7 +194,7 @@ const ChartEditorWithPreview: React.FC<any> = (props) => {
 
         <div className='relative'>
           <div>
-            <ClientChartBlock {...chartProps} />
+            <ClientChartBlock {...chartProps} allAvailableDatasets={allAvailableDatasets} />
           </div>
           <div>
             <figcaption className='text-gray-30 flex'>

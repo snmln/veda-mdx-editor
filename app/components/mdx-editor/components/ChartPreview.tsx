@@ -15,55 +15,14 @@ const Chart = dynamic(() => import('@lib').then((mod) => mod.Chart), {
   ),
 });
 
-const nightmockDatasets = [
-  {
-    metadata: {
-      featured: true,
-      id: 'nighttime-lights',
-      name: 'Nighttime Lights',
-      description:
-        'During the COVID-19 pandemic, researchers are using night light observations to track variations in energy use, migration, and transportation in response to social distancing and lockdown measures.',
-      media: {
-        src: '/images/dataset/nighttime-lights--dataset-cover.jpg',
-        alt: 'Satellite image of Earth at night.',
-        author: {
-          name: 'NASA Earth Observatory',
-          url: 'https://earthobservatory.nasa.gov/images/90008/night-light-maps-open-up-new-applications',
-        },
-      },
-      taxonomy: [
-        { name: 'Topics', values: ['Covid 19', 'Agriculture'] },
-        { name: 'Sector', values: ['Electricity'] },
-        { name: 'Producer', values: ['NASA'] },
-        { name: 'Gas Emission', values: ['DOS'] },
-      ],
-      layers: [
-        {
-          id: 'nightlights-hd-monthly',
-          stacCol: 'nightlights-hd-monthly',
-          name: 'Nightlights Monthly',
-          type: 'raster',
-          description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sodales semper risus, suscipit varius diam facilisis non.',
-          zoomExtent: [4, 16],
-          legend: {
-            type: 'gradient',
-            min: 'Less',
-            max: 'More',
-            stops: ['#08041d', '#1f0a46', '#52076c', '#f57c16', '#f7cf39'],
-          },
-        },
-      ],
-    },
-  },
-] as unknown as DatasetWithContent[];
+export function ClientChartBlock(props: { allAvailableDatasets?: DatasetWithContent[] }) {
+const datasetsToUse = props.allAvailableDatasets || [];
+const transformed = transformToVedaData(datasetsToUse as any);
 
-export function ClientChartBlock(props) {
-  const transformed = transformToVedaData(nightmockDatasets as any);
   return (
     <DevseedUIThemeProvider>
       <VedaUIConfigProvider>
-        <DataProvider initialDatasets={nightmockDatasets}>
+        <DataProvider initialDatasets={datasetsToUse}>
           <div className='relative w-full h-[250px]'>
             <Chart {...props} datasets={transformed} />
           </div>

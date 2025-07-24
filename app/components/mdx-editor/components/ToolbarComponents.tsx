@@ -20,15 +20,16 @@ import { MapProps, ChartProps } from './types';
 export const DEFAULT_MAP_PROPS: MapProps = {
   center: '[-94.5, 41.25]',
   zoom: '8.3',
-  datasetId: 'no2',
-  layerId: 'no2-monthly-diff',
-  dateTime: '2024-05-31',
-  compareDateTime: '2023-05-31',
-  compareLabel: 'May 2024 VS May 2023',
+  datasetId: 'vulcan-ffco2-yeargrid-v4',
+  layerId: 'vulcan-total-co2',
+  dateTime: '2020-12-31',
+  compareDateTime: '2015-12-31',
+  compareLabel: '2020 VS 2015',
   attrUrl: '',
   attrAuthor: '',
   caption: '',
 };
+
 
 interface TwoColumnProps {
   children: React.ReactNode;
