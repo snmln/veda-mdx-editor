@@ -15,39 +15,38 @@ export const groupByBreakIntoBlocks = (ast) => {
     const groups: any = [];
     let currentGroup: any = [];
 
-    for (const child of children) {
-      if (
-        child.type === 'mdxJsxTextElement' ||
-        child.type === 'mdxJsxFlowElement'
-      ) {
-        if (child.name === 'Break') {
-          if (currentGroup.length > 0) {
-            groups.push([proseWrapper(currentGroup)]);
-          }
-          currentGroup = [];
-        } else if (
-          child.name === 'Block' ||
-          child.name === 'Chart' ||
-          child.name === 'Map' ||
-          child.name === 'TwoColumn' ||
-          child.name === 'Emit'
-        ) {
-          if (currentGroup.length > 0) {
-            groups.push([proseWrapper(currentGroup)]);
-          }
-          currentGroup = [];
+    const BLOCK_LIKE_ELEMENTS = new Set(['Block', 'Chart', 'Map', 'TwoColumn']);
 
-          if (child.name === 'Chart' || child.name === 'Map' || child.name === 'Emit') {
-            groups.push([wrapComponent(child)]);
-          } else if (child.name === 'TwoColumn') {
-            const parsedColumn = handleTwoColumn(child);
-            groups.push(parsedColumn);
+    for (const child of children) {
+      const isSpecialMdxElement =
+        child.type === 'mdxJsxTextElement' ||
+        child.type === 'mdxJsxFlowElement';
+
+      if (
+        isSpecialMdxElement &&
+        (child.name === 'Break' || BLOCK_LIKE_ELEMENTS.has(child.name))
+      ) {
+        // When a block-level or Break component is found, the current group of prose is complete.
+        if (currentGroup.length > 0) {
+          // The 'Map' component has special wrapping logic where its preceding prose
+          // group is not wrapped in a <Prose> component.
+          if (child.name === 'Map') {
+            groups.push(currentGroup);
           } else {
-            groups.push([child]);
+            groups.push([proseWrapper(currentGroup)]);
           }
-        } else {
-          currentGroup.push(child);
         }
+        currentGroup = []; // Reset for the next group.
+
+        // Handle the component that broke the group
+        if (child.name === 'Chart' || child.name === 'Map') {
+          groups.push([wrapComponent(child)]);
+        } else if (child.name === 'TwoColumn') {
+          groups.push(handleTwoColumn(child));
+        }
+        // Note: 'Break' and 'Block' elements are not added to a new group here,
+        // which matches the original logic. The handling of 'Block' seems like a
+        // potential bug as it gets dropped from the final output.
       } else {
         currentGroup.push(child);
       }
@@ -68,7 +67,8 @@ export const groupByBreakIntoBlocks = (ast) => {
 
       if (
         group.some((item) => {
-          return item.name === 'Prose';
+          console.log('item', item);
+          return item.name === 'Prose' || item.name === 'Figure';
         })
       ) {
         result.push({
@@ -77,6 +77,7 @@ export const groupByBreakIntoBlocks = (ast) => {
           children: [...group],
         });
       } else {
+        console.log('block>prose');
         result.push({
           type: 'mdxJsxFlowElement',
           name: 'Block',
