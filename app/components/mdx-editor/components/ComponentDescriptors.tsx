@@ -12,7 +12,11 @@ import ChartEditorWrapper from './ChartEditor';
 import { allAvailableDatasets } from 'app/content/datasets/alldatasets';
 import { availableCsvs } from 'app/content/datasets/allcsv';
 import { Prose } from '@lib';
-
+import EmitEditorWrapper from './EmitEditor';
+import UrbanDashboardWrapper from './UrbanDashboardEditor';
+import GoesWrapper from './GoesEditor';
+import NistWrapper from './NistEditor';
+import NoaaWrapper from './NoaaEditor';
 export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
     name: 'TwoColumn',
@@ -23,6 +27,77 @@ export const jsxComponentDescriptors: JsxComponentDescriptor[] = [
     Editor: (props) => {
       return <TwoColumnEditorWrapper props={{ ...props }} />;
     },
+  },
+  {
+    name: 'EmitInterface',
+    kind: 'flow',
+    source: 'test01-emit', // Adjust the path
+    hasChildren: false,
+    props: [
+      { name: 'defaultCollectionId', type: 'string' },
+      { name: 'defaultZoomLocation', type: 'string' },
+      { name: 'defaultZoomLevel', type: 'number' },
+      { name: 'config', type: 'expression' },
+      { name: 'defaultStartDate', type: 'string' },
+    ],
+    Editor: (props) => {
+      return <EmitEditorWrapper props={{ ...props }} />;
+    },
+  },
+  {
+    name: 'UrbanDashboard',
+    kind: 'flow',
+    source: 'test01-urban', // Adjust the path
+    hasChildren: false,
+    props: [
+      { name: 'defaultZoomLocation', type: 'string' },
+      { name: 'defaultZoomLevel', type: 'number' },
+      { name: 'config', type: 'expression' },],
+    Editor: (props) => {
+      return <UrbanDashboardWrapper props={{ ...props }} />;
+    }
+  },
+   {
+    name: 'GoesInterface',
+    kind: 'flow',
+    source: 'test01-goes', // Adjust the path
+    hasChildren: false,
+    props: [
+      { name: 'defaultZoomLocation', type: 'string' },
+      { name: 'defaultZoomLevel', type: 'number' },
+      { name: 'config', type: 'expression' },
+      { name: 'defaultCollectionId', type: 'string' }
+    ],
+    Editor: (props) => {
+      return <GoesWrapper props={{ ...props }} />;
+    }
+  },
+  {
+    name: 'NistInterface',
+    kind: 'flow',
+    source: 'test01-nist', // Adjust the path
+    hasChildren: false,
+    props: [
+      { name: 'defaultZoomLevel', type: 'number' },
+      { name: 'config', type: 'expression' },
+    ],
+    Editor: (props) => {
+      return <NistWrapper props={{ ...props }} />;
+    }
+  },
+    {
+    name: 'NoaaInterface',
+    kind: 'flow',
+    source: 'test01-noaa', // Adjust the path
+    hasChildren: false,
+    props: [
+      { name: 'defaultZoomLocation', type: 'string' },
+      { name: 'defaultZoomLevel', type: 'number' },
+      { name: 'config', type: 'expression' },
+    ],
+    Editor: (props) => {
+      return <NoaaWrapper props={{ ...props }} />;
+    }
   },
   {
     name: 'Block',

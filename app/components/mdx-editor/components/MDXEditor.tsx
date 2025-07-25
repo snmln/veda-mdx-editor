@@ -63,9 +63,10 @@ import {
   InsertLineGraph,
   InsertTwoColumnButton,
   InsertSectionBreak,
+  InsertEmitInterfaceButton,
+  InsertInterfaceDropdown
 } from './ToolbarComponents';
-import { $wrapNodes } from '@lexical/selection';
-import { $createCodeNode } from '@lexical/code';
+
 import {
   jsxComponentDescriptors,
   CalloutDirectiveDescriptor,
@@ -201,6 +202,7 @@ export function MDXEditorEnhanced({
                   <InsertMapButton />
                   <InsertLineGraph />
                   <InsertTwoColumnButton />
+                  <InsertInterfaceDropdown />
                   <InsertSectionBreak />
                 </div>
               </div>

@@ -10,6 +10,11 @@ import { highlight } from 'sugar-high';
 import Link from 'next/link';
 
 import { allAvailableDatasets } from 'app/content/datasets/alldatasets';
+import { EmitPreview } from './EmitEditor';
+import { UrbanDashboardPreview } from './UrbanDashboardEditor';
+import { GoesPreview } from './GoesEditor'; 
+import { NistPreview } from './NistEditor';
+import { NoaaPreview } from './NoaaEditor';
 
 import {
   Block,
@@ -178,16 +183,32 @@ const components = {
   RightColumn: (props) => {
     return <div className='grid-col-6  '>{props.children}</div>;
   },
-
+  EmitInterface: (props) => {
+    return <EmitPreview {...props}/>;
+  },
+  UrbanDashboard: (props) =>{
+    return <UrbanDashboardPreview {...props}/>;
+  },
+  GoesInterface: (props) => {
+    return <GoesPreview {...props}/>;
+  },
+  NistInterface: (props) => {
+    return <NistPreview {...props}/>;
+  },
+  NoaaInterface: (props) => {
+    return <NoaaPreview {...props}/>;
+  },
   Map: MapWrapper,
   Chart: ChartWrapper,
+  Embed: (props) => {
+    return <EmitPreview {...props}/>;
+  },
 };
 
 export function SimpleMDXPreview({ source }: MDXPreviewProps) {
   // Use an empty string as a default if source is undefined
   // const datasets = getDatasetsMetadata();
   const safeSource = source || '';
-
   return (
     <section>
       <article className='prose'>
