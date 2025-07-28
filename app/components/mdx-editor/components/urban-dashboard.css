@@ -1,0 +1,279 @@
+.card {
+    padding: 5px 15px;
+    margin-top: 5px;
+}
+
+.explore-more-card {
+    display: flex;
+    text-decoration: none !important;
+    margin-right: 10px;
+    justify-content: space-between;
+}
+
+/* Dataset Card Styles start Here */
+.dataset-card {
+    /* max-width: 329px; */
+}
+
+.dataset-card h2 {
+    color: #082A64;
+    font-size: 16px;
+    margin: 0 0 8px 0;
+}
+
+.dataset-card p {
+    color: #1E1E1E;
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.dataset-card a {
+    color: #0098D7;
+    text-decoration: none;
+    /* font-weight: bold; */
+}
+
+.dataset-card a:hover {
+    text-decoration: underline;
+}
+
+/* Population Card Styles Start Here */
+.population-container {
+    margin-top: 5px;
+    display: flex;
+    gap: 60px;
+}
+
+.population-item {
+    display: flex;
+    align-items: center;
+}
+
+.population-icon {
+    background-color: #082A64;
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.population-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+.population-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.population-label {
+    color: #0098D7;
+    font-size: 12px;
+    margin: 0;
+    line-height: 12.1px;
+}
+
+.population-value {
+    color: #082A64;
+    font-size: 16px;
+    margin: 0;
+    line-height: 19.36px;
+}
+
+/* Population Card Styles End Here */
+
+/* Pie chart */
+.pie-chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.pie-chart {
+    width: 105px;
+    height: 105px;
+    margin: 0 auto;
+}
+
+/* Colormap chart */
+.colormap-chart {
+    position: fixed;
+    z-index: 100;
+    right: 10px;
+    bottom: 30px;
+    width: 320px;
+
+    padding: 10px;
+
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    /* max-width: 90vw; */
+
+    align-items: center;
+    justify-content: center;
+}
+.dashboard {
+    display: block;
+    position: static;
+}
+
+/* Pie chart */
+.pie-chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.pie-chart {
+    width: 135px;
+    height: 135px;
+    margin: 0 auto;
+}
+
+
+/* Stacked line chart */
+.dataset-card {
+    /* overflow: auto; */
+}
+
+.info-sidebar-container {
+    /* display: flex;
+    flex-direction: column; */
+}
+
+.info-sidebar {
+    position: fixed;
+    margin-top: 10px;
+    margin-left: 10px;
+    /* margin-bottom: 10px; */
+    /* max-width: 90vw; */
+    width: 30vw;
+
+    max-height: 94vh;
+    border-radius: 6px;
+
+    padding: 20px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-sidebar-full-height {
+    /* height: 100%; */
+}
+
+.info-sidebar-full-height {
+    height: 100%;
+}
+
+.info-border-primary {
+    border: 1px solid #082A64;
+}
+
+.info-border-secondary {
+    border: 1px solid #D0D0D0;
+}
+/* parent div of insights should be relative,
+ else insight would be applied with repect to body */
+
+.insights {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    top: 11%;
+    color: white;
+}
+
+.insights-left {
+    display: block;
+    position: absolute;
+    left: 1%;
+    top: 0;
+    bottom: 0;
+}
+
+.insights-bottom-left {
+    position: absolute;
+    z-index: 1000;
+    bottom: 15%;
+    left: 1%;
+}
+
+.insights-right {
+    display: block;
+    position: absolute;
+    right: 1%;
+}
+
+.insights>div>div {
+    margin-bottom: 4%;
+}
+
+.mapSection {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.marker {
+  background-image: url('/marker-gold.png'); 
+  background-size: cover;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.mapboxgl-ctrl button .mapboxgl-ctrl-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  font-size: 14px;
+  padding-top: 20%;
+  /* background-color: #082A63; */
+  fill: white;
+}
+
+.mapboxgl-ctrl-compass {
+  display: none !important;
+}
+
+.title-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-card-title {
+  flex-grow: 1;
+  display: flex;
+  justify-content: left;
+  color: #082A64;
+}
+
+.title-card-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title-card-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
