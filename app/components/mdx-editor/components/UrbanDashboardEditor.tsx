@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { createRoot } from "react-dom/client";
 import { UrbanDashboard } from "test01-urban";
 import "../style/styles.css"
 
@@ -11,16 +12,48 @@ export const urbanConfig = {
   dataUrl: "https://raw.githubusercontent.com/US-GHG-Center/urban_dashboard_data/main/data",
 };
 
+// Simple Shadow DOM wrapper
+const ShadowWrapper = ({ children }) => {
+  const hostRef = useRef(null);
+  const rootRef = useRef(null);
+
+  useEffect(() => {
+    if (!hostRef.current || rootRef.current) return;
+
+    // Create shadow root
+    const shadowRoot = hostRef.current.attachShadow({ mode: "open" });
+
+    // Create container
+    const container = document.createElement("div");
+    container.style.width = "100%";
+    container.style.height = "100%";
+    shadowRoot.appendChild(container);
+
+    // Create React root and render
+    rootRef.current = createRoot(container);
+    rootRef.current.render(children);
+
+    return () => {
+      if (rootRef.current) {
+        rootRef.current.unmount();
+      }
+    };
+  }, [children]);
+
+  return <div ref={hostRef} style={{ width: "100%", height: "100%" }} />;
+};
+
 export const UrbanDashboardPreview = (props) => {
-    
   return (
-      <div className="fullSize" style={{ minHeight: '550px', width: '100%' }}>
+    <div className="fullSize" style={{ minHeight: '550px', width: '100%' }}>
+      <ShadowWrapper>
         <UrbanDashboard
-          defaultZoomLocation = {[-98.771556, 32.967243]}
+          defaultZoomLocation={[-98.771556, 32.967243]}
           defaultZoomLevel={4}
           config={urbanConfig}
         />
-      </div>
+      </ShadowWrapper>
+    </div>
   );
 };
 
@@ -44,7 +77,7 @@ const UrbanDashboardWrapper = (props) => {
         Urban Dashboard Preview
       </p>
 
-       <div style={{ height: '550px', width: '100%'}}>
+      <div style={{ height: '550px', width: '100%'}}>
         <UrbanDashboardPreview props={{ ...props }} />
       </div>
     </div>
