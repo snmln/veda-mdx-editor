@@ -2,6 +2,7 @@ import { handleTwoColumn } from './parseTwoColumn';
 import { wrapComponent } from './wrapComponent';
 
 export const groupByBreakIntoBlocks = (ast) => {
+  console.log('groupByBreakIntoBlocks', ast);
   const result: any = [];
   const proseWrapper = (children) => {
     return {
@@ -16,6 +17,7 @@ export const groupByBreakIntoBlocks = (ast) => {
     let currentGroup: any = [];
 
     const BLOCK_LIKE_ELEMENTS = new Set(['Block', 'Chart', 'Map', 'TwoColumn']);
+    const INTERFACE_ELEMENTS = new Set(['UrbanDashboard', 'EmitInterface', 'NistInterface', 'GoesInterface', 'NoaaInterface']);
 
     for (const child of children) {
       const isSpecialMdxElement =
@@ -24,7 +26,7 @@ export const groupByBreakIntoBlocks = (ast) => {
 
       if (
         isSpecialMdxElement &&
-        (child.name === 'Break' || BLOCK_LIKE_ELEMENTS.has(child.name))
+        (child.name === 'Break' || BLOCK_LIKE_ELEMENTS.has(child.name) || INTERFACE_ELEMENTS.has(child.name))
       ) {
         // When a block-level or Break component is found, the current group of prose is complete.
         if (currentGroup.length > 0) {
@@ -43,6 +45,19 @@ export const groupByBreakIntoBlocks = (ast) => {
           groups.push([wrapComponent(child)]);
         } else if (child.name === 'TwoColumn') {
           groups.push(handleTwoColumn(child));
+        } else if (INTERFACE_ELEMENTS.has(child.name)) {
+          const wrappedInterface = {
+            type: 'mdxJsxFlowElement',
+            name: 'Block',
+            children: [
+              {
+                type: 'mdxJsxFlowElement',
+                name: 'Figure',
+                children: [child],
+              },
+            ],
+          };
+          groups.push([wrappedInterface]);
         }
         // Note: 'Break' and 'Block' elements are not added to a new group here,
         // which matches the original logic. The handling of 'Block' seems like a
@@ -65,7 +80,11 @@ export const groupByBreakIntoBlocks = (ast) => {
       // Check for prose wrapper inside group If no prose wrapper
       // then wrap group inside prose object before adding to block element
 
-      if (
+      const hasBlockElement = group.some((item) => item.name === 'Block');
+      
+      if (hasBlockElement) {
+        result.push(...group);
+      } else if (
         group.some((item) => {
           console.log('item', item);
           return item.name === 'Prose' || item.name === 'Figure';
